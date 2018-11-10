@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,10 +13,59 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     
+    <!-- jQuery UI-->
+    <link rel="stylesheet" href="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.10.3/themes/sunny/jquery-ui.css">
+    <script src="http://code.jquery.com/ui/1.8.24/jquery-ui.min.js" integrity="sha256-UOoxwEUqhp5BSFFwqzyo2Qp4JLmYYPTHB8l+1yhZij8=" crossorigin="anonymous"></script>
+
+    <!-- App scripts and styles -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
     <script src="{{ url_for('static', filename='js/index.js') }}"></script>
 </head>
+
 <body>
-    <h1>QQ ept</h1>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6" style="margin: 0 auto;">
+                <div>
+                    <label for="city1">Город отправителя</label>
+                    <input id="city1" type="text">
+                </div>
+                <div>
+                    <label for="city2">Город получателя</label>
+                    <input id="city2" type="text">
+                </div>
+            </div>
+            <div class="col-lg-6" style="margin: 0 auto;">
+                <div>
+                    <label for="dateExecute">Дата доставки</label>
+                    <input id="dateExecute" type="date" value="2018-11-30">
+                </div>
+                <div>
+                    <label for="weight">Вес кг</label>
+                    <input id="weight" value="0.3" />
+                    <!-- Длина места, см. -->
+                    <label for="length">Длина </label>
+                    <input id="length" value="10" />
+                    <!-- Ширина места, см. -->
+                    <label for="width">Ширина </label>
+                    <input id="width" value="7" />
+                    <!-- Высота места, см. -->
+                    <label for="height">Высота </label>
+                    <input id="height" value="5" />
+
+                    <!-- Вес места, кг.-->
+                    <label for="weight1">Вес </label>
+                    <input id="weight1" value="0.1" />
+                    <!-- объём места, длина*ширина*высота, метры кубические -->
+                    <label for="objem">объём </label>
+                    <input id="objem" value="0.001" />
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
 </body>
+
 </html>
