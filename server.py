@@ -36,7 +36,23 @@ def requires_auth(f):
 def index():
     return render_template("index.html")
 
- 
+@app.route('/calculate', methods=['POST'])
+def calculate():
+    # Recieving request from user
+    req = request.get_json()
+    print('Request: ')
+    print(req)
+    # Match city names
+    # Send requests to all API here
+    # ==SDEK API==
+
+    # ==SDEK API==
+    # return results here
+    return jsonify({
+        'company_name': 321,
+        'company_name1': 21,
+        'company_name3': 184
+    })
 
 if __name__ == '__main__':
     

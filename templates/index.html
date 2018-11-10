@@ -24,15 +24,22 @@
 
 <body>
     <div class="container">
-        <div class="row">
+        <div class="">
             <div class="col-lg-6" style="margin: 0 auto;">
                 <div>
                     <label for="city1">Город отправителя</label>
-                    <input id="city1" type="text">
+                    <input id="city1" type="text" required>
                 </div>
                 <div>
                     <label for="city2">Город получателя</label>
-                    <input id="city2" type="text">
+                    <input id="city2" type="text" required>
+                </div>
+                <div>
+                    <button id="calcBtn" class="btn btn-lg btn-success">Рассчитать стоимость</button>
+
+                </div>
+                <div id="output">
+
                 </div>
             </div>
             <div class="col-lg-6" style="margin: 0 auto;">
@@ -40,7 +47,7 @@
                     <label for="dateExecute">Дата доставки</label>
                     <input id="dateExecute" type="date" value="2018-11-30">
                 </div>
-                <div>
+                <div style="display: inline-grid;">
                     <label for="weight">Вес кг</label>
                     <input id="weight" value="0.3" />
                     <!-- Длина места, см. -->

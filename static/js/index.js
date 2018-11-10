@@ -1,7 +1,11 @@
 $(document).ready(function () {
     //This sends to server
-    var city1Id;
-    var city2Id;
+    function City(id, name) {
+        this._id = id;
+        this._name = name;
+    }
+    var city1;
+    var city2;
     $("#city1").autocomplete({
         source : function(request, response) {
             $.ajax({
@@ -30,10 +34,7 @@ $(document).ready(function () {
         },
         minLength : 1,
         select : function(event, ui) {
-            //console.log("Yep!");
-            console.log('Selected id = ', ui.item.id);
-            city1Id = ui.item.id;
-            // $('#receiverCityId').val(ui.item.id);
+            city1 = new City(ui.item.id, ui.item.value);
         }
     });
 
@@ -65,10 +66,29 @@ $(document).ready(function () {
         },
         minLength : 1,
         select : function(event, ui) {
-            //console.log("Yep!");
-            console.log('Selected id = ', ui.item.id);
-            city2Id = ui.item.id;
-            // $('#receiverCityId').val(ui.item.id);
+            city2 = new City(ui.item.id, ui.item.value);
         }
+    });
+
+    $("#calcBtn").click(function () {
+        $.ajax({
+            url : "/calculate",
+            contentType: 'application/json',
+            method: 'POST',
+            data : JSON.stringify({
+                'city1': {
+                    'id': city1._id,
+                    'name': city1._name,
+                },
+                'city2': {
+                    'id': city2._id,
+                    'name': city2._name,
+                }
+            }),
+            success : function(data) {
+                console.log('RESPONSE FROM FLASK:');
+                console.log(data);
+            }
+        });
     });
 });
