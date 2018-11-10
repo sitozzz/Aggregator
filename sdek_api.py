@@ -61,3 +61,35 @@ req = {
 # }
 # test_response = xmltodict.unparse(test_response, pretty=True)
 # print(test_response)
+sdek_json = {
+        "version":"1.0",
+        "dateExecute":"2012-07-27", 
+        # "authLogin":"098f6bcd4621d373cade4e832627b4f6", 
+        # "secure":"396fe8e7dfd37c7c9f361bba60db0874", 
+        "senderCityId":"270", 
+        "receiverCityId":"1071", 
+        "tariffId":"11", 
+        "goods": [ 
+            { 
+                "weight":"0.3", 
+                "length":"10", 
+                "width":"7", 
+                "height":"5" 
+            }
+           
+        ],
+        # "services": [
+        #     {	
+        #         "id": 2,	
+        #         "param": 2000	
+        #     },
+        #     {	
+        #         "id": 30
+        #     }
+        # ]
+    }
+
+sdek_res = requests.post('http://api.cdek.ru/calculator/calculate_price_by_json.php',json=sdek_json)
+txt = sdek_res.text
+txt = json.loads(txt)
+print(txt)

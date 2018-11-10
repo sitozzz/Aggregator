@@ -114,6 +114,7 @@ $(document).ready(function () {
                 ]
             }),
             success : function(data) {
+                // TODO: show result
                 console.log('RESPONSE FROM FLASK:');
                 console.log(data);
             }
