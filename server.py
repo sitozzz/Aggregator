@@ -45,7 +45,7 @@ def calculate():
     # Match city names
     # Send requests to all API here
     # ==SDEK API==
-
+    # TODO: send request to sdek
     # ==SDEK API==
     # return results here
     return jsonify({

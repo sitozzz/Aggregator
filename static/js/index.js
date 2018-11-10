@@ -1,8 +1,17 @@
 $(document).ready(function () {
     //This sends to server
+    //City object
     function City(id, name) {
         this._id = id;
         this._name = name;
+    }
+    //Delivery data
+    function DeliveryData( weight, length, height, width) {
+        this.weight = weight;
+        this.length = length;
+        this.height = height;
+        this.width = width;
+        //this.size = height*width*length;
     }
     var city1;
     var city2;
@@ -71,6 +80,14 @@ $(document).ready(function () {
     });
 
     $("#calcBtn").click(function () {
+        //Collect data from fields
+        let deliveryData = new DeliveryData(
+          
+            $('#weight').val(), 
+            $('#length').val(),
+            $('#height').val(),
+            $('#width').val()
+        );
         $.ajax({
             url : "/calculate",
             contentType: 'application/json',
@@ -83,7 +100,18 @@ $(document).ready(function () {
                 'city2': {
                     'id': city2._id,
                     'name': city2._name,
-                }
+                }, 
+                'dateExecute':  $('#dateExecute').val(),
+                //1 or more
+                //TODO: Example hardcode!!!
+                'goods':[
+                    {
+                        'weight': deliveryData.weight,
+                        'height': deliveryData.height,
+                        'width': deliveryData.width,
+                        'length': deliveryData.length
+                    }
+                ]
             }),
             success : function(data) {
                 console.log('RESPONSE FROM FLASK:');
