@@ -46,7 +46,6 @@ $(document).ready(function () {
             city1 = new City(ui.item.id, ui.item.value);
         }
     });
-
     $("#city2").autocomplete({
         source : function(request, response) {
             $.ajax({
@@ -78,8 +77,11 @@ $(document).ready(function () {
             city2 = new City(ui.item.id, ui.item.value);
         }
     });
-
+    $("#calcBtn1").click(function (){
+        $("#prop-holder").show(100);
+    });
     $("#calcBtn").click(function () {
+        
         //Collect data from fields
         let deliveryData = new DeliveryData(
           
