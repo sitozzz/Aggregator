@@ -116,9 +116,20 @@ $(document).ready(function () {
                 ]
             }),
             success : function(data) {
-                // TODO: show result
                 console.log('RESPONSE FROM FLASK:');
+                data = JSON.parse(data);
+                console.log(typeof data);
+                // TODO: Only for sdek api!
+                data = data.result;
                 console.log(data);
+                let price = data.price;
+                let deliveryPeriodMin = data.deliveryPeriodMin;
+                let deliveryPeriodMax = data.deliveryPeriodMax;
+                let deliveryDateMin = data.deliveryDateMin;
+                let deliveryDateMax = data.deliveryDateMax;
+                document.getElementById('priceSDEK').innerText = price + ' Rub';
+                // $('#priceSDEK').val(price + ' Rub');
+                $('#output').show('fast');
             }
         });
     });
