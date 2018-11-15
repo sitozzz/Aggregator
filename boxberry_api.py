@@ -40,6 +40,17 @@ def get_list_points():
         'prepaid' : '1'
     })
 
+def get_list_points_for_city(code_city = ''):
+    """Получить коды всех пунктов выдачи заказов для города.
+    
+    :param code_city: (optional) код города в boxberry, без указания кода вернет все пункты выдачи.
+    :return: list of Dictionary."""
+    return get_json(url, {
+        'token'   : token,
+        'method'  : 'ListPointsShort',
+        'CityCode' : code_city
+    })
+
 #достаточно обновления 1 раз в час
 def get_points_for_parcels():
     """Получить список точек приёма посылок.
@@ -49,6 +60,30 @@ def get_points_for_parcels():
         'token'  : token,
         'method' : 'PointsForParcels'
     })
+
+def get_description_point(point_code, photo = False):
+    """Получить полное описание пункта выдачи заказов.
+    
+    :param point_code: код пункта выдачи заказов.
+    :param photo: (optional) получить изображения.
+    :return: массив значений."""
+    return get_json(url, {
+        'token'  : token,
+        'method' : 'PointsDescription',
+        'code'   : point_code,
+        'photo'  : photo
+    })
+
+def get_point_by_zip(zip_code):
+    """Получить код ближайшего пункта выдачи заказов по почтовому индексу.
+
+    :param zip_code: почтовый код.
+    :return: код пункта выдачи заказов."""
+    return get_json(url, {
+        'token'  : token,
+        'method' : 'PointsByPostCode',
+        'zip'    : zip_code,
+    })['Code']
 
 def zip_check(zip_code):
     """Проверить возможность курьерской доставки для заданного индекса.
@@ -120,14 +155,13 @@ def check_courier_delivery(city):
     :return: True возможна доставка курьером, False нет."""
     return city['CourierDelivery']
 
-#метод отбирающий параметры
-
 def write_csv(data, file_name, columns, encoding = 'utf-8'):
     """Записать лист словарей в файл ('*.csv').
     
     :param data: лист словарей.
     :param file_name: имя файла в который произведется запись.
-    :param column: заголовки колонок в виде списка строк.
+    :param columns: заголовки колонок в виде списка строк.
+    :param encoding: (optional) кодировка по умолчанию ('utf-8').
     :return: True если запись прошла успешо, False нет."""
     with open(file_name, 'w', newline = '', encoding = encoding) as file:
         writer = csv.DictWriter(file, delimiter = ';', fieldnames = columns)
@@ -144,6 +178,7 @@ def take_city_from_csv(file_name, name_city, encoding = 'utf-8'):
     
     :param file_name: имя файла из которого считываются данные.
     :param name_city: имя города, которое необходимо найти.
+    :param encoding: (optional) кодировка по умолчанию ('utf-8').
     :return: словарь данных, в случае если город не найден None."""
     with open(file_name, 'r', newline = '', encoding = encoding) as file:
         reader = csv.DictReader(file, delimiter = ';')
@@ -159,6 +194,7 @@ def take_points_for_parcels_from_csv(file_name, name_city, encoding = 'utf-8'):
     
     :param file_name: имя файла из которого считываются данные.
     :param name_city: имя города в котором необходимо найти пункты приема.
+    :param encoding: (optional) кодировка по умолчанию ('utf-8').
     :return: лист словарей данных, в случае если город не найден пустой массив
         В случае ошибки чтения None."""
     with open(file_name, 'r', newline = '', encoding = encoding) as file:
@@ -178,6 +214,7 @@ def take_points_of_issue_orders(file_name, code_city, encoding = 'utf-8'):
     
     :param file_name: имя файла из которого считываются данные.
     :param code_city: код города в boxberry.
+    :param encoding: (optional) кодировка по умолчанию ('utf-8').
     :return: лист словарей данных, в случае если город не найден пустой массив
         В случае ошибки чтения None."""
     with open(file_name, 'r', newline = '', encoding = encoding) as file:
