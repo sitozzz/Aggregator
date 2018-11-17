@@ -104,6 +104,7 @@ $(document).ready(function () {
                     'name': city2._name,
                 }, 
                 'dateExecute':  $('#dateExecute').val(),
+                'tariffName': $('#tariff').find(':selected').text(),
                 //1 or more
                 //TODO: Example hardcode!!!
                 'goods':[
@@ -118,19 +119,51 @@ $(document).ready(function () {
             success : function(data) {
                 console.log('RESPONSE FROM FLASK:');
                 data = JSON.parse(data);
-                console.log(typeof data);
                 // TODO: Only for sdek api!
-                data = data.result;
-                console.log(data);
-                let price = data.price;
-                let deliveryPeriodMin = data.deliveryPeriodMin;
-                let deliveryPeriodMax = data.deliveryPeriodMax;
-                let deliveryDateMin = data.deliveryDateMin;
-                let deliveryDateMax = data.deliveryDateMax;
-                document.getElementById('priceSDEK').innerText = price + ' Rub';
-                // $('#priceSDEK').val(price + ' Rub');
+                if (data.result != undefined) {
+                    data = data.result;
+                    console.log(data);
+                    let price = data.price;
+                    let deliveryPeriodMin = data.deliveryPeriodMin;
+                    let deliveryPeriodMax = data.deliveryPeriodMax;
+                    let deliveryDateMin = data.deliveryDateMin;
+                    let deliveryDateMax = data.deliveryDateMax;
+                    document.getElementById('priceSDEK').innerText = price + ' Rub';
+                    document.getElementById('errorSDEK').innerText = '';
+                    // $('#priceSDEK').val(price + ' Rub');
+                } else {
+                    console.log(data);
+                    // data = data.error[0];
+                    document.getElementById('priceSDEK').innerText ='';
+                    document.getElementById('errorSDEK').innerText ="Доставка невозможна при заданных условиях";
+                }
+                
                 $('#output').show('fast');
             }
         });
     });
+    function getTariffs() {
+        $.ajax({
+            url : "/get_tariffs",
+            contentType: 'application/json',
+            method : 'GET',
+            success : function(data) {
+                data = data['fields'];
+                var tariffHolder = document.getElementById('tariff');
+                for(let elem in data){
+                    if (data[elem] != '') {
+                        console.log(data[elem]);
+                        let option = document.createElement('option');
+                        option.id = 'option-' + elem;
+                        option.text = data[elem];
+                        tariffHolder.appendChild(option);
+                    }
+                    
+                }
+            }
+        });
+    }
+    getTariffs();
+    
+
 });
