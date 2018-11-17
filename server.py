@@ -14,6 +14,7 @@ import requests
 import pandas as pd
 import csv
 import functions
+import sdek_api
 app = Flask(__name__)
 
 def check_auth(username, password):
@@ -54,29 +55,7 @@ def calculate():
     #=== Match tariffs ===
     # Send requests to all API here
     # ==SDEK API==
-    sdek_json = {
-        "version":"1.0",
-        "dateExecute": req['dateExecute'], 
-        # "authLogin":"098f6bcd4621d373cade4e832627b4f6", 
-        # "secure":"396fe8e7dfd37c7c9f361bba60db0874", 
-        "senderCityId": req['city1']['id'], 
-        "receiverCityId": req['city2']['id'], 
-        # Check this
-        "tariffId": sdek_id, 
-        "goods": req['goods'],
-        # "services": [
-        #     {	
-        #         "id": 2,	
-        #         "param": 2000	
-        #     },
-        #     {	
-        #         "id": 30
-        #     }
-        # ]
-    }    
-    sdek_res = requests.post('http://api.cdek.ru/calculator/calculate_price_by_json.php',json=sdek_json)
-    sdek_res = sdek_res.text
-    # sdek_res = json.loads(sdek_res)
+    sdek_res = sdek_api.calculate_sdek(req, sdek_id)
     # ==SDEK API==
     
     # return results here
