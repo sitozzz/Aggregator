@@ -46,7 +46,7 @@ def calculate():
     # Recieving request from user
     req = request.get_json()
     # print('Request: ')
-    # print(req)
+    print(req)
 
     #TODO: Match city names
    
