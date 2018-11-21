@@ -15,6 +15,7 @@ import pandas as pd
 import csv
 import functions
 import sdek_api
+import dpd_api
 app = Flask(__name__)
 
 def check_auth(username, password):
@@ -59,12 +60,22 @@ def calculate():
     sdek_res = json.loads(sdek_res,encoding='utf-8')
     # ==SDEK API==
     
+    #dpd_res = dpd_api.get_service_cost(req['city1']['name'],req['city2']['name'],True,True,int(req['goods']['weight']),int(req['goods']['length']),int(req['goods']['width']),int(req['goods']['height']))
+    print(req['goods'][0]['weight'])
+    print(type(req['goods'][0]['weight']))
+    print(float(req['goods'][0]['weight']))
+    print(type(req['goods'][0]['weight']))
+
+    dpd_res = dpd_api.get_service_cost(req['city1']['name'].split(',')[0],req['city2']['name'].split(',')[0],True,True,req['goods'][0]['weight'],20,20,20)
+    print(dpd_res['list'])
     # return results here
+
     out_json = jsonify({
         "sdek": sdek_res,
-        "dpd": "dpd_json",
+        "dpd": dpd_res['list'],
         "boxberry": "boxberry_json"
     })
+    print(out_json)
    
     return out_json
 
