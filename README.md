@@ -1,5 +1,9 @@
 # Aggregator
 
+Starting Flask:
+
+*python3 server.py
+
 Working with XML:
 
 *pip install xmltodict

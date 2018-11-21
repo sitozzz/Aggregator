@@ -11,6 +11,10 @@ import math
 import random
 import time
 import requests
+import pandas as pd
+import csv
+import functions
+import sdek_api
 app = Flask(__name__)
 
 def check_auth(username, password):
@@ -41,36 +45,17 @@ def index():
 def calculate():
     # Recieving request from user
     req = request.get_json()
-    print('Request: ')
+    # print('Request: ')
     print(req)
-    # Match city names
+
+    #TODO: Match city names
+   
+    #=== Match tariffs ===
+    sdek_id, pony_id, another_id = functions.match_tariffs(req, 'tariffs.csv', 'cp1251')
+    #=== Match tariffs ===
     # Send requests to all API here
     # ==SDEK API==
-    # TODO: send request to sdek
-    sdek_json = {
-        "version":"1.0",
-        "dateExecute": req['dateExecute'], 
-        # "authLogin":"098f6bcd4621d373cade4e832627b4f6", 
-        # "secure":"396fe8e7dfd37c7c9f361bba60db0874", 
-        "senderCityId": req['city1']['id'], 
-        "receiverCityId": req['city2']['id'], 
-        # Check this
-        "tariffId":"11", 
-        "goods": req['goods'],
-        # "services": [
-        #     {	
-        #         "id": 2,	
-        #         "param": 2000	
-        #     },
-        #     {	
-        #         "id": 30
-        #     }
-        # ]
-    }
-    
-    sdek_res = requests.post('http://api.cdek.ru/calculator/calculate_price_by_json.php',json=sdek_json)
-    sdek_res = sdek_res.text
-    # sdek_res = json.loads(sdek_res)
+    sdek_res = sdek_api.calculate_sdek(req, sdek_id)
     # ==SDEK API==
     
     # return results here
@@ -81,6 +66,19 @@ def calculate():
     #     'company_name1': 21,
     #     'company_name3': 184
     # })
+@app.route('/get_tariffs', methods=['GET'])
+def get_tariffs():
+    # TODO: get tariffs from CSV file or database
+    out_json = []
+    with open('tariffs.csv', 'r', newline = '', encoding = 'cp1251') as file:
+        reader = csv.DictReader(file, delimiter = ';')
+        for i in reader:
+            out_json.append(i['tariff_name'])
+    print(out_json)
+    return jsonify({
+        'fields' : out_json
+        })
+
 
 if __name__ == '__main__':
     
