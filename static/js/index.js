@@ -138,12 +138,6 @@ $(document).ready(function () {
                 ]
             }),
             success : function(data) {
-                console.log('RESPONSE FROM FLASK:');
-                //data = JSON.parse(data);
-                // console.log(data.result);
-                console.log(typeof data);
-                console.log(data.sdek.result);
-
                 // TODO: Only for sdek api!
                  showSdekResults(data.sdek.result)
                 

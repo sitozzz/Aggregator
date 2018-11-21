@@ -56,14 +56,14 @@ def calculate():
     # Send requests to all API here
     # ==SDEK API==
     sdek_res = sdek_api.calculate_sdek(req, sdek_id)
-    # ==SDEK API==
-    print(type(sdek_res))
-    # return results here
     sdek_res = json.loads(sdek_res,encoding='utf-8')
-    print(type(sdek_res))
-    print(sdek_res)
+    # ==SDEK API==
+    
+    # return results here
     out_json = jsonify({
-        "sdek": sdek_res
+        "sdek": sdek_res,
+        "dpd": "dpd_json",
+        "boxberry": "boxberry_json"
     })
    
     return out_json
