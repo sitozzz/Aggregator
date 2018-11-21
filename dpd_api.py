@@ -92,7 +92,7 @@ def get_service_cost(from_city,to_city,self_pickup,self_delivery,weight,length,w
     return {'orig_resp': result, 'list': vrs}
 
 #get_cities()
-get_service_cost('кемерово','екатеринбург',True,True,1,20,20,20)
+#get_service_cost('кемерово','екатеринбург',True,True,1,20,20,20)
 
 
 
