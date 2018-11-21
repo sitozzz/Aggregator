@@ -14,6 +14,7 @@ $(document).ready(function () {
         //this.size = height*width*length;
     }
     function showSdekResults(data) {
+        dpdData = data.dpd
         if (data.sdek.error == undefined) {
 
 
@@ -38,9 +39,9 @@ $(document).ready(function () {
                 document.getElementById('errorSDEK').innerText = "Доставка невозможна при заданных условиях";
             }
         }
-        for (let r in data.dpd) {
+        for (let r in dpdData) {
             
-            $('#output1').append('<p> услуга: ' + data.dpd[r].serviceName + ', цена: '+data.dpd[r].cost+' дней до доставки: '+data.dpd[r].days+'</p>')
+            $('#output1').append('<p> услуга: ' + dpdData[r].serviceName + ', цена: '+dpdData[r].cost+' дней до доставки: '+dpdData[r].days+'</p>')
             
         }
         $('#output1').show();
