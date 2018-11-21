@@ -13,6 +13,27 @@ $(document).ready(function () {
         this.width = width;
         //this.size = height*width*length;
     }
+    function showSdekResults(data) {
+        console.log(data);
+        // console.log(data['result']);
+        if (data != undefined) {
+            // data = data['result'];
+            // console.log(data);
+            let price = data['price'];
+            let deliveryPeriodMin = data['deliveryPeriodMin'];
+            let deliveryPeriodMax = data['deliveryPeriodMax'];
+            let deliveryDateMin = data['deliveryDateMin'];
+            let deliveryDateMax = data['deliveryDateMax'];
+            document.getElementById('priceSDEK').innerText = price + ' Rub';
+            document.getElementById('errorSDEK').innerText = '';
+            // $('#priceSDEK').val(price + ' Rub');
+        } else {
+            console.log(data);
+            // data = data.error[0];
+            document.getElementById('priceSDEK').innerText ='';
+            document.getElementById('errorSDEK').innerText ="Доставка невозможна при заданных условиях";
+        }
+    }
     var city1;
     var city2;
     $("#city1").autocomplete({
@@ -117,26 +138,8 @@ $(document).ready(function () {
                 ]
             }),
             success : function(data) {
-                console.log('RESPONSE FROM FLASK:');
-                data = JSON.parse(data);
                 // TODO: Only for sdek api!
-                if (data.result != undefined) {
-                    data = data.result;
-                    console.log(data);
-                    let price = data.price;
-                    let deliveryPeriodMin = data.deliveryPeriodMin;
-                    let deliveryPeriodMax = data.deliveryPeriodMax;
-                    let deliveryDateMin = data.deliveryDateMin;
-                    let deliveryDateMax = data.deliveryDateMax;
-                    document.getElementById('priceSDEK').innerText = price + ' Rub';
-                    document.getElementById('errorSDEK').innerText = '';
-                    // $('#priceSDEK').val(price + ' Rub');
-                } else {
-                    console.log(data);
-                    // data = data.error[0];
-                    document.getElementById('priceSDEK').innerText ='';
-                    document.getElementById('errorSDEK').innerText ="Доставка невозможна при заданных условиях";
-                }
+                 showSdekResults(data.sdek.result)
                 
                 $('#output').show('fast');
             }
@@ -165,5 +168,5 @@ $(document).ready(function () {
     }
     getTariffs();
     
-
+  
 });

@@ -56,16 +56,19 @@ def calculate():
     # Send requests to all API here
     # ==SDEK API==
     sdek_res = sdek_api.calculate_sdek(req, sdek_id)
+    sdek_res = json.loads(sdek_res,encoding='utf-8')
     # ==SDEK API==
     
     # return results here
-    return jsonify(sdek_res)
-    # TODO: send this!
-    # return jsonify({
-    #     'company_name': 321,
-    #     'company_name1': 21,
-    #     'company_name3': 184
-    # })
+    out_json = jsonify({
+        "sdek": sdek_res,
+        "dpd": "dpd_json",
+        "boxberry": "boxberry_json"
+    })
+   
+    return out_json
+
+    
 @app.route('/get_tariffs', methods=['GET'])
 def get_tariffs():
     # TODO: get tariffs from CSV file or database
