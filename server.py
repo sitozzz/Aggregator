@@ -57,15 +57,18 @@ def calculate():
     # ==SDEK API==
     sdek_res = sdek_api.calculate_sdek(req, sdek_id)
     # ==SDEK API==
-    
+    print(type(sdek_res))
     # return results here
-    return jsonify(sdek_res)
-    # TODO: send this!
-    # return jsonify({
-    #     'company_name': 321,
-    #     'company_name1': 21,
-    #     'company_name3': 184
-    # })
+    sdek_res = json.loads(sdek_res,encoding='utf-8')
+    print(type(sdek_res))
+    print(sdek_res)
+    out_json = jsonify({
+        "sdek": sdek_res
+    })
+   
+    return out_json
+
+    
 @app.route('/get_tariffs', methods=['GET'])
 def get_tariffs():
     # TODO: get tariffs from CSV file or database

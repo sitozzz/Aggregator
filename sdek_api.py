@@ -1,17 +1,17 @@
 import requests
 import json
 # TODO: Change this
-test_login = "3y03Ahh2XigMgzN1l7mWff6jZMSCqHE1"
-dateExecute = "2018-12-12"
-test_pswd = dateExecute + "&Or6kB0BaKUrGCx51NWtVNcZ4YmVRFMBN"
-
+# test_login = "3y03Ahh2XigMgzN1l7mWff6jZMSCqHE1"
+# test_pswd = dateExecute + "&Or6kB0BaKUrGCx51NWtVNcZ4YmVRFMBN"
+prod_login = "9PNdW6RZ7Klnfg2P4JXkglM9BkznKrzh"
+prod_pswd = "RfYDInLNGtB654BaZi8Z11ylwwq4WBmO"
 
 def calculate_sdek(data, sdek_id):
 	sdek_json = {
 		"version":"1.0",
 		"dateExecute": data['dateExecute'], 
-		# "authLogin":"098f6bcd4621d373cade4e832627b4f6", 
-		# "secure":"396fe8e7dfd37c7c9f361bba60db0874", 
+		# "authLogin": prod_login, 
+		# "secure": prod_pswd, 
 		"senderCityId": data['city1']['id'], 
 		"receiverCityId": data['city2']['id'], 
 		# Check this
