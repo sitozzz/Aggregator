@@ -49,6 +49,16 @@ $(document).ready(function () {
     }
     var city1;
     var city2;
+    var deliveryDataFrom = 'door';
+    var deliveryDataTo = 'door';
+    
+    $('input[name=fromDelivery]').on('change', function () {
+        deliveryDataFrom = $(this).val(); 
+    });
+    $('input[name=toDelivery]').on('change', function () {
+        deliveryDataTo = $(this).val(); 
+    });
+
     $("#city1").autocomplete({
         source: function (request, response) {
             $.ajax({
@@ -138,8 +148,13 @@ $(document).ready(function () {
                     'name': city2._name,
                 },
                 'dateExecute': $('#dateExecute').val(),
-                'tariffName': $('#tariff').find(':selected').text(),
-                //1 or more
+                // 'tariffName': $('#tariff').find(':selected').text(),
+                
+                //Door to door, door to storage and other 
+                'deliveryType': {
+                    'deliveryFrom' : deliveryDataFrom, 
+                    'deliveryTo' : deliveryDataTo},
+
                 //TODO: Example hardcode!!!
                 'goods': [
                     {
@@ -160,28 +175,28 @@ $(document).ready(function () {
             }
         });
     });
-    function getTariffs() {
-        $.ajax({
-            url: "/get_tariffs",
-            contentType: 'application/json',
-            method: 'GET',
-            success: function (data) {
-                data = data['fields'];
-                var tariffHolder = document.getElementById('tariff');
-                for (let elem in data) {
-                    if (data[elem] != '') {
-                        console.log(data[elem]);
-                        let option = document.createElement('option');
-                        option.id = 'option-' + elem;
-                        option.text = data[elem];
-                        tariffHolder.appendChild(option);
-                    }
+    // function getTariffs() {
+    //     $.ajax({
+    //         url: "/get_tariffs",
+    //         contentType: 'application/json',
+    //         method: 'GET',
+    //         success: function (data) {
+    //             data = data['fields'];
+    //             var tariffHolder = document.getElementById('tariff');
+    //             for (let elem in data) {
+    //                 if (data[elem] != '') {
+    //                     console.log(data[elem]);
+    //                     let option = document.createElement('option');
+    //                     option.id = 'option-' + elem;
+    //                     option.text = data[elem];
+    //                     tariffHolder.appendChild(option);
+    //                 }
 
-                }
-            }
-        });
-    }
-    getTariffs();
+    //             }
+    //         }
+    //     });
+    // }
+    // getTariffs();
 
 
 });
