@@ -29,7 +29,7 @@ $(document).ready(function () {
                 let deliveryPeriodMax = data['deliveryPeriodMax'];
                 let deliveryDateMin = data['deliveryDateMin'];
                 let deliveryDateMax = data['deliveryDateMax'];
-                document.getElementById('priceSDEK').innerText = price + ' Rub';
+                document.getElementById('priceSDEK').innerHTML = '<p>' + price + ' Rub </p><p>Дата доставки: ' + deliveryDateMax + '</p>';
                 document.getElementById('errorSDEK').innerText = '';
                 // $('#priceSDEK').val(price + ' Rub');
             } else {
@@ -175,28 +175,4 @@ $(document).ready(function () {
             }
         });
     });
-    // function getTariffs() {
-    //     $.ajax({
-    //         url: "/get_tariffs",
-    //         contentType: 'application/json',
-    //         method: 'GET',
-    //         success: function (data) {
-    //             data = data['fields'];
-    //             var tariffHolder = document.getElementById('tariff');
-    //             for (let elem in data) {
-    //                 if (data[elem] != '') {
-    //                     console.log(data[elem]);
-    //                     let option = document.createElement('option');
-    //                     option.id = 'option-' + elem;
-    //                     option.text = data[elem];
-    //                     tariffHolder.appendChild(option);
-    //                 }
-
-    //             }
-    //         }
-    //     });
-    // }
-    // getTariffs();
-
-
 });
