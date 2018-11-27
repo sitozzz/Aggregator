@@ -79,8 +79,14 @@ def select_delivery_type(type_from, type_to):
 		return storage_to_storage
 
 def calculate_sdek(data):
-	
-	
+	# print(data)
+	# if data['goods']['volume'] == None:
+	# 	data['goods'].pop("volume")
+	# else:
+	# 	data['goods'].pop("height")
+	# 	data['goods'].pop("length")
+	# 	data['goods'].pop("width")
+
 	sdek_json = {
 		"version":"1.0",
 		"dateExecute": data['dateExecute'], 

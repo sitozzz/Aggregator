@@ -31,25 +31,29 @@
                     <input id="city1" class="form-control" type="text" placeholder="Откуда:" required>
                     <div id="deliveryTypeFrom" class="btn-group btn-group-toggle" data-toggle="buttons">
                         <label class="btn btn-secondary active">
-                          <input type="radio" name="fromDelivery" value="door" id="door1" autocomplete="off" checked> Дверь
+                            <input type="radio" name="fromDelivery" value="door" id="door1" autocomplete="off" checked>
+                            Дверь
                         </label>
                         <label class="btn btn-secondary">
-                          <input type="radio" name="fromDelivery" value="storage" id="storage1" autocomplete="off"> Склад
+                            <input type="radio" name="fromDelivery" value="storage" id="storage1" autocomplete="off">
+                            Склад
                         </label>
-                        
-                      </div>
+
+                    </div>
                 </div>
                 <div style="display: inline-block; margin:0; padding:0; padding-left: 10px;  width: 250px; ">
                     <input id="city2" class="form-control" type="text" placeholder="Куда:" required>
                     <div id="deliveryTypeTo" class="btn-group btn-group-toggle" data-toggle="buttons">
                         <label class="btn btn-secondary active">
-                          <input type="radio" name="toDelivery" value="door" id="door2" autocomplete="off" checked> Дверь
+                            <input type="radio" name="toDelivery" value="door" id="door2" autocomplete="off" checked>
+                            Дверь
                         </label>
                         <label class="btn btn-secondary">
-                          <input type="radio" name="toDelivery" value="storage" id="storage2" autocomplete="off"> Склад
+                            <input type="radio" name="toDelivery" value="storage" id="storage2" autocomplete="off">
+                            Склад
                         </label>
-                        
-                      </div>
+
+                    </div>
                 </div>
                 <div style="display: inline-block; margin:0; padding:0; padding-left: 10px; text-align:right; width: 100px; ">
                     <button id="calcBtn1" class="btn btn btn-success">Найти</button>
@@ -67,21 +71,39 @@
                     </select> -->
                 </div>
                 <div style="display: inline-block; width:50%; padding-top: 10px;">
-                    <label for="weight">Вес кг</label>
-                    <input id="weight" class="form-control" value='0.3' type="number" />
+                    <label for="weight">Вес, кг</label>
+                    <input id="weight" class="form-control" min="0.0" value='0.3' type="number" />
                 </div>
-                <div style="display: inline-block; width:49%; padding-top: 10px;">
-                    <label for="length">Длина </label>
-                    <input id="length" class="form-control" value="10" type="number" />
+                <div id="calcVariantDiv" class="btn-group btn-group-toggle" data-toggle="buttons">
+                    <label class="btn btn-secondary active">
+                        <input type="radio" name="calcVariant" value="variant1"  autocomplete="off" checked> ДВШ
+                    </label>
+                    <label class="btn btn-secondary">
+                        <input type="radio" name="calcVariant" value="variant2"  autocomplete="off"> Объем
+                    </label>
+
                 </div>
-                <div style="display: inline-block; width:50%; padding-top: 10px;">
-                    <label for="width">Ширина </label>
-                    <input id="width" class="form-control" value="7" type="number" />
+                <div id="variant1">
+                    <div style="display: inline-block; width:49%; padding-top: 10px;">
+                        <label for="length">Длина, см </label>
+                        <input id="length" class="form-control" min="0.0" value="10" type="number" />
+                    </div>
+                    <div style="display: inline-block; width:50%; padding-top: 10px;">
+                        <label for="width">Ширина, см</label>
+                        <input id="width" class="form-control" min="0.0" value="7" type="number" />
+                    </div>
+                    <div style="display: inline-block; width:49%; padding-top: 10px;">
+                        <label for="height">Высота, см</label>
+                        <input id="height" class="form-control" min="0.0" value="5" type="number" />
+                    </div>
                 </div>
-                <div style="display: inline-block; width:49%; padding-top: 10px;">
-                    <label for="height">Высота </label>
-                    <input id="height" class="form-control" value="5" type="number" />
+                <div id="variant2" style="display:none;">
+                    <div style="display: inline-block; width:49%; padding-top: 10px;">
+                        <label for="size">Объем, м3 </label>
+                        <input id="size" class="form-control" value="5" type="number" />
+                    </div>
                 </div>
+
                 <div style="width:100%; padding-top: 20px; text-align: center;">
                     <button id="calcBtn" class="btn btn-lg btn-success">Рассчитать стоимость</button>
                 </div>
@@ -100,10 +122,10 @@
         </div>
 
         <div id="output1" class="row" style="margin:0; padding:30px;  width:100%; display: none;">
-            
+
         </div>
         <!-- FIXME: Add styles here -->
-        
+
     </div>
 
     </div>

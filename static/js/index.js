@@ -6,12 +6,16 @@ $(document).ready(function () {
         this._name = name;
     }
     //Delivery data
-    function DeliveryData(weight, length, height, width) {
-        this.weight = weight;
-        this.length = length;
-        this.height = height;
-        this.width = width;
-        //this.size = height*width*length;
+    function DeliveryData(weight, length, height, width, size) {
+        if (size == undefined) {
+            this.weight = weight;
+            this.length = length;
+            this.height = height;
+            this.width = width;
+        } else {
+            this.weight = weight;
+            this.size = size;   
+        }
     }
     function showSdekResults(data) {
         dpdData = data.dpd
@@ -57,6 +61,17 @@ $(document).ready(function () {
     });
     $('input[name=toDelivery]').on('change', function () {
         deliveryDataTo = $(this).val(); 
+    });
+    
+    $('input[name=calcVariant]').on('change', function () {
+        if ($(this).val() == 'variant1') {
+            $('#variant1').show();
+            $('#variant2').hide();
+        } else {
+            $('#variant1').hide();
+            $('#variant2').show();            
+        }
+
     });
 
     $("#city1").autocomplete({
@@ -127,13 +142,20 @@ $(document).ready(function () {
     $("#calcBtn").click(function () {
 
         //Collect data from fields
+        let size;
+        if ($('#variant2').is(':visible')) {
+            size = $('#size').val();
+        }
         let deliveryData = new DeliveryData(
 
             $('#weight').val(),
             $('#length').val(),
             $('#height').val(),
-            $('#width').val()
+            $('#width').val(),
+            size
         );
+        console.log('Delivery data = ');
+        console.log(deliveryData);
         $.ajax({
             url: "/calculate",
             contentType: 'application/json',
@@ -161,7 +183,8 @@ $(document).ready(function () {
                         'weight': deliveryData.weight,
                         'height': deliveryData.height,
                         'width': deliveryData.width,
-                        'length': deliveryData.length
+                        'length': deliveryData.length,
+                        'volume': deliveryData.size
                     }
                 ]
             }),
