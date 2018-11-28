@@ -71,7 +71,7 @@ def get_description_point(point_code, photo = False):
     
     :param point_code: код пункта выдачи заказов.
     :param photo: (optional) получить изображения.
-    :return: массив значений."""
+    :return: list."""
     return get_json(url, {
         'token'  : token,
         'method' : 'PointsDescription',
@@ -106,52 +106,43 @@ def find_city_in_data(name_sity, list_cities):
     
     :param name_city: название города.
     :param list_cities: список словарей городов.
-    :return: словарь для заданного города."""
+    :return: Dictionary для заданного города."""
     for i in list_cities:
         if i['Name'] == name_sity:
             return i
+
+def find_elements(value, list_elements, name_element):
+    elements = []
+
+    for i in list_elements:
+        if i[name_element] == value:
+            elements.append(i)
+
+    return elements
 
 def find_list_points_for_city(code_city, list_points):
     """Поиск всех пунктов выдачи заказов в заданном городе.
     
     :param code_city: код города в boxberry.
     :param list_points: список словарей пунктов выдачи заказов для всех городов.
-    :return: список словарей пунктов выдачи заказов для заданного города."""
-    points = []
-
-    for i in list_points:
-        if i['CityCode'] == code_city:
-            points.append(i)
-
-    return points
+    :return: list of Dictionary пунктов выдачи заказов для заданного города."""
+    return find_elements(code_city, list_points, 'CityCode')
 
 def find_list_points_for_parcels_for_city(name_city, list_points):
     """Поиск всех пунктов приема в заданном городе.
     
     :param name_city: название города.
     :param list_points: список словарей пунктов приема для всех городов.
-    :return: список словарей пунктов приема для заданного города."""
-    points = []
-
-    for i in list_points:
-        if i['City'] == name_city:
-            points.append(i)
-
-    return points
+    :return: list of Dictionary пунктов приема для заданного города."""
+    return find_elements(name_city, list_points, 'City')
 
 def find_zips_for_city(name_city, zips):
     """Поиск всех почтовых индексов для заданого города.
     
     :param name_city: название города.
     :param zips: список словарей почтовых индексов для всех городов.
-    :return: список словарей почтовых индексов для заданного города."""
-    zips_in_city = []
-
-    for i in zips:
-        if i['City'] == name_city:
-            zips_in_city.append(i)
-
-    return zips_in_city
+    :return: list of Dictionary почтовых индексов для заданного города."""
+    return find_elements(name_city, zips, 'City')
 
 def check_courier_delivery(city):
     """Проверка возможности доставки курьером на основе данных о городе.
@@ -178,7 +169,7 @@ def filter_by_point(points, weight, volume):
 def write_csv(data, file_name, columns, encoding = 'utf-8'):
     """Записать лист словарей в файл ('*.csv').
     
-    :param data: лист словарей.
+    :param data: list of Dictionary.
     :param file_name: имя файла в который произведется запись.
     :param columns: заголовки колонок в виде списка строк.
     :param encoding: (optional) кодировка по умолчанию ('utf-8').
@@ -209,25 +200,30 @@ def take_city_from_csv(file_name, name_city, encoding = 'utf-8'):
         except csv.Error:
             return None
 
+        return None
+
+def take_from_csv(file_name, value, name_element, encoding = 'utf-8'):
+    with open(file_name, 'r', newline = '', encoding = encoding) as file:
+        elements = []
+        reader = csv.DictReader(file, delimiter = ';')
+        try:
+            for i in reader:
+                if i[name_element] == value:
+                    elements.append(i)
+        except csv.Error:
+            return None
+        
+        return elements
+
 def take_points_for_parcels_from_csv(file_name, name_city, encoding = 'utf-8'):
     """Получить пункты приема в заданном городе из файла ('*.csv').
     
     :param file_name: имя файла из которого считываются данные.
     :param name_city: имя города в котором необходимо найти пункты приема.
     :param encoding: (optional) кодировка по умолчанию ('utf-8').
-    :return: лист словарей данных, в случае если город не найден пустой массив
+    :return: list of Dictionary, в случае если город не найден пустой массив
         В случае ошибки чтения None."""
-    with open(file_name, 'r', newline = '', encoding = encoding) as file:
-        points = []
-        reader = csv.DictReader(file, delimiter = ';')
-        try:
-            for i in reader:
-                if i['City'] == name_city:
-                    points.append(i)
-        except csv.Error:
-            return None
-        
-        return points
+    return take_from_csv(file_name, name_city, 'City', encoding)
 
 def take_points_of_issue_orders(file_name, code_city, encoding = 'utf-8'):
     """Получить пункты приема в заданном городе из файла ('*.csv').
@@ -235,26 +231,16 @@ def take_points_of_issue_orders(file_name, code_city, encoding = 'utf-8'):
     :param file_name: имя файла из которого считываются данные.
     :param code_city: код города в boxberry.
     :param encoding: (optional) кодировка по умолчанию ('utf-8').
-    :return: лист словарей данных, в случае если город не найден пустой массив
+    :return: list of Dictionary, в случае если город не найден пустой массив
         В случае ошибки чтения None."""
-    with open(file_name, 'r', newline = '', encoding = encoding) as file:
-        points = []
-        reader = csv.DictReader(file, delimiter = ';')
-        try:
-            for i in reader:
-                if i['CityCode'] == code_city:
-                    points.append(i)
-        except csv.Error:
-            print('Error')
-            return None
-        
-        return points
+    return take_from_csv(file_name, code_city, 'CityCode', encoding)
 
-def get_delivery_costs(sender_city, recipient_city, weight, zip_code, advanced_sending_options = None):
+def get_delivery_costs(sender_city, recipient_city, ordersum, weight, zip_code, advanced_sending_options):
     """Расчет стоимости доставки посылки до ПВЗ, возможен расчет с учетом курьерской доставки.
     
-    :param sender_city: str, город отправителя.
-    :param recipient_city: str, город получателя.
+    :param sender_city: город отправителя.
+    :param recipient_city: город получателя.
+    :param ordersum: заявленная стоимость ('руб.').
     :param weight: вес посылки в (граммах).
     :param zip_code: почтовый индекс для курьерской доставки.
     :param advanced_sending_options: (optional) Dictionary,
@@ -275,6 +261,7 @@ def get_delivery_costs(sender_city, recipient_city, weight, zip_code, advanced_s
         'method'      : 'DeliveryCosts',
         'weight'      : weight,
         'target'      : recipient_city,
+        'ordersum'    : ordersum,
         'targetstart' : sender_city,
         'height'      : height,
         'width'       : width,
@@ -300,25 +287,24 @@ def data_loading():
     """Загрузка данных в ('*.csv') файлы."""
     list_cities = get_list_cities()
     write_csv(list_cities, file_cities, list_cities[0].keys())
+    list_points_for_parcels = get_points_for_parcels()
+    write_csv(list_points_for_parcels, file_points_for_parcels, list_points_for_parcels[0].keys())
     list_points = get_list_points()
     write_csv(list_points, file_points, list_points[0].keys())
     list_zips = get_list_zips()
     write_csv(list_zips, file_zips, list_zips[0].keys())
-    list_points_for_parcels = get_points_for_parcels()
-    write_csv(list_points_for_parcels, file_points_for_parcels, list_points_for_parcels[0].keys())
 
-def get_data(request):
-    """Получить цену за доставку и кол-во дней доставки.
-    
-    :return: словарь данных, в случае если получить данные невозможно возвращается пустой словарь."""
-    sender_city = get_name_city(request['city1']['name'])
-    recipient_city = get_name_city(request['city2']['name'])
+def calculate_boxberry(sender_city, recipient_city, advanced_sending_options, ordersum = 0, zip_code = 0):
+    """Получить цену за доставку и кол-во дней доставки."""
+    try:
+        weight = float(advanced_sending_options['weight'])
+    except:
+        weight = 0
 
     try:
-        weight = float(request['goods'][0]['weight'])
-        height = float(request['goods'][0]['height'])
-        width = float(request['goods'][0]['width'])
-        depth = float(request['goods'][0]['length'])
+        height = float(advanced_sending_options['height'])
+        width = float(advanced_sending_options['width'])
+        depth = float(advanced_sending_options['length'])
     except:
         height = 0
         width = 0
@@ -332,17 +318,44 @@ def get_data(request):
     
     city_a = take_city_from_csv(file_cities, sender_city)
     city_b = take_city_from_csv(file_cities, recipient_city)
+
+    if city_a == None or city_b == None:
+        return {}
+
     points_for_parcels = take_points_for_parcels_from_csv(file_points_for_parcels, city_a['Name'])
+
+    if len(points_for_parcels) == 0:
+        return {}
+
     points_of_issue_orders = take_points_of_issue_orders(file_points, city_b['Code'])
     points_of_issue_orders = filter_by_point(points_of_issue_orders, weight, volume)
+
+    if len(points_of_issue_orders) == 0:
+        return {}
+
+    if zip_code != 0:
+        if not zip_check(zip_code):
+            zip_code = 0
+        
     price, period = get_delivery_costs(
         points_for_parcels[0]['Code'], 
         points_of_issue_orders[0]['Code'], 
+        ordersum, 
         weight * 1000, 
-        0, 
-        {'height' : height, 'width' : width, 'depth' : depth})
+        zip_code, 
+        {
+            'height' : height, 
+            'width' : width, 
+            'depth' : depth
+        })
     
     return {
         'price'  : price,
         'period' : period
     }
+
+def get_data_boxberry(request):
+    sender_city = get_name_city(request['city1']['name'])
+    recipient_city = get_name_city(request['city2']['name'])
+
+    return calculate_boxberry(sender_city, recipient_city, request['goods'][0])
