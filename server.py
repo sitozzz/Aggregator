@@ -17,6 +17,8 @@ import csv
 import sdek_api
 import dpd_api
 import pony_api
+import boxberry_api
+
 app = Flask(__name__)
 
 def check_auth(username, password):
@@ -60,6 +62,8 @@ def calculate():
     
     dpd_res = dpd_api.get_service_cost(req)
     print(dpd_res['list'])
+
+    #boxberry_res = boxberry_api.get_data_boxberry(req)
     # return results here
 
     pony_res = pony_api.get_service_cost(req)
