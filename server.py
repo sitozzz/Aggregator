@@ -63,7 +63,9 @@ def calculate():
     dpd_res = dpd_api.get_service_cost(req)
     print(dpd_res['list'])
 
+    #boxberry_api.data_loading()
     #boxberry_res = boxberry_api.get_data_boxberry(req)
+    
     # return results here
 
     pony_res = pony_api.get_service_cost(req)
@@ -71,7 +73,7 @@ def calculate():
     out_json = jsonify({
         "sdek": sdek_res,
         "dpd": dpd_res['list'],
-        "boxberry": "boxberry_json",
+        "boxberry": "boxberry_res",
         "pony": pony_res
     })
     print(out_json)

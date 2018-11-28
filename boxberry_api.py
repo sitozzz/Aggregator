@@ -269,8 +269,6 @@ def get_delivery_costs(sender_city, recipient_city, ordersum, weight, zip_code, 
         'zip'         : zip_code
     })
 
-    print(delivery_costs)
-
     return delivery_costs['price'], delivery_costs['delivery_period']
 
 
