@@ -57,16 +57,13 @@ def calculate():
     sdek_res = json.loads(sdek_res,encoding='utf-8')
     # ==SDEK API==
     
-    #dpd_res = dpd_api.get_service_cost(req['city1']['name'],req['city2']['name'],True,True,int(req['goods']['weight']),int(req['goods']['length']),int(req['goods']['width']),int(req['goods']['height']))
-   
-
-    # dpd_res = dpd_api.get_service_cost(req['city1']['name'].split(',')[0],req['city2']['name'].split(',')[0],True,True,req['goods'][0]['weight'],20,20,20)
-    # print(dpd_res['list'])
+    dpd_res = dpd_api.get_service_cost(req)
+    print(dpd_res['list'])
     # return results here
 
     out_json = jsonify({
         "sdek": sdek_res,
-        # "dpd": dpd_res['list'],
+        "dpd": dpd_res['list'],
         "boxberry": "boxberry_json"
     })
     print(out_json)

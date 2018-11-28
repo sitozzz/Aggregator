@@ -1,79 +1,103 @@
-$(document).ready(function () {
-    //This sends to server
-    //City object
-    function City(id, name) {
-        this._id = id;
-        this._name = name;
+var city1;
+var city2;
+var deliveryDataFrom = 'door';
+var deliveryDataTo = 'door';
+var d = document;
+
+//This sends to server
+//City object
+function City(id, name) {
+    this._id = id;
+    this._name = name;
+}
+//Delivery data
+function DeliveryData(weight, length, height, width, size) {
+    if (size == undefined) {
+        this.weight = weight;
+        this.length = length;
+        this.height = height;
+        this.width = width;
+    } else {
+        this.weight = weight;
+        this.size = size;
     }
-    //Delivery data
-    function DeliveryData(weight, length, height, width, size) {
-        if (size == undefined) {
-            this.weight = weight;
-            this.length = length;
-            this.height = height;
-            this.width = width;
+}
+function showResults(data) {
+    showDPDres(data.dpd);
+    if (data.sdek.error == undefined) {
+
+
+        data = data.sdek.result
+        console.log(data);
+        // console.log(data['result']);
+        if (data != undefined) {
+            // data = data['result'];
+            // console.log(data);
+            let price = data['price'];
+            let deliveryPeriodMin = data['deliveryPeriodMin'];
+            let deliveryPeriodMax = data['deliveryPeriodMax'];
+            let deliveryDateMin = data['deliveryDateMin'];
+            let deliveryDateMax = data['deliveryDateMax'];
+            document.getElementById('priceSDEK').innerHTML = '<p>' + price + ' Rub </p><p>Дата доставки: ' + deliveryDateMax + '</p>';
+            document.getElementById('errorSDEK').innerText = '';
+            // $('#priceSDEK').val(price + ' Rub');
         } else {
-            this.weight = weight;
-            this.size = size;   
-        }
-    }
-    function showSdekResults(data) {
-        dpdData = data.dpd
-        if (data.sdek.error == undefined) {
-
-
-            data = data.sdek.result
             console.log(data);
-            // console.log(data['result']);
-            if (data != undefined) {
-                // data = data['result'];
-                // console.log(data);
-                let price = data['price'];
-                let deliveryPeriodMin = data['deliveryPeriodMin'];
-                let deliveryPeriodMax = data['deliveryPeriodMax'];
-                let deliveryDateMin = data['deliveryDateMin'];
-                let deliveryDateMax = data['deliveryDateMax'];
-                document.getElementById('priceSDEK').innerHTML = '<p>' + price + ' Rub </p><p>Дата доставки: ' + deliveryDateMax + '</p>';
-                document.getElementById('errorSDEK').innerText = '';
-                // $('#priceSDEK').val(price + ' Rub');
-            } else {
-                console.log(data);
-                // data = data.error[0];
-                document.getElementById('priceSDEK').innerText = '';
-                document.getElementById('errorSDEK').innerText = "Доставка невозможна при заданных условиях";
-            }
+            // data = data.error[0];
+            document.getElementById('priceSDEK').innerText = '';
+            document.getElementById('errorSDEK').innerText = "Доставка невозможна при заданных условиях";
         }
-        for (let r in dpdData) {
-            
-            $('#output1').append('<p> услуга: ' + dpdData[r].serviceName + ', цена: '+dpdData[r].cost+' дней до доставки: '+dpdData[r].days+'</p>')
-            
-        }
-        $('#output1').show();
-
     }
-    var city1;
-    var city2;
-    var deliveryDataFrom = 'door';
-    var deliveryDataTo = 'door';
-    
+}
+function showDPDres(dpdData) {
+    $('#dpd-output').html('');
+    if (dpdData[0].serviceName) {
+        var dpdHolder = d.getElementById('dpd-output');
+        var row = d.createElement('div')
+        row.className = 'row';
+        row.style = "margin:auto; padding:0; max-width: 600px; padding: 24px;border: 1px solid gray; border-radius: 15px;";
+        dpdHolder.appendChild(row);
+        var title = d.createElement('h1');
+        title.innerText = 'Стоимость доставки DPD';
+        row.appendChild(title);
+        for (let r in dpdData) {
+            var propHolder = d.createElement('div');
+            propHolder.style = 'width:100%;';
+            propHolder.innerHTML = '<p> услуга: ' + dpdData[r].serviceName + ', цена: ' + dpdData[r].cost + ' дней до доставки: ' + dpdData[r].days + '</p>'
+            row.appendChild(propHolder);
+        }
+    } else {
+        var dpdHolder = d.getElementById('dpd-output');
+        var row = d.createElement('div')
+        row.className = 'row';
+        row.style = "margin:auto; padding:0; max-width: 600px; padding: 24px;border: 1px solid gray; border-radius: 15px;";
+        dpdHolder.appendChild(row);
+        var title = d.createElement('h1');
+        title.innerText = dpdData.replace('Server raised fault: ','');
+        row.appendChild(title);
+        
+    }
+
+    $('#dpd-output').show();
+}
+
+$(document).ready(function () {
     $('input[name=fromDelivery]').on('change', function () {
-        deliveryDataFrom = $(this).val(); 
+        deliveryDataFrom = $(this).val();
     });
     $('input[name=toDelivery]').on('change', function () {
-        deliveryDataTo = $(this).val(); 
+        deliveryDataTo = $(this).val();
     });
-    
     $('input[name=calcVariant]').on('change', function () {
         if ($(this).val() == 'variant1') {
             $('#variant1').show();
             $('#variant2').hide();
         } else {
             $('#variant1').hide();
-            $('#variant2').show();            
+            $('#variant2').show();
         }
 
     });
-
     $("#city1").autocomplete({
         source: function (request, response) {
             $.ajax({
@@ -171,11 +195,12 @@ $(document).ready(function () {
                 },
                 'dateExecute': $('#dateExecute').val(),
                 // 'tariffName': $('#tariff').find(':selected').text(),
-                
+
                 //Door to door, door to storage and other 
                 'deliveryType': {
-                    'deliveryFrom' : deliveryDataFrom, 
-                    'deliveryTo' : deliveryDataTo},
+                    'deliveryFrom': deliveryDataFrom,
+                    'deliveryTo': deliveryDataTo
+                },
 
                 //TODO: Example hardcode!!!
                 'goods': [
@@ -192,7 +217,7 @@ $(document).ready(function () {
                 // TODO: Only for sdek api!
                 console.log(data);
 
-                showSdekResults(data)
+                showResults(data)
 
                 $('#output').show('fast');
             }
