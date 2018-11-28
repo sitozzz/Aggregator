@@ -26,35 +26,38 @@
 <body>
     <div class="section">
         <div class="row" style="margin:0; padding:30px; width: 100%; text-align: center;">
-            <div class="row" style="margin:auto; padding:0; max-width: 608px;">
+            <div class="row" style="margin:auto; padding:0; max-width: 608px; display: inline;">
                 <div style="display: inline-block; margin:0; padding:0; width: 250px; ">
                     <input id="city1" class="form-control" type="text" placeholder="Откуда:" required>
-                    <div id="deliveryTypeFrom" class="btn-group btn-group-toggle" data-toggle="buttons">
-                        <label class="btn btn-secondary active">
-                            <input type="radio" name="fromDelivery" value="door" id="door1" autocomplete="off" checked>
-                            Дверь
-                        </label>
-                        <label class="btn btn-secondary">
-                            <input type="radio" name="fromDelivery" value="storage" id="storage1" autocomplete="off">
-                            Склад
-                        </label>
+                    
+                </div>
+                <div id="deliveryTypeFrom" class="btn-group btn-group-toggle" data-toggle="buttons">
+                    <label class="btn btn-secondary active">
+                        <input type="radio" name="fromDelivery" value="door" id="door1" autocomplete="off" checked>
+                        Дверь
+                    </label>
+                    <label class="btn btn-secondary">
+                        <input type="radio" name="fromDelivery" value="storage" id="storage1" autocomplete="off">
+                        Склад
+                    </label>
 
-                    </div>
                 </div>
                 <div style="display: inline-block; margin:0; padding:0; padding-left: 10px;  width: 250px; ">
                     <input id="city2" class="form-control" type="text" placeholder="Куда:" required>
-                    <div id="deliveryTypeTo" class="btn-group btn-group-toggle" data-toggle="buttons">
-                        <label class="btn btn-secondary active">
-                            <input type="radio" name="toDelivery" value="door" id="door2" autocomplete="off" checked>
-                            Дверь
-                        </label>
-                        <label class="btn btn-secondary">
-                            <input type="radio" name="toDelivery" value="storage" id="storage2" autocomplete="off">
-                            Склад
-                        </label>
-
-                    </div>
+                    
                 </div>
+                <div id="deliveryTypeTo" class="btn-group btn-group-toggle" data-toggle="buttons">
+                    <label class="btn btn-secondary active">
+                        <input type="radio" name="toDelivery" value="door" id="door2" autocomplete="off" checked>
+                        Дверь
+                    </label>
+                    <label class="btn btn-secondary">
+                        <input type="radio" name="toDelivery" value="storage" id="storage2" autocomplete="off">
+                        Склад
+                    </label>
+
+                </div>
+                
                 <div style="display: inline-block; margin:0; padding:0; padding-left: 10px; text-align:right; width: 100px; ">
                     <button id="calcBtn1" class="btn btn btn-success">Найти</button>
                 </div>
