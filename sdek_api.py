@@ -111,4 +111,5 @@ def calculate_sdek(data):
 	}    
 	
 	sdek_res = requests.post('http://api.cdek.ru/calculator/calculate_price_by_json.php',json=sdek_json)
+	sdek_res = json.loads(sdek_res.text,encoding='utf-8')
 	return sdek_res.text
