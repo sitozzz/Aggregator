@@ -24,6 +24,7 @@ function DeliveryData(weight, length, height, width, size) {
 }
 function showResults(data) {
     showDPDres(data.dpd);
+    showPonyres(data.pony)
     if (data.sdek.error == undefined) {
 
 
@@ -79,6 +80,9 @@ function showDPDres(dpdData) {
     }
 
     $('#dpd-output').show();
+}
+function showPonyres(ponyData){
+    console.log(ponyData);
 }
 
 $(document).ready(function () {

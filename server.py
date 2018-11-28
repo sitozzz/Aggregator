@@ -16,6 +16,7 @@ import csv
 # import functions
 import sdek_api
 import dpd_api
+import pony_api
 app = Flask(__name__)
 
 def check_auth(username, password):
@@ -61,12 +62,17 @@ def calculate():
     print(dpd_res['list'])
     # return results here
 
+    pony_res = pony_api.get_service_cost(req)
+
     out_json = jsonify({
         "sdek": sdek_res,
         "dpd": dpd_res['list'],
-        "boxberry": "boxberry_json"
+        "boxberry": "boxberry_json",
+        "pony": pony_res
     })
     print(out_json)
+
+    
    
     return out_json
 
