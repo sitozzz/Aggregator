@@ -54,7 +54,7 @@ def calculate():
     # ==SDEK API==
     # TODO: Add from and to delivery selection
     sdek_res = sdek_api.calculate_sdek(req)
-    sdek_res = json.loads(sdek_res,encoding='utf-8')
+    # sdek_res = json.loads(sdek_res,encoding='utf-8')
     # ==SDEK API==
     
     dpd_res = dpd_api.get_service_cost(req)
