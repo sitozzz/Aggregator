@@ -95,11 +95,14 @@ def zip_check(zip_code):
     
     :param zip_code: почтовый код.
     :return: True если возможно, False нет."""
-    return get_json(url, {
-        'token'  : token,
-        'method' : 'ZipCheck',
-        'Zip'    : zip_code
-    })[0]['ExpressDelivery']
+    try:
+        return get_json(url, {
+            'token'  : token,
+            'method' : 'ZipCheck',
+            'Zip'    : zip_code
+        })[0]['ExpressDelivery']
+    except:
+        return False
 
 def find_city_in_data(name_sity, list_cities):
     """Поиск в листе словарей города с заданым именем.
@@ -235,6 +238,16 @@ def take_points_of_issue_orders(file_name, code_city, encoding = 'utf-8'):
         В случае ошибки чтения None."""
     return take_from_csv(file_name, code_city, 'CityCode', encoding)
 
+def take_zips_for_city(file_name, name_city, encoding = 'utf-8'):
+    """Получить почтовые индексы в заданном городе из файла ('*.csv').
+    
+    :param file_name: имя файла из которого считываются данные.
+    :param name_city: имя города в котором необходимо найти почтовые индексы.
+    :param encoding: (optional) кодировка по умолчанию ('utf-8').
+    :return: list of Dictionary, в случае если город не найден пустой массив
+        В случае ошибки чтения None."""
+    return take_from_csv(file_name, name_city, 'City', encoding)
+
 def get_delivery_costs(sender_city, recipient_city, ordersum, weight, zip_code, advanced_sending_options):
     """Расчет стоимости доставки посылки до ПВЗ, возможен расчет с учетом курьерской доставки.
     
@@ -332,7 +345,9 @@ def calculate_boxberry(sender_city, recipient_city, advanced_sending_options, or
         return {}
 
     if zip_code != 0:
-        if not zip_check(zip_code):
+        if zip_code == 1:
+            zip_code = take_zips_for_city(file_zips, recipient_city)[0]['Zip']
+        elif not zip_check(zip_code):
             zip_code = 0
         
     price, period = get_delivery_costs(
@@ -355,8 +370,12 @@ def calculate_boxberry(sender_city, recipient_city, advanced_sending_options, or
 def get_data_boxberry(request):
     sender_city = get_name_city(request['city1']['name'])
     recipient_city = get_name_city(request['city2']['name'])
+    zip_code = 0
 
-    return calculate_boxberry(sender_city, recipient_city, request['goods'][0])
+    if request['deliveryType']['deliveryTo'] == 'door':
+        zip_code = 1
+
+    return calculate_boxberry(sender_city, recipient_city, request['goods'][0], zip_code=zip_code)
 
 def send_request(json):
     response = requests.post(url, json=json)
