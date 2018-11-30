@@ -1,5 +1,6 @@
 import requests
 from suds.client import Client
+import xmltodict
 
 
 def get_service_cost(req):
@@ -19,21 +20,16 @@ def get_service_cost(req):
 
   if 'length' in req['goods'][0].keys():
       length = req['goods'][0]['length']
-      print('EDIK TUT DLINA')
-      print (length)
       width = req['goods'][0]['width']
       height = req['goods'][0]['height']
   else:
       length = round((int(req['goods'][0]['volume']) * 1000000)**(1/3))
-      print('EDIK TUT DLINA')
-      print (length)
       width = round((int(req['goods'][0]['volume']) * 1000000)**(1/3))
       height = round((int(req['goods'][0]['volume']) * 1000000)**(1/3))
   url = "https://svc-api.p2e.ru/UI_Service.svc?singleWsdl"
   client = Client(url)
 
-  body = '''
-  <?xml version="1.0" encoding="utf-8"?>
+  body = '''<?xml version="1.0" encoding="utf-8"?>
   <Request xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:type="OrderRequest">
     <Id>1</Id>  <Mode>Calculation</Mode>  <OrderList>
       <Order>      <ClientsNumber>kb48-12744</ClientsNumber>      <Payment>
@@ -71,8 +67,8 @@ def get_service_cost(req):
                   <Type>Box</Type>
                 </Packing>
                 <Dimentions>
-                  <Length>'''+length+'''</Length>                <Width>300</Width>                <Height>200</Height>              </Dimentions>
-                <Weight>800</Weight>              <Cost>10000</Cost>
+                  <Length>'''+length+'''</Length>                <Width>'''+width+'''</Width>                <Height>'''+height+'''</Height>              </Dimentions>
+                <Weight>'''+str(int(float(weight)*1000))+'''</Weight>              <Cost>10000</Cost>
               </Cargo>
             </CargoList>
             <Unformalized>Доставка запчастей</Unformalized>
@@ -83,7 +79,11 @@ def get_service_cost(req):
   </Request>
   '''
   result = client.service.SubmitRequest('6f0ef6b3-e39e-40b2-85af-185bb5a73e62', body)
+  print(result)
+  result=xmltodict.parse(result)
+
     #return re
   print('result PONY')
-  print(result)
+  print(result['Response']['OrderList']['Order']['ServiceList']['Service']['Calculation']['DeliveryRateSet']['DeliveryRate'])
+  result=result['Response']['OrderList']['Order']['ServiceList']['Service']['Calculation']['DeliveryRateSet']['DeliveryRate']
   return result
