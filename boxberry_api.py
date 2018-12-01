@@ -95,11 +95,14 @@ def zip_check(zip_code):
     
     :param zip_code: почтовый код.
     :return: True если возможно, False нет."""
-    return get_json(url, {
-        'token'  : token,
-        'method' : 'ZipCheck',
-        'Zip'    : zip_code
-    })[0]['ExpressDelivery']
+    try:
+        return get_json(url, {
+            'token'  : token,
+            'method' : 'ZipCheck',
+            'Zip'    : zip_code
+        })[0]['ExpressDelivery']
+    except:
+        return False
 
 def find_city_in_data(name_sity, list_cities):
     """Поиск в листе словарей города с заданым именем.
@@ -235,6 +238,16 @@ def take_points_of_issue_orders(file_name, code_city, encoding = 'utf-8'):
         В случае ошибки чтения None."""
     return take_from_csv(file_name, code_city, 'CityCode', encoding)
 
+def take_zips_for_city(file_name, name_city, encoding = 'utf-8'):
+    """Получить почтовые индексы в заданном городе из файла ('*.csv').
+    
+    :param file_name: имя файла из которого считываются данные.
+    :param name_city: имя города в котором необходимо найти почтовые индексы.
+    :param encoding: (optional) кодировка по умолчанию ('utf-8').
+    :return: list of Dictionary, в случае если город не найден пустой массив
+        В случае ошибки чтения None."""
+    return take_from_csv(file_name, name_city, 'City', encoding)
+
 def get_delivery_costs(sender_city, recipient_city, ordersum, weight, zip_code, advanced_sending_options):
     """Расчет стоимости доставки посылки до ПВЗ, возможен расчет с учетом курьерской доставки.
     
@@ -332,7 +345,9 @@ def calculate_boxberry(sender_city, recipient_city, advanced_sending_options, or
         return {}
 
     if zip_code != 0:
-        if not zip_check(zip_code):
+        if zip_code == 1:
+            zip_code = take_zips_for_city(file_zips, recipient_city)[0]['Zip']
+        elif not zip_check(zip_code):
             zip_code = 0
         
     price, period = get_delivery_costs(
@@ -355,5 +370,95 @@ def calculate_boxberry(sender_city, recipient_city, advanced_sending_options, or
 def get_data_boxberry(request):
     sender_city = get_name_city(request['city1']['name'])
     recipient_city = get_name_city(request['city2']['name'])
+    zip_code = 0
 
-    return calculate_boxberry(sender_city, recipient_city, request['goods'][0])
+    if request['deliveryType']['deliveryTo'] == 'door':
+        zip_code = 1
+
+    return calculate_boxberry(sender_city, recipient_city, request['goods'][0], zip_code=zip_code)
+
+def send_request(json):
+    response = requests.post(url, json=json)
+
+    return response
+
+def create_parsel():
+    data = {
+        'updateByTrack'     : 'track',
+        'order_id'          : 'ID заказа в ИМ',
+        'PalletNumber'      : 'Номер палеты',
+        'barcode'           : 'Штрих-код заказа',
+        'price'             : 'Объявленная стоимость - общая оценочная стоимость ЗП, в руб.',
+        'payment_sum'       : 'Сумма к оплате',
+        'delivery_sum'      : 'Стоимость доставки',
+        'vid'               : 'Тип доставки (1/2)',
+        'shop'              : {
+            'name'          : 'Код ПВЗ',
+            'name1'         : 'Код пункта поступления'
+        },
+        'customer'          : {
+            'fio'           : 'ФИО',
+            'phone'         : 'phone',
+            'phone2'        : 'phone2',
+            'email'         : 'email',
+            'name'          : 'имя организации',
+            'address'       : 'адрес',
+            'inn'           : 'inn',
+            'kpp'           : 'kpp',
+            'r_s'           : 'расчетный счет',
+            'bank'          : 'наименование банка',
+            'kor_s'         : 'кор счет',
+            'bik'           : 'БИК'
+        },
+        'kurdost'           : {
+            'index'         : 'Индекс',
+            'citi'          : 'Город',
+            'addressp'      : 'Адрес получателя',
+            'timesfrom1'    : 'Время доставки, от',
+            'timesto1'      : 'Время доставки, до',
+            'timesfrom2'    : 'Альтернативное время, от',
+            'timesto2'      : 'Альтернативное время, до',
+            'timep'         : 'Время доставки текстовый формат',
+            'delivery_date' : 'Дата доставки от +1 день до +5 дней от текущий даты (только для доставки по Москве, МО и Санкт-Петербургу)',
+            'comentk'       : 'Комментарий'
+        },
+        'items'             : {
+            'id'            : 'ID товара в БД ИМ',
+            'name'          : 'Наименование товара',
+            'UnitName'      : 'Единица измерения',
+            'nds'           : 'Процент НДС',
+            'price'         : 'Цена товара',
+            'quantity'      : 'Количество'
+        },
+        'weights'           : {
+            'weight'        : 'Вес 1-ого места',
+            'barcode'       : 'Баркод 1-го места',
+            'weight2'       : 'Вес 2-ого места',
+            'barcode2'      : 'Баркод 2-го места',
+            'weight3'       : 'Вес 3-его места',
+            'barcode3'      : 'Баркод 3-го места',
+            'weight4'       : 'Вес 4-ого места',
+            'barcode4'      : 'Баркод 4-го места',
+            'weight5'       : 'Вес 5-ого места',
+            'barcode5'      : 'Баркод 5-го места'
+        }
+    }
+
+    # order_id - идентификатор (номер) заказа в БД ИМ (должен быть уникальным в рамках одного ЛК).
+    # price - Объявленная стоимость - общая (оценочная) стоимость ЗП, в руб.
+    # payment_sum - Сумма к оплате (сумма, которую необходимо взять с получателя), руб. Для полностью предоплаченного заказа указывать 0.
+    # delivery_sum - Стоимость доставки, которую ИМ объявил получателю, руб.
+    # vid - 1 - самовывоз из ПВЗ (по умолчанию), 2 - курьерская доставка
+    # shop name1 - Код пункта поступления ЗП (код ПВЗ, в который ИМ сдаёт посылки для доставки).
+    # customer fio phone
+    # kurdost city - Наименование города Получателя ЗП, в котором будет курьерская доставка
+    # kurdost addressp - Адрес Получателя ЗП для курьерской доставки. Рекомендуется указывать в соответствии с КЛАДР. Адрес должен принадлежать почтовому индексу, по которому осуществляется Курьерская доставка.
+    # weights weight
+
+    return send_request(data)
+
+def place_order():
+    return
+
+def set_booking(request):
+    return place_order()

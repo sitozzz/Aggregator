@@ -24,7 +24,8 @@ function DeliveryData(weight, length, height, width, size) {
 }
 function showResults(data) {
     showDPDres(data.dpd);
-    showPonyres(data.pony)
+    showPonyres(data.pony);
+    showBoxberry(data.boxberry);
     if (data.sdek.error == undefined) {
 
 
@@ -74,15 +75,60 @@ function showDPDres(dpdData) {
         row.style = "margin:auto; padding:0; max-width: 600px; padding: 24px;border: 1px solid gray; border-radius: 15px;";
         dpdHolder.appendChild(row);
         var title = d.createElement('h1');
-        title.innerText = dpdData.replace('Server raised fault: ','');
+        title.innerText = dpdData.replace('Server raised fault: ', '');
         row.appendChild(title);
-        
+
     }
 
     $('#dpd-output').show();
 }
-function showPonyres(ponyData){
-    console.log(ponyData);
+function showPonyres(ponyData) {
+    $('#pony-output').html('');
+    $('#pony-output').show();
+    let row = d.createElement('div')
+    let title = d.createElement('h1');
+    title.innerText = 'Pony Express';
+    row.appendChild(title);
+    row.className = 'row';
+    row.style = "margin:auto; padding:0; max-width: 600px; padding: 24px;border: 1px solid gray; border-radius: 15px;";
+    
+
+
+    for (let i in ponyData) {
+
+        var propHolder = d.createElement('div');
+        propHolder.style = 'width:100%;';
+        propHolder.innerHTML = '<p> услуга: ' + ponyData[i].Mode + ', цена без НДС: ' + ponyData[i].Sum + ' НДС: ' + ponyData[i].VAT + ' дней до доставки: ' + ponyData[i].MaxTerm + '</p>'
+        row.appendChild(propHolder);
+    }
+    $('#pony-output').append(row);
+    //----------------------------------------
+
+   
+
+
+}
+
+function showBoxberry(boxberryData) {
+    console.log(boxberryData);
+    $('#boxberry-output').html('');
+    if (boxberryData.price) {
+        var blockBoxberry = d.getElementById('boxberry-output');
+        console.log(blockBoxberry);
+        var row = d.createElement('div');
+        row.className = 'row';
+        row.style = "margin: auto; padding: 0; max-width: 600px; padding: 24px;border: 1px solid gray; border-radius: 15px;";
+        blockBoxberry.appendChild(row);
+        var title = d.createElement('h1');
+        title.innerText = 'Стоимость доставки Boxberry';
+        row.appendChild(title);
+        var deliveryInformation = d.createElement('div');
+        deliveryInformation.style = 'width: 100%;';
+        deliveryInformation.innerHTML = '<p> Цена: ' + boxberryData.price + '; дней до доставки: ' + boxberryData.period + '</p>';
+        row.appendChild(deliveryInformation);
+    }
+    
+    $('#boxberry-output').show();
 }
 
 $(document).ready(function () {
