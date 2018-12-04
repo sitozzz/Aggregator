@@ -22,35 +22,47 @@ function DeliveryData(weight, length, height, width, size) {
         this.size = size;
     }
 }
+
+
 function showResults(data) {
     showDPDres(data.dpd);
     showPonyres(data.pony);
     showBoxberry(data.boxberry);
-    if (data.sdek.error == undefined) {
+    showSDEKres(data.sdek);
+}
 
+function showSDEKres(sdekdata) {
+    console.log('sdek data');
+    console.log(sdekdata);
+    $('#sdek-output').html('');
+    if (sdekdata.error == undefined) {
 
-        data = data.sdek.result
+        data = sdekdata.result;
         console.log(data);
-        // console.log(data['result']);
         if (data != undefined) {
-            // data = data['result'];
-            // console.log(data);
             let price = data['price'];
             let deliveryPeriodMin = data['deliveryPeriodMin'];
             let deliveryPeriodMax = data['deliveryPeriodMax'];
             let deliveryDateMin = data['deliveryDateMin'];
             let deliveryDateMax = data['deliveryDateMax'];
-            document.getElementById('priceSDEK').innerHTML = '<p>' + price + ' Rub </p><p>Дата доставки: ' + deliveryDateMax + '</p>';
-            document.getElementById('errorSDEK').innerText = '';
-            // $('#priceSDEK').val(price + ' Rub');
-        } else {
-            console.log(data);
-            // data = data.error[0];
-            document.getElementById('priceSDEK').innerText = '';
-            document.getElementById('errorSDEK').innerText = "Доставка невозможна при заданных условиях";
-        }
+
+            var sdekHolder = d.getElementById('dpd-output');
+            var row = d.createElement('div')
+            row.className = 'row';
+            row.style = "margin:auto; padding:0; max-width: 600px; padding: 24px;border: 1px solid gray; border-radius: 15px;";
+            sdekHolder.appendChild(row);
+            var title = d.createElement('h1');
+            title.innerText = 'SDEK';
+            row.appendChild(title);
+            var propHolder = d.createElement('div');
+            propHolder.style = 'width:100%';
+            propHolder.innerHTML = '<p>' + price + ' Rub </p><p>Дата доставки: ' + deliveryDateMax + '</p>';
+            row.appendChild(propHolder);
+
+        } 
     }
 }
+
 function showDPDres(dpdData) {
     $('#dpd-output').html('');
     if (dpdData[0].serviceName) {
@@ -132,6 +144,7 @@ function showBoxberry(boxberryData) {
 }
 
 $(document).ready(function () {
+    d.getElementById('dateExecute').value = new Date().toISOString().slice(0,10);
     $('input[name=fromDelivery]').on('change', function () {
         deliveryDataFrom = $(this).val();
     });
