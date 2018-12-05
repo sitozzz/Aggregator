@@ -35,6 +35,10 @@ function showSDEKres(sdekdata) {
     console.log('sdek data');
     console.log(sdekdata);
     $('#sdek-output').html('');
+    // TODO: Change tariff id to tariff name from this dict
+    let tariff_map = {
+
+    };
     if (sdekdata.error == undefined) {
 
         data = sdekdata.result;
@@ -45,6 +49,7 @@ function showSDEKres(sdekdata) {
             let deliveryPeriodMax = data['deliveryPeriodMax'];
             let deliveryDateMin = data['deliveryDateMin'];
             let deliveryDateMax = data['deliveryDateMax'];
+            let tariffName = data['tariffId'];
 
             var sdekHolder = d.getElementById('dpd-output');
             var row = d.createElement('div')
@@ -56,7 +61,7 @@ function showSDEKres(sdekdata) {
             row.appendChild(title);
             var propHolder = d.createElement('div');
             propHolder.style = 'width:100%';
-            propHolder.innerHTML = '<p>' + price + ' Rub </p><p>Дата доставки: ' + deliveryDateMax + '</p>';
+            propHolder.innerHTML = '<p>' + price + ' Rub </p><p>Дата доставки: ' + deliveryDateMax + '</p><p>Тариф: '+tariffName+'</p>';
             row.appendChild(propHolder);
 
         } 
@@ -243,6 +248,8 @@ $(document).ready(function () {
         );
         console.log('Delivery data = ');
         console.log(deliveryData);
+
+        // TODO: Show loader here!
         $.ajax({
             url: "/calculate",
             contentType: 'application/json',
@@ -277,7 +284,7 @@ $(document).ready(function () {
                 ]
             }),
             success: function (data) {
-                // TODO: Only for sdek api!
+                // TODO: Hide loader here!
                 console.log(data);
 
                 showResults(data)
