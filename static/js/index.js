@@ -4,6 +4,12 @@ var deliveryDataFrom = 'door';
 var deliveryDataTo = 'door';
 var d = document;
 
+function* entries(obj) {
+    for (let key of Object.keys(obj)) {
+        yield [key, obj[key]];
+    }
+}
+
 //This sends to server
 //City object
 function City(id, name) {
@@ -35,10 +41,31 @@ function showSDEKres(sdekdata) {
     console.log('sdek data');
     console.log(sdekdata);
     $('#sdek-output').html('');
-    // TODO: Change tariff id to tariff name from this dict
     let tariff_map = {
-
+        136 : 'Посылка',
+        137 : 'Посылка',
+        138 : 'Посылка',
+        139 : 'Посылка',
+        233 : 'Экономичная посылка',
+        234 : 'Экономичная посылка',
+        291 : 'Express',
+        293 : 'Express',
+        294 : 'Express',
+        295 : 'Express',
+        1   : 'Экспресс лайт',
+        5   : 'Экономичный экспресс',
+        3   : 'Супер-экспресс до 18',
+        10  : 'Экспресс лайт',
+        11  : 'Экспресс лайт',
+        12  : 'Экспресс лайт',
+        15  : 'Экспресс тяжеловесы',
+        16  : 'Экспресс тяжеловесы',
+        17  : 'Экспресс тяжеловесы',
+        18  : 'Экспресс тяжеловесы', 
+        62  : 'Магистральный экспресс',
+        63  : 'Магистральный экспресс',
     };
+    
     if (sdekdata.error == undefined) {
 
         data = sdekdata.result;
@@ -50,6 +77,12 @@ function showSDEKres(sdekdata) {
             let deliveryDateMin = data['deliveryDateMin'];
             let deliveryDateMax = data['deliveryDateMax'];
             let tariffName = data['tariffId'];
+            
+            for(let [key, value] of entries(tariff_map)){
+                if (key == tariffName) {
+                    tariffName = value;
+                }
+            }
 
             var sdekHolder = d.getElementById('dpd-output');
             var row = d.createElement('div')
