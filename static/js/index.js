@@ -84,7 +84,7 @@ function showSDEKres(sdekdata) {
                 }
             }
 
-            var sdekHolder = d.getElementById('dpd-output');
+            var sdekHolder = d.getElementById('sdek-output');
             var row = d.createElement('div')
             row.className = 'row';
             row.style = "margin:auto; padding:0; max-width: 600px; padding: 24px;border: 1px solid gray; border-radius: 15px;";
@@ -96,6 +96,7 @@ function showSDEKres(sdekdata) {
             propHolder.style = 'width:100%';
             propHolder.innerHTML = '<p>' + price + ' Rub </p><p>Дата доставки: ' + deliveryDateMax + '</p><p>Тариф: '+tariffName+'</p>';
             row.appendChild(propHolder);
+            $(sdekHolder).show();
 
         } 
     }
@@ -283,6 +284,7 @@ $(document).ready(function () {
         console.log(deliveryData);
 
         // TODO: Show loader here!
+        $('#loader').show();
         $.ajax({
             url: "/calculate",
             contentType: 'application/json',
@@ -318,6 +320,7 @@ $(document).ready(function () {
             }),
             success: function (data) {
                 // TODO: Hide loader here!
+                $('#loader').hide();
                 console.log(data);
 
                 showResults(data)
