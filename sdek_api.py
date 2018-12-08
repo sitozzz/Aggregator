@@ -36,10 +36,10 @@ CDEK Express д-с 295,
 def select_delivery_type(type_from, type_to):
 	# ===Tariffs ids===
 	door_to_door = [
+		{"id":1, "priority" : 10},
 		{"id":139, "priority" : 1},
 		{"id":293, "priority" : 1},
-		{"id":18, "priority" : 1},
-		{"id":1, "priority" : 1},
+		{"id":18, "priority" : 9},
 		{"id":3, "priority" : 1}
 		]
 
@@ -48,8 +48,13 @@ def select_delivery_type(type_from, type_to):
 		{"id":234, "priority" : 1},
 		{"id":291, "priority" : 1},
 		{"id":5, "priority" : 1},
-		{"id":15, "priority" : 1},
+		
 		{"id":62, "priority" : 1},
+		{"id":63, "priority" : 1},
+
+		{"id":10, "priority" : 1},
+		{"id":15, "priority" : 1},
+
 		# {"id":3, "priority" : 1}
 		]
 
@@ -58,6 +63,8 @@ def select_delivery_type(type_from, type_to):
 		{"id":295, "priority" : 1},
 		{"id":17, "priority" : 1},
 		{"id":12, "priority" : 1},
+		
+		
 		# {"id":3, "priority" : 1}
 		]
 
