@@ -96,10 +96,84 @@ function showSDEKres(sdekdata) {
             propHolder.style = 'width:100%';
             propHolder.innerHTML = '<p>' + price + ' Rub </p><p>Дата доставки: ' + deliveryDateMax + '</p><p>Тариф: '+tariffName+'</p>';
             row.appendChild(propHolder);
+            var btn = d.createElement('button');
+            btn.className = 'btn btn-lg btn-success';
+            btn.innerText = 'Заказать';
+            row.appendChild(btn);
+
+            btn.onclick = function () {
+                console.log('click sdek btn');
+                getSDEKPvz(city2._id);
+            };
+            
+            // TODO: Add this to another container
+            var dropdownContainer = d.createElement('div');
+            dropdownContainer.id = 'drop-container';
+            dropdownContainer.style = 'display:none';
+            dropdownContainer.className = '';
+
+            var dropdown = d.createElement('select');
+            dropdown.id = 'sdek-dropdown';
+            
+            dropdown.className = 'form-control';
+            var dropdownLabel = d.createElement('p');
+            dropdownLabel.innerText = 'Выберите пункт получения из списка: ';
+            
+            dropdownContainer.appendChild(dropdownLabel);
+            dropdownContainer.appendChild(dropdown);
+            row.appendChild(dropdownContainer);
+
+
+            var fullAddressText = d.createElement('p');
+            fullAddressText.id = 'full-address-text';
+            row.appendChild(fullAddressText);
+
             $(sdekHolder).show();
 
         } 
     }
+}
+
+function getSDEKPvz(city_code) {
+    console.log('CITY CODE  = '+city_code);
+    $.ajax({
+        contentType: 'application/json', 
+        method: 'POST',
+        url: "/sdek_pvz",
+        data: JSON.stringify({
+            "city_code": city_code
+        }),
+        
+        success: function (response) {
+            //TODO: Display dropdown and some info here
+            console.log('Success sdek pvz');
+            console.log(response);
+
+            for(let elem in response){
+                createSDEKDropdown(response[elem]);
+            }
+
+            $('#drop-container').show();
+            $('#sdek-dropdown').on('change', function (e) {
+               d.getElementById('full-address-text').innerText = 'Адрес: ' + $('option:selected', this).val();
+            });
+        },
+        error: function (err) {
+            console.log('AJAX ERROR');
+            console.log(err);
+        }
+
+    });
+    
+}
+
+function createSDEKDropdown(data) {
+    var root = d.getElementById('sdek-dropdown');
+    var option = d.createElement('option');
+    option.id = data['code'];
+    option.innerText = data['display_name'];
+    option.value = data['full_address'];
+    root.appendChild(option);
 }
 
 function showDPDres(dpdData) {

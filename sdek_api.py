@@ -1,5 +1,6 @@
 import requests
 import json
+import xmltodict
 # TODO: Change this
 # test_login = "3y03Ahh2XigMgzN1l7mWff6jZMSCqHE1"
 # test_pswd = dateExecute + "&Or6kB0BaKUrGCx51NWtVNcZ4YmVRFMBN"
@@ -114,3 +115,34 @@ def calculate_sdek(data):
 	sdek_res = json.loads(sdek_res.text,encoding='utf-8')
 	print(sdek_res)
 	return sdek_res
+
+def get_pvz_list(city_id):
+	# city_id = str(city_id)
+	url = 'http://integration.cdek.ru/pvzlist/v1/xml?weightmax=50&cityid={0}&allowedcod=1'.format(city_id)
+	sdek_res = requests.get(url)
+	# print(sdek_res)
+	sdek_res = xmltodict.parse(sdek_res.text)
+	data = sdek_res['PvzList']
+	output = []
+	for pvz in data:
+		for el in data[pvz]:
+			pvz_json = {}
+
+			print(el['@PostalCode'])
+			pvz_json['display_name'] = el['@Name'] + '-' + el['@PostalCode']
+			pvz_json['postal_code'] = el['@PostalCode']
+			pvz_json['full_address'] = el['@FullAddress']
+			pvz_json['code'] = el['@Code']
+			output.append(pvz_json)
+	
+	print(output)
+	return output
+
+			
+	# for el in data:
+	# 	for e in data[el]:
+	# 		print(e)
+	# 	break
+
+
+get_pvz_list(270)
