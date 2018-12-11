@@ -151,5 +151,14 @@ def get_pvz_list(city_id):
 	# 		print(e)
 	# 	break
 
+def add_delivery():
+	url = 'https://integration.cdek.ru/addDeliveryRaw'
+	headers = {'Content-Type': 'application/xml'} 
+	
+	xml = '<?xml version="1.0" encoding="UTF-8"?><deliveryrequest account="716b2c7e8f2e1a46ff8fd126adaef97d" currency="rub" date="2017-03-15 10:17:07" foreigndelivery="false" number="test_request" ordercount="2" secure="4180a7f32c5f605db27f15e26eec03d7"> <order clientside="SENDER" comment="test_comment" number="number2017_6344227223" phone="123456789123456789" reccitycode="44" recipientcompany="company-6344227223" recipientcurrency="rub" recipientemail="email_1_G4Akh0@test.ru" recipientname="Получатель Получателев" sendcitycode="44" tarifftypecode="1"> <address flat="flat-G4Akh0" house="house-G4Akh0" street="street-G4Akh0"/> <sender name="Отправ Отправителев"> <address flat="flat-G4Akh0" house="house-G4Akh0" street="street-G4Akh0"/> <phone>+7-913-873-98-76</phone> <phone>7-913-287-39-10</phone> </sender> <package barcode="test_package" comment="test_comment" sizea="10.0" sizeb="20.0" sizec="30.0" weight="1000.0"/> </order> <order clientside="SENDER" comment="test_comment" number="number2017_6344227225" phone="123456789 123456789" reccitycode="44" recipientcompany="company-6344227225" recipientcurrency="rub" recipientemail="email_1_G4Akh1@test.ru" recipientname="Получатель Получателев" sendcitycode="44" tarifftypecode="1"> <address flat="flat-G4Akh1" house="house-G4Akh1" street="street-G4Akh1"/> <sender name="Отправ Отправителев"> <address flat="flat-G4Akh1" house="house-G4Akh1" street="street-G4Akh1"/> <phone>89133309944</phone> <phone>89138092416</phone> </sender> <package barcode="test_package" comment="test_comment" sizea="10.0" sizeb="20.0" sizec="30.0" weight="1000.0"/> </order></deliveryrequest>'
 
-get_pvz_list(270)
+
+	res = requests.post(url = url, data = xml.encode('utf-8'), headers = headers)
+	print(res.text)
+
+add_delivery()
