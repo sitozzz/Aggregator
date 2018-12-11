@@ -103,7 +103,10 @@ function showSDEKres(sdekdata) {
 
             btn.onclick = function () {
                 console.log('click sdek btn');
-                getSDEKPvz(city2._id);
+                // TODO: check delivery type
+                // Display this only for storage to storage delivery type
+                getSDEKPvz(city1._id, 'sdek-dropdown');
+                getSDEKPvz(city2._id, 'sdek-dropdown-to');
             };
             
             // TODO: Add this to another container
@@ -111,6 +114,14 @@ function showSDEKres(sdekdata) {
             dropdownContainer.id = 'drop-container';
             dropdownContainer.style = 'display:none';
             dropdownContainer.className = '';
+
+            var dropdownTo = d.createElement('select');
+            dropdownTo.id = 'sdek-dropdown-to';
+            dropdownTo.className = 'form-control';
+            var dropdownLabelTo = d.createElement('p');
+            dropdownLabelTo.innerText = 'Выберите пункт отправления из списка: ';
+            dropdownContainer.appendChild(dropdownLabelTo);
+            dropdownContainer.appendChild(dropdownTo);
 
             var dropdown = d.createElement('select');
             dropdown.id = 'sdek-dropdown';
@@ -134,7 +145,7 @@ function showSDEKres(sdekdata) {
     }
 }
 
-function getSDEKPvz(city_code) {
+function getSDEKPvz(city_code, rootElement) {
     console.log('CITY CODE  = '+city_code);
     $.ajax({
         contentType: 'application/json', 
@@ -150,13 +161,13 @@ function getSDEKPvz(city_code) {
             console.log(response);
 
             for(let elem in response){
-                createSDEKDropdown(response[elem]);
+                createSDEKDropdown(response[elem], rootElement);
             }
 
             $('#drop-container').show();
-            $('#sdek-dropdown').on('change', function (e) {
-               d.getElementById('full-address-text').innerText = 'Адрес: ' + $('option:selected', this).val();
-            });
+            // $('#sdek-dropdown').on('change', function (e) {
+            //    d.getElementById('full-address-text').innerText = 'Адрес ПВЗ получателя: ' + $('option:selected', this).val();
+            // });
         },
         error: function (err) {
             console.log('AJAX ERROR');
@@ -167,8 +178,8 @@ function getSDEKPvz(city_code) {
     
 }
 
-function createSDEKDropdown(data) {
-    var root = d.getElementById('sdek-dropdown');
+function createSDEKDropdown(data, rootElement) {
+    var root = d.getElementById(rootElement);
     var option = d.createElement('option');
     option.id = data['code'];
     option.innerText = data['display_name'];

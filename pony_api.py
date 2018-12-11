@@ -79,11 +79,11 @@ def get_service_cost(req):
   </Request>
   '''
   result = client.service.SubmitRequest('6f0ef6b3-e39e-40b2-85af-185bb5a73e62', body)
-  print(result)
+  # print(result)
   result=xmltodict.parse(result)
 
     #return re
-  print('result PONY')
+  # print('result PONY')
   print(result['Response']['OrderList']['Order']['ServiceList']['Service']['Calculation']['DeliveryRateSet']['DeliveryRate'])
   result=result['Response']['OrderList']['Order']['ServiceList']['Service']['Calculation']['DeliveryRateSet']['DeliveryRate']
   return result
