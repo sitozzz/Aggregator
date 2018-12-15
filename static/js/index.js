@@ -102,42 +102,51 @@ function showSDEKres(sdekdata) {
             row.appendChild(btn);
 
             btn.onclick = function () {
-                console.log('click sdek btn');
-                // TODO: check delivery type
-                // Display this only for storage to storage delivery type
-                getSDEKPvz(city1._id, 'sdek-dropdown');
-                getSDEKPvz(city2._id, 'sdek-dropdown-to');
+                if (deliveryDataFrom != 'door') {
+                    $("#send-door").hide();
+                    $("#send-storage").show();
+                    getSDEKPvz(city1._id, 'sdek-dropdown-from');
+                    // TODO: display full address in p tag
+                } 
+                if (deliveryDataTo != 'door') {
+                    $("#recieve-door").hide();
+                    $("#recieve-storage").show();
+                    getSDEKPvz(city2._id, 'sdek-dropdown-to');
+                    // TODO: display full address in p tag
+                }
+                $('.section').fadeOut('fast', function () {$('#order').fadeIn('fast');  });
+                
+               
             };
             
-            // TODO: Add this to another container
-            var dropdownContainer = d.createElement('div');
-            dropdownContainer.id = 'drop-container';
-            dropdownContainer.style = 'display:none';
-            dropdownContainer.className = '';
+            // var dropdownContainer = d.createElement('div');
+            // dropdownContainer.id = 'drop-container';
+            // dropdownContainer.style = 'display:none';
+            // dropdownContainer.className = '';
 
-            var dropdownTo = d.createElement('select');
-            dropdownTo.id = 'sdek-dropdown-to';
-            dropdownTo.className = 'form-control';
-            var dropdownLabelTo = d.createElement('p');
-            dropdownLabelTo.innerText = 'Выберите пункт отправления из списка: ';
-            dropdownContainer.appendChild(dropdownLabelTo);
-            dropdownContainer.appendChild(dropdownTo);
+            // var dropdownTo = d.createElement('select');
+            // dropdownTo.id = 'sdek-dropdown-to';
+            // dropdownTo.className = 'form-control';
+            // var dropdownLabelTo = d.createElement('p');
+            // dropdownLabelTo.innerText = 'Выберите пункт отправления из списка: ';
+            // dropdownContainer.appendChild(dropdownLabelTo);
+            // dropdownContainer.appendChild(dropdownTo);
 
-            var dropdown = d.createElement('select');
-            dropdown.id = 'sdek-dropdown';
+            // var dropdown = d.createElement('select');
+            // dropdown.id = 'sdek-dropdown';
             
-            dropdown.className = 'form-control';
-            var dropdownLabel = d.createElement('p');
-            dropdownLabel.innerText = 'Выберите пункт получения из списка: ';
+            // dropdown.className = 'form-control';
+            // var dropdownLabel = d.createElement('p');
+            // dropdownLabel.innerText = 'Выберите пункт получения из списка: ';
             
-            dropdownContainer.appendChild(dropdownLabel);
-            dropdownContainer.appendChild(dropdown);
-            row.appendChild(dropdownContainer);
+            // dropdownContainer.appendChild(dropdownLabel);
+            // dropdownContainer.appendChild(dropdown);
+            // row.appendChild(dropdownContainer);
 
 
-            var fullAddressText = d.createElement('p');
-            fullAddressText.id = 'full-address-text';
-            row.appendChild(fullAddressText);
+            // var fullAddressText = d.createElement('p');
+            // fullAddressText.id = 'full-address-text';
+            // row.appendChild(fullAddressText);
 
             $(sdekHolder).show();
 
@@ -413,5 +422,8 @@ $(document).ready(function () {
                 $('#output').show('fast');
             }
         });
+    });
+    $("#close-sdek-order").click(function () {
+        $("#order").fadeOut('fast', function (){$(".section").fadeIn('fast');});
     });
 });
