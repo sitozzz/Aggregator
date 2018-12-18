@@ -90,7 +90,7 @@ def get_service_cost(req):
     req_data['delivery'] = delivery
     req_data['selfPickup'] = self_pickup
     req_data['selfDelivery'] = self_delivery
-    req_data['serviceCode'] = 'ECN,CUR,NDY,PCL,DPI,DPE,MXO,ECU'
+    req_data['serviceCode'] = 'ECN,CUR,NDY,PCL,DPI,DPE,ECU' #MXO,
     req_data['parcel'] = {'weight':weight,'length':length,'width':width,'height':height}
 
     try:
@@ -108,8 +108,93 @@ def get_service_cost(req):
 
     return {'orig_resp': result, 'list': vrs}
 
+def get_terminals():
+    
+    url = "http://ws.dpd.ru/services/geography2?wsdl"
+    client = Client(url)
+    req_data = {}
+    auth = {'clientNumber': 1020004365,
+            'clientKey': '04CD36DEDACCD77DB1424218BF57A57F6D82A12F'}
+    req_data['auth'] = auth
+
+    result = client.service.getParcelShops(request=req_data)
+    print(result)
+    cities_arr = []
+    for i in result:
+        city = {}
+        for key in i:
+            city[key[0]] = key[1]
+        cities_arr.append(city)
+    f = open('dpd_terminals.txt', 'w',encoding="utf8")
+    simplejson.dump(cities_arr, f,ensure_ascii=False)
+    f.close()
+    
+    
+def make_order():
+    
+    url = "http://ws.dpd.ru/services/order2?wsdl"
+    client = Client(url)
+    req_data = {}
+    auth = {'clientNumber': 1020004365,
+            'clientKey': '04CD36DEDACCD77DB1424218BF57A57F6D82A12F'}
+    
+
+    req_data['auth'] = auth
+    senderAddress = {
+        'name' : 'Иванов Сергей Петрович',
+        'terminalCode' : '13',
+        'countryName' : 'Россия',
+        'city' : 'Екатеринбург',
+        'street' : 'Есенина',
+        'house' : 10,
+        'contactPhone' : '79292155373',
+        'contactFio' : 'Комаров Василий Дмитриевич'
+    }
+    header = {
+        'datePickup' : '2018-12-10',
+        #'payer' : 'sdf',
+        'senderAddress' : senderAddress,
+        'pickupTimePeriod' : '9-18',
+
+        
+    }
+    req_data['header'] = header
+    receiverAddress = {
+        'name' : 'Иванов Иван Петрович',
+        'terminalCode' : 'M13',
+        'countryName' : 'Россия',
+        'city' : 'Екатеринбург',
+        'street' : 'Есенина',
+        'house' : 10,
+        'contactPhone' : '79292155373',
+        'contactFio' : 'Комаров Василий Дмитриевич'
+
+    }
+    order = {
+        'orderNumberInternal' : '123456',
+        'serviceCode' : 'DPE',
+        'serviceVariant' : 'TT',
+        'cargoNumPack' : 1,
+        'cargoWeight' : 1,
+        'cargoRegistered' : False,
+        'cargoCategory' : 'Одежда',
+        'receiverAddress' : receiverAddress,
+
+    }
+    req_data['order'] = order
+
+
+    # try:
+    result = client.service.createOrder(orders=req_data)
+    print(result)
+    # except Exception as identifier:
+    #     print('DPD ERROR')
+    #     return {'orig_resp': str(identifier) , 'list': str(identifier)}
+
 #get_cities()
 #get_service_cost('кемерово','екатеринбург',True,True,1,20,20,20)
+#make_order()
+#get_terminals()
 
 
 
