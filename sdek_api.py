@@ -39,7 +39,7 @@ def select_delivery_type(type_from, type_to):
 		{"id":1, "priority" : 10},
 		{"id":139, "priority" : 1},
 		{"id":293, "priority" : 1},
-		{"id":18, "priority" : 9},
+		{"id":18, "priority" : 1},
 		{"id":3, "priority" : 1}
 		]
 
