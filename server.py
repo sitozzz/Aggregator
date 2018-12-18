@@ -83,21 +83,16 @@ def calculate():
    
     return out_json
 
+
+@app.route('/sdek_pvz', methods=['POST'])
+def sdek_pvz():
+    req = request.get_json()
+    output = sdek_api.get_pvz_list(req['city_code'])
     
-# @app.route('/get_tariffs', methods=['GET'])
-# def get_tariffs():
-#     # TODO: get tariffs from CSV file or database
-#     out_json = []
-#     with open('tariffs.csv', 'r', newline = '', encoding = 'cp1251') as file:
-#         reader = csv.DictReader(file, delimiter = ';')
-#         for i in reader:
-#             out_json.append(i['tariff_name'])
-#     print(out_json)
-#     return jsonify({
-#         'fields' : out_json
-#         })
+    return jsonify(output)
+    
 
 
 if __name__ == '__main__':
     
-    app.run(host='127.0.0.1', port=8000)
+    app.run(host='127.0.0.1', port=8000, debug=True)

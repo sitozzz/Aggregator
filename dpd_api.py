@@ -7,10 +7,13 @@ import requests
 from suds.client import Client
 import simplejson
 import codecs
+import ast
 
 client_number = 1020004365
 client_key = '04CD36DEDACCD77DB1424218BF57A57F6D82A12F'
 
+f = open('dpd_cities.txt', 'r',encoding="utf8").read()
+f = ast.literal_eval(f)
 
 def get_cities():
     '''
@@ -41,9 +44,23 @@ def get_cities():
     simplejson.dump(cities_arr, f,ensure_ascii=False)
     f.close()
     return {'orig_resp': result, 'list': cities_arr}
-
+def getCityProp(cityName):
+    #global f
+    print("-------------------")
+    print(cityName)
+    print(f[0])
+    cityProp = {'cityName':cityName}
+    for city in f:
+        if city['cityName'] == cityName:
+            cityProp = {'cityName':cityName, "cityId": city['cityId']}
+    print(cityProp)
+    print("-------------------")
+    return cityProp
+             
+    
 
 def get_service_cost(req):
+    print('SDFSDFSDFSDFSDF')
     '''
     returns dict 
     orig_resp - object list (???)
@@ -82,8 +99,9 @@ def get_service_cost(req):
     req_data = {}
     auth = {'clientNumber': 1020004365,
             'clientKey': '04CD36DEDACCD77DB1424218BF57A57F6D82A12F'}
-    pickup = {'cityName':from_city}
-    delivery = {'cityName':to_city}
+    pickup = getCityProp(from_city)
+    
+    delivery = getCityProp(to_city)
 
     req_data['auth'] = auth
     req_data['pickup'] = pickup

@@ -96,10 +96,104 @@ function showSDEKres(sdekdata) {
             propHolder.style = 'width:100%';
             propHolder.innerHTML = '<p>' + price + ' Rub </p><p>Дата доставки: ' + deliveryDateMax + '</p><p>Тариф: '+tariffName+'</p>';
             row.appendChild(propHolder);
+            var btn = d.createElement('button');
+            btn.className = 'btn btn-lg btn-success';
+            btn.innerText = 'Заказать';
+            row.appendChild(btn);
+
+            btn.onclick = function () {
+                if (deliveryDataFrom != 'door') {
+                    $("#send-door").hide();
+                    $("#send-storage").show();
+                    getSDEKPvz(city1._id, 'sdek-dropdown-from');
+                    // TODO: display full address in p tag
+                } 
+                if (deliveryDataTo != 'door') {
+                    $("#recieve-door").hide();
+                    $("#recieve-storage").show();
+                    getSDEKPvz(city2._id, 'sdek-dropdown-to');
+                    // TODO: display full address in p tag
+                }
+                $('.section').fadeOut('fast', function () {$('#order').fadeIn('fast');  });
+                
+               
+            };
+            
+            // var dropdownContainer = d.createElement('div');
+            // dropdownContainer.id = 'drop-container';
+            // dropdownContainer.style = 'display:none';
+            // dropdownContainer.className = '';
+
+            // var dropdownTo = d.createElement('select');
+            // dropdownTo.id = 'sdek-dropdown-to';
+            // dropdownTo.className = 'form-control';
+            // var dropdownLabelTo = d.createElement('p');
+            // dropdownLabelTo.innerText = 'Выберите пункт отправления из списка: ';
+            // dropdownContainer.appendChild(dropdownLabelTo);
+            // dropdownContainer.appendChild(dropdownTo);
+
+            // var dropdown = d.createElement('select');
+            // dropdown.id = 'sdek-dropdown';
+            
+            // dropdown.className = 'form-control';
+            // var dropdownLabel = d.createElement('p');
+            // dropdownLabel.innerText = 'Выберите пункт получения из списка: ';
+            
+            // dropdownContainer.appendChild(dropdownLabel);
+            // dropdownContainer.appendChild(dropdown);
+            // row.appendChild(dropdownContainer);
+
+
+            // var fullAddressText = d.createElement('p');
+            // fullAddressText.id = 'full-address-text';
+            // row.appendChild(fullAddressText);
+
             $(sdekHolder).show();
 
         } 
     }
+}
+
+function getSDEKPvz(city_code, rootElement) {
+    console.log('CITY CODE  = '+city_code);
+    $.ajax({
+        contentType: 'application/json', 
+        method: 'POST',
+        url: "/sdek_pvz",
+        data: JSON.stringify({
+            "city_code": city_code
+        }),
+        
+        success: function (response) {
+            //TODO: Display dropdown and some info here
+            console.log('Success sdek pvz');
+            console.log(response);
+
+            for(let elem in response){
+                createSDEKDropdown(response[elem], rootElement);
+            }
+
+            $('#drop-container').show();
+            // $('#sdek-dropdown').on('change', function (e) {
+            //    d.getElementById('full-address-text').innerText = 'Адрес ПВЗ получателя: ' + $('option:selected', this).val();
+            // });
+        },
+        error: function (err) {
+            console.log('AJAX ERROR');
+            console.log(err);
+        }
+
+    });
+    
+}
+
+function createSDEKDropdown(data, rootElement) {
+    var root = d.getElementById(rootElement);
+    var option = d.createElement('option');
+    option.id = data['code'];
+    option.innerText = data['display_name'];
+    option.value = data['full_address'];
+    root.appendChild(option);
 }
 
 function showDPDres(dpdData) {
@@ -328,5 +422,8 @@ $(document).ready(function () {
                 $('#output').show('fast');
             }
         });
+    });
+    $("#close-sdek-order").click(function () {
+        $("#order").fadeOut('fast', function (){$(".section").fadeIn('fast');});
     });
 });

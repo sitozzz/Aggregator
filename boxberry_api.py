@@ -368,6 +368,9 @@ def calculate_boxberry(sender_city, recipient_city, advanced_sending_options, or
     }
 
 def get_data_boxberry(request):
+    if request['deliveryType']['deliveryFrom'] == 'door':
+        return {}
+    
     sender_city = get_name_city(request['city1']['name'])
     recipient_city = get_name_city(request['city2']['name'])
     zip_code = 0

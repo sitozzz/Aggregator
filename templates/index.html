@@ -9,15 +9,19 @@
 
     <!-- jQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!-- Jquery -->
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
+    <!-- Bootstrap -->
     <!-- jQuery UI-->
     <link rel="stylesheet" href="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.10.3/themes/sunny/jquery-ui.css">
     <script src="http://code.jquery.com/ui/1.8.24/jquery-ui.min.js" integrity="sha256-UOoxwEUqhp5BSFFwqzyo2Qp4JLmYYPTHB8l+1yhZij8="
         crossorigin="anonymous"></script>
-
+    <!-- Jquery UI -->
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
+    <!-- Icons -->
     <!-- App scripts and styles -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
     <script src="{{ url_for('static', filename='js/index.js') }}"></script>
@@ -25,14 +29,14 @@
 
 <body>
     <div id="loader" style="position: fixed; left:0; top:0; width:100%; height:100%; background-color: rgba(148, 148, 148, 0.43); display: none;">
-    <img style="width:250px; height:250px; left:0; right:0; top:0; bottom:0; margin:auto; position: absolute; " src="static/img/1.gif">
+        <img style="width:250px; height:250px; left:0; right:0; top:0; bottom:0; margin:auto; position: absolute; " src="static/img/1.gif">
     </div>
-    <div class="section">
+    <div id="calc" class="section">
         <div class="row" style="margin:0; padding:30px; width: 100%; text-align: center;">
             <div class="row" style="margin:auto; padding:0; max-width: 608px; display: inline;">
                 <div style="display: inline-block; margin:0; padding:0; width: 250px; ">
                     <input id="city1" class="form-control" type="text" placeholder="Откуда:" required>
-                    
+
                 </div>
                 <div id="deliveryTypeFrom" class="btn-group btn-group-toggle" data-toggle="buttons">
                     <label class="btn btn-secondary active">
@@ -47,7 +51,7 @@
                 </div>
                 <div style="display: inline-block; margin:0; padding:0; padding-left: 10px;  width: 250px; ">
                     <input id="city2" class="form-control" type="text" placeholder="Куда:" required>
-                    
+
                 </div>
                 <div id="deliveryTypeTo" class="btn-group btn-group-toggle" data-toggle="buttons">
                     <label class="btn btn-secondary active">
@@ -60,7 +64,7 @@
                     </label>
 
                 </div>
-                
+
                 <div style="display: inline-block; margin:0; padding:0; padding-left: 10px; text-align:right; width: 100px; ">
                     <button id="calcBtn1" class="btn btn btn-success">Найти</button>
                 </div>
@@ -82,10 +86,10 @@
                 </div>
                 <div id="calcVariantDiv" class="btn-group btn-group-toggle" data-toggle="buttons">
                     <label class="btn btn-secondary active">
-                        <input type="radio" name="calcVariant" value="variant1"  autocomplete="off" checked> ДВШ
+                        <input type="radio" name="calcVariant" value="variant1" autocomplete="off" checked> ДВШ
                     </label>
                     <label class="btn btn-secondary">
-                        <input type="radio" name="calcVariant" value="variant2"  autocomplete="off"> Объем
+                        <input type="radio" name="calcVariant" value="variant2" autocomplete="off"> Объем
                     </label>
 
                 </div>
@@ -115,8 +119,8 @@
                 </div>
             </div>
         </div>
-    
-        
+
+
         <div id="sdek-output" class="row" style="margin:0; padding:30px;  width:100%; display: none;">
         </div>
 
@@ -126,14 +130,14 @@
 
         <div id="pony-output" class="row" style="margin:0; padding:30px;  width:100%; display: none;">
         </div>
-           
+
 
         <div id="boxberry-output" class="row" style="margin:0; padding:30px;  width:100%; display: none;">
         </div>
-    
-    </div>
 
     </div>
+    {% include "sdek_order.html" %}
+    
 </body>
 
 </html>
