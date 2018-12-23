@@ -6,6 +6,9 @@
                 <div style="position: relative; top: 0; left: 2%;">
                         <span id="close-sdek-order" style="font-size: 2.5rem; cursor: pointer;"><i class="fas fa-times"></i></span> 
                  </div>
+            <h2>Город отправителя: <span id="send-city"></span></h2>
+           
+
             <div id="send-door">
                 <h2>Адрес отправителя</h2>
                 <div style="display: inline-block; width:49%; padding-top: 10px;">
@@ -21,6 +24,14 @@
                     <input id="send-flat" class="form-control" required type="text" />
                 </div>
             </div>
+            <div id="send-storage" style="display: none;">
+                <label for="sdek-dropdown-from">Адрес отправки</label>
+                <select id="sdek-dropdown-from"></select>
+                <p id="full-address-from"></p>
+            </div>
+
+            <h2>Город получателя: <span id="recieve-city"></span></h2>
+
             <div id="recieve-door">
                 <h2>Адрес получателя</h2>
                 <div style="display: inline-block; width:49%; padding-top: 10px;">
@@ -36,12 +47,7 @@
                     <input id="recieve-flat" class="form-control" required type="text" />
                 </div>
             </div>
-
-            <div id="send-storage" style="display: none;">
-                <label for="sdek-dropdown-from">Адрес отправки</label>
-                <select id="sdek-dropdown-from"></select>
-                <p id="full-address-from"></p>
-            </div>
+            
             <div id="recieve-storage" style="display: none;">
                 <label for="sdek-dropdown-to">Адрес получения</label>
                 <select id="sdek-dropdown-to"></select>

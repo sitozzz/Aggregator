@@ -114,7 +114,12 @@ function showSDEKres(sdekdata) {
                     getSDEKPvz(city2._id, 'sdek-dropdown-to');
                     // TODO: display full address in p tag
                 }
-                $('.section').fadeOut('fast', function () {$('#order').fadeIn('fast');  });
+                $('.section').fadeOut('fast', function () {
+                    d.getElementById('send-city').innerText = $('#city1').val();
+                    d.getElementById('recieve-city').innerText = $('#city2').val();
+                    
+                    $('#order').fadeIn('fast');  
+                });
                 
                
             };
