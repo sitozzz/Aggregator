@@ -36,36 +36,36 @@ function showResults(data) {
     showBoxberry(data.boxberry);
     showSDEKres(data.sdek);
 }
-
+// ===SDEK FUNCTIONS===
 function showSDEKres(sdekdata) {
     console.log('sdek data');
     console.log(sdekdata);
     $('#sdek-output').html('');
     let tariff_map = {
-        136 : 'Посылка',
-        137 : 'Посылка',
-        138 : 'Посылка',
-        139 : 'Посылка',
-        233 : 'Экономичная посылка',
-        234 : 'Экономичная посылка',
-        291 : 'Express',
-        293 : 'Express',
-        294 : 'Express',
-        295 : 'Express',
-        1   : 'Экспресс лайт',
-        5   : 'Экономичный экспресс',
-        3   : 'Супер-экспресс до 18',
-        10  : 'Экспресс лайт',
-        11  : 'Экспресс лайт',
-        12  : 'Экспресс лайт',
-        15  : 'Экспресс тяжеловесы',
-        16  : 'Экспресс тяжеловесы',
-        17  : 'Экспресс тяжеловесы',
-        18  : 'Экспресс тяжеловесы', 
-        62  : 'Магистральный экспресс',
-        63  : 'Магистральный экспресс',
+        136: 'Посылка',
+        137: 'Посылка',
+        138: 'Посылка',
+        139: 'Посылка',
+        233: 'Экономичная посылка',
+        234: 'Экономичная посылка',
+        291: 'Express',
+        293: 'Express',
+        294: 'Express',
+        295: 'Express',
+        1: 'Экспресс лайт',
+        5: 'Экономичный экспресс',
+        3: 'Супер-экспресс до 18',
+        10: 'Экспресс лайт',
+        11: 'Экспресс лайт',
+        12: 'Экспресс лайт',
+        15: 'Экспресс тяжеловесы',
+        16: 'Экспресс тяжеловесы',
+        17: 'Экспресс тяжеловесы',
+        18: 'Экспресс тяжеловесы',
+        62: 'Магистральный экспресс',
+        63: 'Магистральный экспресс',
     };
-    
+
     if (sdekdata.error == undefined) {
 
         data = sdekdata.result;
@@ -77,8 +77,8 @@ function showSDEKres(sdekdata) {
             let deliveryDateMin = data['deliveryDateMin'];
             let deliveryDateMax = data['deliveryDateMax'];
             let tariffName = data['tariffId'];
-            
-            for(let [key, value] of entries(tariff_map)){
+
+            for (let [key, value] of entries(tariff_map)) {
                 if (key == tariffName) {
                     tariffName = value;
                 }
@@ -94,7 +94,7 @@ function showSDEKres(sdekdata) {
             row.appendChild(title);
             var propHolder = d.createElement('div');
             propHolder.style = 'width:100%';
-            propHolder.innerHTML = '<p>' + price + ' Rub </p><p>Дата доставки: ' + deliveryDateMax + '</p><p>Тариф: '+tariffName+'</p>';
+            propHolder.innerHTML = '<p>' + price + ' Rub </p><p>Дата доставки: ' + deliveryDateMax + '</p><p>Тариф: ' + tariffName + '</p>';
             row.appendChild(propHolder);
             var btn = d.createElement('button');
             btn.className = 'btn btn-lg btn-success';
@@ -107,7 +107,7 @@ function showSDEKres(sdekdata) {
                     $("#send-storage").show();
                     getSDEKPvz(city1._id, 'sdek-dropdown-from');
                     // TODO: display full address in p tag
-                } 
+                }
                 if (deliveryDataTo != 'door') {
                     $("#recieve-door").hide();
                     $("#recieve-storage").show();
@@ -117,13 +117,13 @@ function showSDEKres(sdekdata) {
                 $('.section').fadeOut('fast', function () {
                     d.getElementById('send-city').innerText = $('#city1').val();
                     d.getElementById('recieve-city').innerText = $('#city2').val();
-                    
-                    $('#order').fadeIn('fast');  
+
+                    $('#order').fadeIn('fast');
                 });
-                
-               
+
+
             };
-            
+
             // var dropdownContainer = d.createElement('div');
             // dropdownContainer.id = 'drop-container';
             // dropdownContainer.style = 'display:none';
@@ -139,11 +139,11 @@ function showSDEKres(sdekdata) {
 
             // var dropdown = d.createElement('select');
             // dropdown.id = 'sdek-dropdown';
-            
+
             // dropdown.className = 'form-control';
             // var dropdownLabel = d.createElement('p');
             // dropdownLabel.innerText = 'Выберите пункт получения из списка: ';
-            
+
             // dropdownContainer.appendChild(dropdownLabel);
             // dropdownContainer.appendChild(dropdown);
             // row.appendChild(dropdownContainer);
@@ -155,26 +155,26 @@ function showSDEKres(sdekdata) {
 
             $(sdekHolder).show();
 
-        } 
+        }
     }
 }
 
 function getSDEKPvz(city_code, rootElement) {
-    console.log('CITY CODE  = '+city_code);
+    console.log('CITY CODE  = ' + city_code);
     $.ajax({
-        contentType: 'application/json', 
+        contentType: 'application/json',
         method: 'POST',
         url: "/sdek_pvz",
         data: JSON.stringify({
             "city_code": city_code
         }),
-        
+
         success: function (response) {
             //TODO: Display dropdown and some info here
             console.log('Success sdek pvz');
             console.log(response);
 
-            for(let elem in response){
+            for (let elem in response) {
                 createSDEKDropdown(response[elem], rootElement);
             }
 
@@ -189,7 +189,7 @@ function getSDEKPvz(city_code, rootElement) {
         }
 
     });
-    
+
 }
 
 function createSDEKDropdown(data, rootElement) {
@@ -200,6 +200,58 @@ function createSDEKDropdown(data, rootElement) {
     option.value = data['full_address'];
     root.appendChild(option);
 }
+
+function addSDEKDelivery(isSendStorage, isRecieveStorage) {
+    var dateDelivery = new Date().toJSON().slice(0, 10);
+    var sender = {
+        'city_id': city1._id,
+        'phone': $('#send-phone').text(),
+        'name': $('#send-name').text()
+    };
+    var reciever = {
+        'city_id': city2._id,
+        'phone': $('#reciever-phone').text(),
+        'name': $('#reciever-name').text()
+    };
+    var package = {
+        'height': $('#height').val(),
+        'width': $('#width').val(),
+        'weight': $('#weight').val(),
+        'length': $('#length').val()
+    };
+    if (isSendStorage) {
+        // TODO: Add fields for storage
+    } else {
+        sender['street'] = $('#send-street').text();
+        sender['flat'] = $('#send-flat').text();
+        sender['house'] = $('#send-house').text();
+    }
+
+    if (isRecieveStorage) {
+        // TODO: Add fields for storage
+    } else {
+        reciever['street'] = $('#recieve-street').text();
+        reciever['flat'] = $('#recieve-flat').text();
+        reciever['house'] = $('#recieve-house').text();
+    }
+    $.ajax({
+        type: "POST",
+        contentType: "application/json",
+
+        url: "/sdek_delivery",
+        data: JSON.stringify({
+            'date': dateDelivery,
+            'sender': sender,
+            'reciever': reciever,
+            package: package
+        }),
+        success: function (response) {
+            console.log('response = ' + response);
+        }
+    });
+}
+
+// ===SDEK FUNCTIONS===
 
 function showDPDres(dpdData) {
     $('#dpd-output').html('');
@@ -241,7 +293,7 @@ function showPonyres(ponyData) {
     row.appendChild(title);
     row.className = 'row';
     row.style = "margin:auto; padding:0; max-width: 600px; padding: 24px;border: 1px solid gray; border-radius: 15px;";
-    
+
 
 
     for (let i in ponyData) {
@@ -254,7 +306,7 @@ function showPonyres(ponyData) {
     $('#pony-output').append(row);
     //----------------------------------------
 
-   
+
 
 
 }
@@ -277,12 +329,12 @@ function showBoxberry(boxberryData) {
         deliveryInformation.innerHTML = '<p> Цена: ' + boxberryData.price + '; дней до доставки: ' + boxberryData.period + '</p>';
         row.appendChild(deliveryInformation);
     }
-    
+
     $('#boxberry-output').show();
 }
 
 $(document).ready(function () {
-    d.getElementById('dateExecute').value = new Date().toISOString().slice(0,10);
+    d.getElementById('dateExecute').value = new Date().toISOString().slice(0, 10);
     $('input[name=fromDelivery]').on('change', function () {
         deliveryDataFrom = $(this).val();
     });
@@ -429,6 +481,12 @@ $(document).ready(function () {
         });
     });
     $("#close-sdek-order").click(function () {
-        $("#order").fadeOut('fast', function (){$(".section").fadeIn('fast');});
+        $("#order").fadeOut('fast', function () { $(".section").fadeIn('fast'); });
+    });
+
+    $('#sdekOrderBtn').click(function () { 
+        // TODO: check this flags after user selection
+        addSDEKDelivery(false, false);
+        
     });
 });
