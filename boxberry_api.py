@@ -1,5 +1,6 @@
 import requests
 import csv
+import json
 
 token = '84327.pjpqbddd'
 url = 'http://api.boxberry.de/json.php'
@@ -48,7 +49,7 @@ def get_list_points():
 def get_list_points_for_city(code_city = ''):
     """Получить коды всех пунктов выдачи заказов для города.
     
-    :param code_city: (optional) код города в boxberry, без указания кода вернет все пункты выдачи.
+    :param code_city: (optional) код города в boxberry, без указания кода вернет все пункты выдачи.\n
     :return: list of Dictionary."""
     return get_json(url, {
         'token'   : token,
@@ -69,8 +70,8 @@ def get_points_for_parcels():
 def get_description_point(point_code, photo = False):
     """Получить полное описание пункта выдачи заказов.
     
-    :param point_code: код пункта выдачи заказов.
-    :param photo: (optional) получить изображения.
+    :param point_code: код пункта выдачи заказов.\n
+    :param photo: (optional) получить изображения.\n
     :return: list."""
     return get_json(url, {
         'token'  : token,
@@ -82,18 +83,21 @@ def get_description_point(point_code, photo = False):
 def get_point_by_zip(zip_code):
     """Получить код ближайшего пункта выдачи заказов по почтовому индексу.
 
-    :param zip_code: почтовый код.
-    :return: код пункта выдачи заказов."""
-    return get_json(url, {
-        'token'  : token,
-        'method' : 'PointsByPostCode',
-        'zip'    : zip_code,
-    })['Code']
+    :param zip_code: почтовый код.\n
+    :return: код пункта выдачи заказов или None в случае ошибки запроса."""
+    try:
+        return get_json(url, {
+            'token'  : token,
+            'method' : 'PointsByPostCode',
+            'zip'    : zip_code,
+        })['Code']
+    except:
+        return None
 
 def zip_check(zip_code):
     """Проверить возможность курьерской доставки для заданного индекса.
     
-    :param zip_code: почтовый код.
+    :param zip_code: почтовый код.\n
     :return: True если возможно, False нет."""
     try:
         return get_json(url, {
@@ -107,12 +111,14 @@ def zip_check(zip_code):
 def find_city_in_data(name_sity, list_cities):
     """Поиск в листе словарей города с заданым именем.
     
-    :param name_city: название города.
-    :param list_cities: список словарей городов.
-    :return: Dictionary для заданного города."""
+    :param name_city: название города.\n
+    :param list_cities: список словарей городов.\n
+    :return: Dictionary для заданного города или None если город не найден."""
     for i in list_cities:
         if i['Name'] == name_sity:
             return i
+
+    return None
 
 def find_elements(value, list_elements, name_element):
     elements = []
@@ -126,40 +132,40 @@ def find_elements(value, list_elements, name_element):
 def find_list_points_for_city(code_city, list_points):
     """Поиск всех пунктов выдачи заказов в заданном городе.
     
-    :param code_city: код города в boxberry.
-    :param list_points: список словарей пунктов выдачи заказов для всех городов.
+    :param code_city: код города в boxberry.\n
+    :param list_points: список словарей пунктов выдачи заказов для всех городов.\n
     :return: list of Dictionary пунктов выдачи заказов для заданного города."""
     return find_elements(code_city, list_points, 'CityCode')
 
 def find_list_points_for_parcels_for_city(name_city, list_points):
     """Поиск всех пунктов приема в заданном городе.
     
-    :param name_city: название города.
-    :param list_points: список словарей пунктов приема для всех городов.
+    :param name_city: название города.\n
+    :param list_points: список словарей пунктов приема для всех городов.\n
     :return: list of Dictionary пунктов приема для заданного города."""
     return find_elements(name_city, list_points, 'City')
 
 def find_zips_for_city(name_city, zips):
     """Поиск всех почтовых индексов для заданого города.
     
-    :param name_city: название города.
-    :param zips: список словарей почтовых индексов для всех городов.
+    :param name_city: название города.\n
+    :param zips: список словарей почтовых индексов для всех городов.\n
     :return: list of Dictionary почтовых индексов для заданного города."""
     return find_elements(name_city, zips, 'City')
 
 def check_courier_delivery(city):
     """Проверка возможности доставки курьером на основе данных о городе.
     
-    :param city: словарь данных о городе.
+    :param city: словарь данных о городе.\n
     :return: True возможна доставка курьером, False нет."""
     return city['CourierDelivery']
 
 def filter_by_point(points, weight, volume):
     """Отфильтровать точки по весу и объему.
     
-    :param points: пункты выдачи заказов.
-    :param weight: вес посылки.
-    :param volume: объем посылки.
+    :param points: пункты выдачи заказов.\n
+    :param weight: вес посылки.\n
+    :param volume: объем посылки.\n
     :return: отфильтрованный список пунктов выдачи заказов."""
     filtered_points = []
 
@@ -170,12 +176,12 @@ def filter_by_point(points, weight, volume):
     return filtered_points
 
 def write_csv(data, file_name, columns, encoding = 'utf-8'):
-    """Записать лист словарей в файл ('*.csv').
+    """Записать list of Dictionary в файл ('*.csv').
     
-    :param data: list of Dictionary.
-    :param file_name: имя файла в который произведется запись.
-    :param columns: заголовки колонок в виде списка строк.
-    :param encoding: (optional) кодировка по умолчанию ('utf-8').
+    :param data: list of Dictionary.\n
+    :param file_name: имя файла в который произведется запись.\n
+    :param columns: заголовки колонок в виде списка строк.\n
+    :param encoding: (optional) кодировка по умолчанию ('utf-8').\n
     :return: True если запись прошла успешо, False нет."""
     with open(file_name, 'w', newline = '', encoding = encoding) as file:
         writer = csv.DictWriter(file, delimiter = ';', fieldnames = columns)
@@ -190,9 +196,9 @@ def write_csv(data, file_name, columns, encoding = 'utf-8'):
 def take_city_from_csv(file_name, name_city, encoding = 'utf-8'):
     """Получить словарь данных о городе по имени годода из файла ('*.csv').
     
-    :param file_name: имя файла из которого считываются данные.
-    :param name_city: имя города, которое необходимо найти.
-    :param encoding: (optional) кодировка по умолчанию ('utf-8').
+    :param file_name: имя файла из которого считываются данные.\n
+    :param name_city: имя города, которое необходимо найти.\n
+    :param encoding: (optional) кодировка по умолчанию ('utf-8').\n
     :return: словарь данных, в случае если город не найден None."""
     with open(file_name, 'r', newline = '', encoding = encoding) as file:
         reader = csv.DictReader(file, delimiter = ';')
@@ -221,45 +227,44 @@ def take_from_csv(file_name, value, name_element, encoding = 'utf-8'):
 def take_points_for_parcels_from_csv(file_name, name_city, encoding = 'utf-8'):
     """Получить пункты приема в заданном городе из файла ('*.csv').
     
-    :param file_name: имя файла из которого считываются данные.
-    :param name_city: имя города в котором необходимо найти пункты приема.
-    :param encoding: (optional) кодировка по умолчанию ('utf-8').
-    :return: list of Dictionary, в случае если город не найден пустой массив
-        В случае ошибки чтения None."""
+    :param file_name: имя файла из которого считываются данные.\n
+    :param name_city: имя города в котором необходимо найти пункты приема.\n
+    :param encoding: (optional) кодировка по умолчанию ('utf-8').\n
+    :return: list of Dictionary, в случае если город не найден пустой массив.
+    В случае ошибки чтения None."""
     return take_from_csv(file_name, name_city, 'City', encoding)
 
 def take_points_of_issue_orders(file_name, code_city, encoding = 'utf-8'):
     """Получить пункты приема в заданном городе из файла ('*.csv').
     
-    :param file_name: имя файла из которого считываются данные.
-    :param code_city: код города в boxberry.
-    :param encoding: (optional) кодировка по умолчанию ('utf-8').
-    :return: list of Dictionary, в случае если город не найден пустой массив
-        В случае ошибки чтения None."""
+    :param file_name: имя файла из которого считываются данные.\n
+    :param code_city: код города в boxberry.\n
+    :param encoding: (optional) кодировка по умолчанию ('utf-8').\n
+    :return: list of Dictionary, в случае если город не найден пустой массив.
+    В случае ошибки чтения None."""
     return take_from_csv(file_name, code_city, 'CityCode', encoding)
 
 def take_zips_for_city(file_name, name_city, encoding = 'utf-8'):
     """Получить почтовые индексы в заданном городе из файла ('*.csv').
     
-    :param file_name: имя файла из которого считываются данные.
-    :param name_city: имя города в котором необходимо найти почтовые индексы.
-    :param encoding: (optional) кодировка по умолчанию ('utf-8').
-    :return: list of Dictionary, в случае если город не найден пустой массив
-        В случае ошибки чтения None."""
+    :param file_name: имя файла из которого считываются данные.\n
+    :param name_city: имя города в котором необходимо найти почтовые индексы.\n
+    :param encoding: (optional) кодировка по умолчанию ('utf-8').\n
+    :return: list of Dictionary, в случае если город не найден пустой массив.
+    В случае ошибки чтения None."""
     return take_from_csv(file_name, name_city, 'City', encoding)
 
 def get_delivery_costs(sender_city, recipient_city, ordersum, weight, zip_code, advanced_sending_options):
     """Расчет стоимости доставки посылки до ПВЗ, возможен расчет с учетом курьерской доставки.
     
-    :param sender_city: город отправителя.
-    :param recipient_city: город получателя.
-    :param ordersum: заявленная стоимость ('руб.').
-    :param weight: вес посылки в (граммах).
-    :param zip_code: почтовый индекс для курьерской доставки.
-    :param advanced_sending_options: (optional) Dictionary,
-        дополнительные парамеры отправки('height', 'width', 'depth') в (см.).
-    :return costs: стоимость доставки, time: срок доставки (дней).
-    :rtype: str, str."""
+    :param sender_city: город отправителя.\n
+    :param recipient_city: город получателя.\n
+    :param ordersum: заявленная стоимость ('руб.').\n
+    :param weight: вес посылки в (граммах).\n
+    :param zip_code: почтовый индекс для курьерской доставки.\n
+    :param advanced_sending_options: (optional) Dictionary,\n
+    дополнительные парамеры отправки('height', 'width', 'depth') в (см.).\n
+    :return costs: стоимость доставки, time: срок доставки (дней)."""
     try:
         height = advanced_sending_options['height']
         width = advanced_sending_options['width']
@@ -288,7 +293,7 @@ def get_delivery_costs(sender_city, recipient_city, ordersum, weight, zip_code, 
 def get_name_city(name):
     """Получить название города из строки запроса.
     
-    :param name: строка включающая название города.
+    :param name: строка включающая название города.\n
     :return: название города."""
     name_city = name.split(',')
 
@@ -306,7 +311,7 @@ def data_loading():
     write_csv(list_zips, file_zips, list_zips[0].keys())
 
 def calculate_boxberry(sender_city, recipient_city, advanced_sending_options, ordersum = 0, zip_code = 0):
-    """Получить цену за доставку и кол-во дней доставки."""
+    """Получить данные о доставке."""
     try:
         weight = float(advanced_sending_options['weight'])
     except:
@@ -321,7 +326,20 @@ def calculate_boxberry(sender_city, recipient_city, advanced_sending_options, or
         width = 0
         depth = 0
 
-    volume = (height * width * depth) / 1000000
+    if height == 0 and width == 0 and depth == 0:
+        try:
+            volume = float(advanced_sending_options['volume'])
+            a = (volume ** (1 / 3)) * 100
+            height = a
+            width = a
+            depth = a
+        except:
+            volume = 0
+    else:
+        volume = (height * width * depth) / 1000000
+
+    if height > 120 or width > 120 or depth > 120:
+        return {}
     if height + width + depth > 250:
         return {}
     if weight > 31:
@@ -361,10 +379,17 @@ def calculate_boxberry(sender_city, recipient_city, advanced_sending_options, or
             'width' : width, 
             'depth' : depth
         })
+
+    if zip_code == 0:
+        reception_points = points_of_issue_orders
+    else:
+        reception_points = zip_code
     
     return {
-        'price'  : price,
-        'period' : period
+        'price'             : price,
+        'period'            : period,
+        'shippingPoints'    : points_for_parcels,
+        'receptionPoints'   : reception_points
     }
 
 def get_data_boxberry(request):
@@ -380,12 +405,81 @@ def get_data_boxberry(request):
 
     return calculate_boxberry(sender_city, recipient_city, request['goods'][0], zip_code=zip_code)
 
-def send_request(json):
-    response = requests.post(url, json=json)
+def send_request(data = None):
+    return requests.post(url, data = data)
 
-    return response
+def parsel_check(order_tracking_code):
+    """Получить ссылку на файл печати этикеток.
+    
+    :param order_tracking_code: код отслеживания заказа.\n
+    :return: ссылка на файл или None в случае ошибки запроса."""
+    try:
+        return get_json(url, {
+            'token'     : token,
+            'method'    : 'ParselCheck',
+            'ImId'      : order_tracking_code
+        })
+    except:
+        return None
+
+def get_list_statuses(order_tracking_code):
+    """Получить информацию о статусах посылки.
+    
+    :param order_tracking_code: код отслеживания заказа.\n
+    :return: array статусов по данному заказу или None в случае ошибки запроса."""
+    try:
+        return get_json(url, {
+            'token'     : token,
+            'method'    : 'ListStatuses',
+            'ImId'      : order_tracking_code
+        })
+    except:
+        return None
+
+def get_list_statuses_full(order_tracking_code):
+    """Получить полную информацию о статусах посылки.
+    
+    :param order_tracking_code: код отслеживания заказа.\n
+    :return: list of Dictionary данных по заказу или None в случае ошибки запроса."""
+    try:
+        return get_json(url, {
+            'token'     : token,
+            'method'    : 'ListStatusesFull',
+            'ImId'      : order_tracking_code
+        })
+    except:
+        return None
+
+def get_list_services(order_tracking_code):
+    """Получить перечень и стоимость оказанных услуг по отправлению.
+    
+    :param order_tracking_code: код отслеживания заказа.\n
+    :return: array статусов по данному заказу или None в случае ошибки запроса."""
+    try:
+        return get_json(url, {
+            'token'     : token,
+            'method'    : 'ListServices',
+            'ImId'      : order_tracking_code
+        })
+    except:
+        return None
+
+def parsel_delete(order_tracking_code):
+    """Удалить посылку, но только в том случае, если она не была проведена в акте.
+    
+    :param order_tracking_code: код отслеживания заказа.\n
+    :return: True в случае успешного удаления, False нет."""
+    try:
+        return get_json(url, {
+            'token'     : token,
+            'method'    : 'ParselDel',
+            'ImId'      : order_tracking_code
+        })['text'] == 'ok'
+    except:
+        return False
 
 def create_parsel():
+    """Создание/обновление посылки в личном кабинете."""
     data = {
         'updateByTrack'     : 'track',
         'order_id'          : 'ID заказа в ИМ',
@@ -458,10 +552,41 @@ def create_parsel():
     # kurdost addressp - Адрес Получателя ЗП для курьерской доставки. Рекомендуется указывать в соответствии с КЛАДР. Адрес должен принадлежать почтовому индексу, по которому осуществляется Курьерская доставка.
     # weights weight
 
-    return send_request(data)
+    return send_request({
+        'token'     : token,
+        'method'    : 'ParselCreate',
+        'sdata'     : json.dumps(data)
+    }).json()
 
 def place_order():
-    return
+    return create_parsel()
 
 def set_booking(request):
     return place_order()
+
+data = {
+    'order_id'          : '1111',
+    'price'             : '0',
+    'payment_sum'       : '0',
+    'delivery_sum'      : '0',
+    'vid'               : '1',
+    'shop'              : {
+        'name'          : '54351',
+        'name1'         : '66151'
+    },
+    'customer'          : {
+        'fio'           : 'Strange Alexander',
+        'phone'         : '9120526079'
+    },
+    'weights'           : {
+        'weight'        : '3000'
+    }
+}
+
+par = {
+    'token' : token,
+    'method': 'ParselCreate',
+    'sdata' : json.dumps(data)
+}
+
+print(send_request(par).json())

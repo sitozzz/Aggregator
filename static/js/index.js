@@ -328,6 +328,48 @@ function showBoxberry(boxberryData) {
         deliveryInformation.style = 'width: 100%;';
         deliveryInformation.innerHTML = '<p> Цена: ' + boxberryData.price + '; дней до доставки: ' + boxberryData.period + '</p>';
         row.appendChild(deliveryInformation);
+
+        var btn = d.createElement('button');
+        btn.className = 'btn btn-lg btn-success';
+        btn.innerText = 'Заказать';
+        row.appendChild(btn);
+
+        btn.onclick = function () {
+            $("#send-door").hide();
+            $("#send-storage").show();
+            
+            boxberryData.shippingPoints.forEach(element => {
+                var root = d.getElementById('sdek-dropdown-from');
+                var option = d.createElement('option');
+                option.id = element['Code'];
+                option.innerText = element['Name'];
+                option.value = element['Name'];
+                root.appendChild(option);
+            });
+
+            $('#drop-container').show();
+
+            $("#recieve-door").hide();
+            $("#recieve-storage").show();
+
+            boxberryData.receptionPoints.forEach(element => {
+                var root = d.getElementById('sdek-dropdown-to');
+                var option = d.createElement('option');
+                option.id = element['Code'];
+                option.innerText = element['AddressReduce'];
+                option.value = element['Address'];
+                root.appendChild(option);
+            });
+
+            $('#drop-container').show();
+
+            $('.section').fadeOut('fast', function () {
+                d.getElementById('send-city').innerText = $('#city1').val();
+                d.getElementById('recieve-city').innerText = $('#city2').val();
+
+                $('#order').fadeIn('fast');
+            });
+        };
     }
 
     $('#boxberry-output').show();
