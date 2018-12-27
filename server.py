@@ -96,7 +96,7 @@ def sdek_delivery():
     req = request.get_json()
     out = sdek_api.add_delivery(req['date'], req['sender'], req['reciever'], req['package'])
     print(out)
-    return jsonify({"Some data": "from sdek api"})
+    return jsonify(out)
 
 
 if __name__ == '__main__':
