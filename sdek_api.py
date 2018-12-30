@@ -2,7 +2,7 @@ import requests
 import json
 import xmltodict
 # TODO: Change this
-# test_login = "3y03Ahh2XigMgzN1l7mWff6jZMSCqHE1"
+test_login = "3y03Ahh2XigMgzN1l7mWff6jZMSCqHE1"
 # test_pswd = dateExecute + "&Or6kB0BaKUrGCx51NWtVNcZ4YmVRFMBN"
 prod_login = "9PNdW6RZ7Klnfg2P4JXkglM9BkznKrzh"
 prod_pswd = "RfYDInLNGtB654BaZi8Z11ylwwq4WBmO"
@@ -155,7 +155,7 @@ def add_delivery(date, sender, reciever, package):
 	url = 'https://integration.cdek.ru/addDeliveryRaw'
 	headers = {'Content-Type': 'application/xml'} 
 	
-	xml = '<?xml version="1.0" encoding="UTF-8"?><deliveryrequest account="716b2c7e8f2e1a46ff8fd126adaef97d" currency="rub" date="{date}" foreigndelivery="false" number="test_request" ordercount="1" secure="4180a7f32c5f605db27f15e26eec03d7"> <order clientside="SENDER" comment="test_comment" number="number2017_6344227223" phone="123456789123456789" reccitycode="{reciever_city_id}" recipientcompany="company-6344227223" recipientcurrency="rub" recipientemail="email_1_G4Akh0@test.ru" recipientname="Получатель Получателев" sendcitycode="{sender_city_id}" tarifftypecode="1"> <address flat="{reciever_flat}" house="{reciever_house}" street="{reciever_street}"/> <sender name="{sender_name}"> <address flat="{sender_flat}" house="{sender_house}" street="{sender_street}"/> <phone>{phone_sender}</phone>  </sender> <package barcode="test_package" comment="test_comment" sizea="{width}" sizeb="{height}" sizec="{length}" weight="{weight}"/> </order> </deliveryrequest>'.format(date = str(date), reciever_city_id = reciever['city_id'], sender_city_id=sender['city_id'], reciever_flat = reciever['flat'], reciever_house = reciever['house'], reciever_street = reciever['street'], sender_flat = sender['flat'], sender_house = sender['house'], sender_street = sender['street'], width = package['width'], height = package['height'], length = package['length'], weight = package['weight'], phone_sender = sender['phone'], sender_name = sender['name'])
+	xml = '<?xml version="1.0" encoding="UTF-8"?><deliveryrequest account="{account}" currency="rub" date="{date}" foreigndelivery="false" number="test_request" ordercount="1" secure="4180a7f32c5f605db27f15e26eec03d7"> <order clientside="SENDER" comment="test_comment" number="number2017_6344227223" phone="123456789123456789" reccitycode="{reciever_city_id}" recipientcompany="company-6344227223" recipientcurrency="rub" recipientemail="email_1_G4Akh0@test.ru" recipientname="Получатель Получателев" sendcitycode="{sender_city_id}" tarifftypecode="1"> <address flat="{reciever_flat}" house="{reciever_house}" street="{reciever_street}"/> <sender name="{sender_name}"> <address flat="{sender_flat}" house="{sender_house}" street="{sender_street}"/> <phone>{phone_sender}</phone>  </sender> <package barcode="test_package" comment="test_comment" sizea="{width}" sizeb="{height}" sizec="{length}" weight="{weight}"/> </order> </deliveryrequest>'.format(date = str(date), reciever_city_id = reciever['city_id'], sender_city_id=sender['city_id'], reciever_flat = reciever['flat'], reciever_house = reciever['house'], reciever_street = reciever['street'], sender_flat = sender['flat'], sender_house = sender['house'], sender_street = sender['street'], width = package['width'], height = package['height'], length = package['length'], weight = package['weight'], phone_sender = sender['phone'], sender_name = sender['name'], account = test_login)
 
 
 	res = requests.post(url = url, data = xml.encode('utf-8'), headers = headers)
