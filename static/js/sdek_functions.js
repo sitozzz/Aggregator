@@ -158,6 +158,7 @@ function addSDEKDelivery(isSendStorage, isRecieveStorage) {
     };
     if (isSendStorage) {
         // TODO: Add fields for storage
+        sender['pvzcode'] = $("#sdek-dropdown-from option:selected").attr('id');
     }
     else {
         sender['street'] = $('#send-street').text();
@@ -166,6 +167,8 @@ function addSDEKDelivery(isSendStorage, isRecieveStorage) {
     }
     if (isRecieveStorage) {
         // TODO: Add fields for storage
+        reciever['pvzcode'] = $("#sdek-dropdown-to option:selected").attr('id');
+
     }
     else {
         reciever['street'] = $('#recieve-street').text();
