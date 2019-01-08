@@ -90,9 +90,15 @@ def sdek_pvz():
     output = sdek_api.get_pvz_list(req['city_code'])
     
     return jsonify(output)
-    
+
+@app.route('/sdek_delivery', methods=['POST'])
+def sdek_delivery():
+    req = request.get_json()
+    out = sdek_api.add_delivery(req['date'], req['sender'], req['reciever'], req['package'])
+    print(out)
+    return jsonify(out)
 
 
 if __name__ == '__main__':
     
-    app.run(host='127.0.0.1', port=8000, debug=True)
+    app.run(host='127.0.0.1', port=8000, debug=False)
