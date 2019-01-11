@@ -46,7 +46,7 @@
     border-radius: 10px;
 }
 
-.row
+.row-s
 {
     display: flex;
     width: 900px;
@@ -55,7 +55,13 @@
     justify-content: space-between;
 }
 
-.row .btn-success
+.row-s .btn-success
 {
     background-color: rgb(7, 77, 182);
 }
+
+.row-s .btn-success:hover
+{
+    background-color: rgb(3, 42, 104);
+}
+

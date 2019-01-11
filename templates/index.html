@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css?family=Montserrat|Staatliches|ZCOOL+XiaoWei" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
     
-    <link href="index.css" rel="stylesheet">
+    <!-- <link href="index.css" rel="stylesheet"> -->
 
     <!-- jQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -40,9 +40,9 @@
                 <span class="title-text">ParcelProject</span>
         </nav>
         <!-- То что мы видим при загрузке -->
-        <!-- <div id="loader"  class="loading-window">
+        <div id="loader"  class="loading-window">
             <img class="loading-window-img" src="static/img/1.gif">
-        </div> -->
+        </div>
         <section class="description-text">
             <p>
                 Поиск лучших предложений
@@ -53,7 +53,7 @@
         </section>
         <section id="calc" class="search-bar">
             <div class="row-wrap">
-                <div class="row">
+                <div class="row-s">
                     <div>
                         <input id="city1" class="form-control" type="text" placeholder="Откуда:" required>
     
@@ -92,13 +92,13 @@
                 </div>
             </div>
     
-            <div id="prop-holder" class="row" style="margin:0; padding:30px;  width:100%; display: none;">
-                <div class="row" style="margin:auto; padding:0; max-width: 600px; padding: 24px; border: 1px solid gray; border-radius: 15px;">
+            <div id="prop-holder" style="margin:0; padding:30px;  width:100%; display: none;">
+                <div class="next-row" style="margin:auto; padding:0; max-width: 600px; padding: 24px; border: 1px solid gray; border-radius: 15px;">
                     <div style="width:100%; ">
                         <label for="dateExecute">Дата отправки:</label>
                         <input id="dateExecute" class="form-control" type="date" value="2018-11-30">
-                        <!-- <label for="tariff">Варианты доставки:</label> -->
-                        <!-- <select id="tariff"  class="form-control">
+                        <!-- <label for="tariff">Варианты доставки:</label>
+                        <select id="tariff"  class="form-control">
                            
                         </select> -->
                     </div>
@@ -143,22 +143,22 @@
             </div>
     
             <!-- Выпадающие элементы -->
-            <div id="sdek-output" class="row" style="margin:0; padding:30px;  width:100%; display: none;">
+            <div id="sdek-output" class="next-row" style="margin:0; padding:30px;  width:100%; display: none;">
             </div>
     
-            <div id="dpd-output" class="row" style="margin:0; padding:30px;  width:100%; display: none;">
-            </div>
-    
-    
-            <div id="pony-output" class="row" style="margin:0; padding:30px;  width:100%; display: none;">
+            <div id="dpd-output" class="next-row" style="margin:0; padding:30px;  width:100%; display: none;">
             </div>
     
     
-            <div id="boxberry-output" class="row" style="margin:0; padding:30px;  width:100%; display: none;">
+            <div id="pony-output" class="next-row" style="margin:0; padding:30px;  width:100%; display: none;">
+            </div>
+    
+    
+            <div id="boxberry-output" class="next-row" style="margin:0; padding:30px;  width:100%; display: none;">
             </div>
     
         </section>
-        <!-- {% include "sdek_order.html" %} -->
+        {% include "sdek_order.html" %}
     </main>
 </body>
 
