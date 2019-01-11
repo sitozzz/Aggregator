@@ -265,11 +265,12 @@ $(document).ready(function () {
         });
     });
     $("#close-sdek-order").click(function () {
-        $("#order").fadeOut('fast', function () { $(".section").fadeIn('fast'); });
+        $("#order").fadeOut('fast', function () { $("#calc").fadeIn('fast'); });
     });
 
     $('#sdekOrderBtn').click(function () { 
         // TODO: check this flags after user selection
+        console.log('sdek delivery clicked');
         addSDEKDelivery(false, false);
         
     });

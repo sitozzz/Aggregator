@@ -59,6 +59,7 @@ function showSDEKres(sdekdata) {
             btn.innerText = 'Заказать';
             row.appendChild(btn);
             btn.onclick = function () {
+                console.log('sdek order click');
                 if (deliveryDataFrom != 'door') {
                     $("#send-door").hide();
                     $("#send-storage").show();
@@ -71,7 +72,7 @@ function showSDEKres(sdekdata) {
                     getSDEKPvz(city2._id, 'sdek-dropdown-to');
                     // TODO: display full address in p tag
                 }
-                $('.section').fadeOut('fast', function () {
+                $('#calc').fadeOut('fast', function () {
                     d.getElementById('send-city').innerText = $('#city1').val();
                     d.getElementById('recieve-city').innerText = $('#city2').val();
                     $('#order').fadeIn('fast');
