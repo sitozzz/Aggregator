@@ -1,0 +1,55 @@
+<div id="boxberry-order" class="" style="display: none;">
+    <div class="row" style="margin:0; padding:30px;  width:100%;">   
+        <div class="row" style="margin:auto; padding:0; max-width: 600px; padding: 24px; border: 1px solid gray; border-radius: 15px; background-color: white;">
+            <div style="position: relative; top: 0; left: 2%;">
+                <span id="close-boxberry-order" style="font-size: 2.5rem; cursor: pointer;"><i class="fas fa-times"></i></span> 
+            </div>
+            <h2>Город отправителя: <span id="sender-city-boxberry"></span></h2>
+            <div>
+                <label for="boxberry-dropdown-from">Адрес отправки</label>
+                <select id="boxberry-dropdown-from"></select>
+            </div>
+            <h2>Город получателя: <span id="reciever-city-boxberry"></span></h2>
+            <div>
+                <label for="boxberry-dropdown-to">Адрес получения</label>
+                <select id="boxberry-dropdown-to"></select>
+            </div>
+            <div id="reciever-door-boxberry" style="display: none;">
+                <h2>Адрес получателя</h2>
+                <div style="display: inline-block; width:49%; padding-top: 10px;">
+                    <label for="reciever-street-boxberry">Улица</label>
+                    <input id="reciever-street-boxberry" class="form-control" required type="text" />
+                </div>
+                <div style="display: inline-block; width:50%; padding-top: 10px;">
+                    <label for="reciever-house-boxberry">Дом</label>
+                    <input id="reciever-house-boxberry" class="form-control" required type="text" />
+                </div>
+                <div style="display: inline-block; width:49%; padding-top: 10px;">
+                    <label for="reciever-flat-boxberry">Квартира</label>
+                    <input id="reciever-flat-boxberry" class="form-control" required type="text" />
+                </div>
+            </div>
+
+            <!-- <div style="display: inline-block; width:50%; padding-top: 10px;">
+                <label for="sender-name-boxberry">Имя Фамилия отправителя</label>
+                <input id="sender-name-boxberry" class="form-control" type="text" />
+            </div>
+            <div style="display: inline-block; width:50%; padding-top: 10px;">
+                <label for="sender-phone-boxberry">Телефон отправителя</label>
+                <input id="sender-phone-boxberry" class="form-control" type="tel" />
+            </div> -->
+
+            <div style="display: inline-block; width:50%; padding-top: 10px;">
+                <label for="reciever-name-boxberry">Имя Фамилия получателя</label>
+                <input id="reciever-name-boxberry" class="form-control" type="text" />
+            </div>
+            <div style="display: inline-block; width:50%; padding-top: 10px;">
+                <label for="reciever-phone-boxberry">Телефон получателя</label>
+                <input id="reciever-phone-boxberry" class="form-control" type="tel" />
+            </div>
+            <div style="width:100%; padding-top: 20px; text-align: center;">
+                <button id="boxberry-order-btn"  class="btn btn-lg btn-success">Заказать</button>
+            </div>
+        </div>
+    </div>
+</div>

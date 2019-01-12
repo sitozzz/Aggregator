@@ -98,6 +98,12 @@ def sdek_delivery():
     print(out)
     return jsonify(out)
 
+@app.route('/boxberry_delivery', methods=['POST'])
+def boxberry_delivery():
+    req = request.get_json()
+    out = boxberry_api.set_booking(req)
+    print(out)
+    return jsonify({"boxberryInfoOrder": out})
 
 if __name__ == '__main__':
     

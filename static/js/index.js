@@ -95,28 +95,6 @@ function showPonyres(ponyData) {
 
 }
 
-function showBoxberry(boxberryData) {
-    console.log(boxberryData);
-    $('#boxberry-output').html('');
-    if (boxberryData.price) {
-        var blockBoxberry = d.getElementById('boxberry-output');
-        console.log(blockBoxberry);
-        var row = d.createElement('div');
-        row.className = 'row';
-        row.style = "margin: auto; padding: 0; max-width: 600px; padding: 24px;border: 1px solid gray; border-radius: 15px;";
-        blockBoxberry.appendChild(row);
-        var title = d.createElement('h1');
-        title.innerText = 'Стоимость доставки Boxberry';
-        row.appendChild(title);
-        var deliveryInformation = d.createElement('div');
-        deliveryInformation.style = 'width: 100%;';
-        deliveryInformation.innerHTML = '<p> Цена: ' + boxberryData.price + '; дней до доставки: ' + boxberryData.period + '</p>';
-        row.appendChild(deliveryInformation);
-    }
-
-    $('#boxberry-output').show();
-}
-
 $(document).ready(function () {
     d.getElementById('dateExecute').value = new Date().toISOString().slice(0, 10);
     $('input[name=fromDelivery]').on('change', function () {
@@ -273,5 +251,13 @@ $(document).ready(function () {
         console.log('sdek delivery clicked');
         addSDEKDelivery(false, false);
         
+    });
+
+    $("#close-boxberry-order").click(function () {
+        $("#boxberry-order").fadeOut('fast', function () { $("#calc").fadeIn('fast'); });
+    });
+
+    $('#boxberry-order-btn').click(function () { 
+        addDeliveryBoxberry();
     });
 });

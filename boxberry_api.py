@@ -12,7 +12,6 @@ file_points = 'list_points_boxberry.csv'
 
 def get_json(url, data = None):
     response = requests.get(url, params = data)
-    print(response.url)
     return response.json()
 
 #достаточно обновления 1 раз в день
@@ -364,7 +363,8 @@ def calculate_boxberry(sender_city, recipient_city, advanced_sending_options, or
 
     if zip_code != 0:
         if zip_code == 1:
-            zip_code = take_zips_for_city(file_zips, recipient_city)[0]['Zip']
+            zips_for_city = take_zips_for_city(file_zips, recipient_city)
+            zip_code = zips_for_city[0]['Zip']
         elif not zip_check(zip_code):
             zip_code = 0
         
@@ -383,11 +383,13 @@ def calculate_boxberry(sender_city, recipient_city, advanced_sending_options, or
     if zip_code == 0:
         reception_points = points_of_issue_orders
     else:
-        reception_points = zip_code
+        reception_points = zips_for_city
     
     return {
         'price'             : price,
         'period'            : period,
+        'senderCity'        : city_a['Code'],
+        'recipientCity'     : city_b['Code'],
         'shippingPoints'    : points_for_parcels,
         'receptionPoints'   : reception_points
     }
@@ -403,7 +405,7 @@ def get_data_boxberry(request):
     if request['deliveryType']['deliveryTo'] == 'door':
         zip_code = 1
 
-    return calculate_boxberry(sender_city, recipient_city, request['goods'][0], zip_code=zip_code)
+    return calculate_boxberry(sender_city, recipient_city, request['goods'][0], zip_code = zip_code)
 
 def send_request(data = None):
     return requests.post(url, data = data)
@@ -551,42 +553,43 @@ def create_parsel():
     # kurdost city - Наименование города Получателя ЗП, в котором будет курьерская доставка
     # kurdost addressp - Адрес Получателя ЗП для курьерской доставки. Рекомендуется указывать в соответствии с КЛАДР. Адрес должен принадлежать почтовому индексу, по которому осуществляется Курьерская доставка.
     # weights weight
-
-    return send_request({
-        'token'     : token,
-        'method'    : 'ParselCreate',
-        'sdata'     : json.dumps(data)
-    }).json()
+    return
+    # return send_request({
+    #     'token'     : token,
+    #     'method'    : 'ParselCreate',
+    #     'sdata'     : json.dumps(data)
+    # }).json()
 
 def place_order():
     return create_parsel()
 
 def set_booking(request):
+    print(request)
     return place_order()
 
-data = {
-    'order_id'          : '1111',
-    'price'             : '0',
-    'payment_sum'       : '0',
-    'delivery_sum'      : '0',
-    'vid'               : '1',
-    'shop'              : {
-        'name'          : '54351',
-        'name1'         : '66151'
-    },
-    'customer'          : {
-        'fio'           : 'Strange Alexander',
-        'phone'         : '9120526079'
-    },
-    'weights'           : {
-        'weight'        : '3000'
-    }
-}
+# data = {
+#     'order_id'          : '1111',
+#     'price'             : '0',
+#     'payment_sum'       : '0',
+#     'delivery_sum'      : '0',
+#     'vid'               : '1',
+#     'shop'              : {
+#         'name'          : '54351',
+#         'name1'         : '66151'
+#     },
+#     'customer'          : {
+#         'fio'           : 'Strange Alexander',
+#         'phone'         : '9120526079'
+#     },
+#     'weights'           : {
+#         'weight'        : '3000'
+#     }
+# }
 
-par = {
-    'token' : token,
-    'method': 'ParselCreate',
-    'sdata' : json.dumps(data)
-}
+# par = {
+#     'token' : token,
+#     'method': 'ParselCreate',
+#     'sdata' : json.dumps(data)
+# }
 
-print(send_request(par).json())
+# print(send_request(par).json())
