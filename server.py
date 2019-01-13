@@ -60,8 +60,8 @@ def calculate():
     # sdek_res = json.loads(sdek_res,encoding='utf-8')
     # ==SDEK API==
     
-    dpd_res = dpd_api.get_service_cost(req)
-    print(dpd_res['list'])
+    # dpd_res = dpd_api.get_service_cost(req)
+    # print(dpd_res['list'])
 
     #загрузить файлы
     #boxberry_api.data_loading()
@@ -73,7 +73,8 @@ def calculate():
 
     out_json = jsonify({
         "sdek": sdek_res,
-        "dpd": dpd_res['list'],
+        # "dpd": dpd_res['list'],
+        "dpd": 'null',
         "boxberry": boxberry_res,
         "pony": pony_res
     })
@@ -107,4 +108,4 @@ def boxberry_delivery():
 
 if __name__ == '__main__':
     
-    app.run(host='127.0.0.1', port=8000, debug=False)
+    app.run(host='127.0.0.1', port=8000, debug=True)

@@ -174,11 +174,14 @@ def add_delivery(date, sender, reciever, package):
 		reciever_address = '<address pvzcode="{pvz_code}"/>'.format(
 			pvz_code = reciever['pvzcode'])
 		
-	xml = '<?xml version="1.0" encoding="UTF-8"?><deliveryrequest account="{account}" currency="rub" date="{date}" foreigndelivery="false" number="test_request" ordercount="1" secure="{secure}"> <order clientside="SENDER" comment="test_comment" number="number2017_6344227223" phone="123456789123456789" reccitycode="{reciever_city_id}" recipientcompany="company-6344227223" recipientcurrency="rub" recipientemail="email_1_G4Akh0@test.ru" recipientname="{reciever_name}" sendcitycode="{sender_city_id}" tarifftypecode="1"> '+reciever_address+' <sender name="{sender_name}"> '+sender_address+' <phone>{phone_sender}</phone>  </sender> <package barcode="test_package" comment="test_comment" sizea="{width}" sizeb="{height}" sizec="{length}" weight="{weight}"/> </order> </deliveryrequest>'.format(date = str(date), reciever_city_id = reciever['city_id'], sender_city_id=sender['city_id'], reciever_name = reciever['name'],  width = package['width'], height = package['height'], length = package['length'], weight = package['weight'], phone_sender = sender['phone'], sender_name = sender['name'], account = test_login, secure=test_pswd)
+	xml = '<?xml version="1.0" encoding="UTF-8"?><deliveryrequest account="'+prod_login+'" currency="rub" date="'+date+'" foreigndelivery="false" number="test_request" ordercount="1" secure="'+prod_pswd+'"> <order clientside="SENDER" comment="test_comment" number="number2017_6344227223" phone="123456789123456789" reccitycode="'+str(reciever['city_id'])+'" recipientcompany="company-6344227223" recipientcurrency="rub" recipientemail="email_1_G4Akh0@test.ru" recipientname="'+reciever['name']+'" sendcitycode="'+str(sender['city_id'])+'" tarifftypecode="1"> '+reciever_address+' <sender name="'+sender['name']+'"> '+sender_address+' <phone>{phone_sender}</phone>  </sender> <package barcode="test_package" comment="test_comment" sizea="{width}" sizeb="{height}" sizec="{length}" weight="{weight}"/> </order> </deliveryrequest>'.format(width=package['width'], height=package['height'], length=package['length'], weight=package['weight'], phone_sender=sender['phone'])
 
-
+	print('====Response====')
+	print(xml)
+	print('====Response====')
 	res = requests.post(url = url, data = xml.encode('utf-8'), headers = headers)
 	print(res.text)
 	return xmltodict.parse(res.text)
 
-# add_delivery()
+def remove_delivery(id):
+	pass
