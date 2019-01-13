@@ -51,17 +51,14 @@ def calculate():
     req = request.get_json()
     # print('Request: ')
     print(req)
-
-    #TODO: Match city names
    
     # ==SDEK API==
-    # TODO: Add from and to delivery selection
     sdek_res = sdek_api.calculate_sdek(req)
     # sdek_res = json.loads(sdek_res,encoding='utf-8')
     # ==SDEK API==
-    
-    # dpd_res = dpd_api.get_service_cost(req)
-    # print(dpd_res['list'])
+    # FIXME: 404 err
+    dpd_res = dpd_api.get_service_cost(req)
+    print(dpd_res['list'])
 
     #загрузить файлы
     #boxberry_api.data_loading()
@@ -73,7 +70,7 @@ def calculate():
 
     out_json = jsonify({
         "sdek": sdek_res,
-        # "dpd": dpd_res['list'],
+        "dpd": dpd_res['list'],
         "dpd": 'null',
         "boxberry": boxberry_res,
         "pony": pony_res
