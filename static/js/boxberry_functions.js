@@ -37,6 +37,7 @@ function showBoxberry(boxberryData) {
                 root.appendChild(option);
             });
 
+            // изменить вид адреса для отправителя
             if (deliveryDataTo != 'door') {
                 boxberryData.receptionPoints.forEach(element => {
                     var root = d.getElementById('boxberry-dropdown-to');
@@ -46,9 +47,13 @@ function showBoxberry(boxberryData) {
                     option.value = element['Address'];
                     root.appendChild(option);
                 });
+
+                $("#reciever-door-boxberry").hide();
+                $("#coment-boxberry").hide();
+                $("#reciever-warehouse-boxberry").show();
             } else {
                 boxberryData.receptionPoints.forEach(element => {
-                    var root = d.getElementById('boxberry-dropdown-to');
+                    var root = d.getElementById('boxberry-zip-to');
                     var option = d.createElement('option');
                     option.id = element['Zip'];
                     option.innerText = element['Zip'];
@@ -56,6 +61,8 @@ function showBoxberry(boxberryData) {
                     root.appendChild(option);
                 });
 
+                $("#reciever-warehouse-boxberry").hide();
+                $("#coment-boxberry").show();
                 $("#reciever-door-boxberry").show();
             }
 
@@ -73,22 +80,31 @@ function showBoxberry(boxberryData) {
 
 function addDeliveryBoxberry() {
     var sender = {
-        'city_id': senderCityCodeBoxberry//,
+        'code' : $("#boxberry-dropdown-from option:selected").attr('id')
+        // 'cityId': senderCityCodeBoxberry,
         // 'phone': $('#sender-phone-boxberry').val(),
         // 'name': $('#sender-name-boxberry').val()
     };
+
     var reciever = {
-        'city_id': recieverCityCodeBoxberry,
+        'nameCity' : $('#city2').val(),
         'phone': $('#reciever-phone-boxberry').val(),
         'name': $('#reciever-name-boxberry').val()
     };
+
+    email = $('#reciever-email-boxberry').val();
+
+    if (email != '') {
+        reciever['email'] = $('#reciever-email-boxberry').val();
+    }
+
     var package = {
         'height': $('#height').val(),
         'width': $('#width').val(),
         'weight': $('#weight').val(),
         'length': $('#length').val()
     };
-    sender['code'] = $("#boxberry-dropdown-from option:selected").attr('id');
+
     if (deliveryDataTo != 'door') {
         reciever['code'] = $("#boxberry-dropdown-to option:selected").attr('id');
     } else {
@@ -96,7 +112,13 @@ function addDeliveryBoxberry() {
         reciever['street'] = $('#reciever-street-boxberry').val();
         reciever['flat'] = $('#reciever-house-boxberry').val();
         reciever['house'] = $('#reciever-flat-boxberry').val();
+        coment = $('#reciever-coment-boxberry').val();
+
+        if (coment != '') {
+            reciever['coment'] = $('#reciever-coment-boxberry').val();
+        }
     }
+    console.log(reciever);
     $.ajax({
         type: "POST",
         contentType: "application/json",
@@ -104,11 +126,19 @@ function addDeliveryBoxberry() {
         data: JSON.stringify({
             'sender': sender,
             'reciever': reciever,
-            package: package
+            'package': package
         }),
         success: function (response) {
-            console.log('response = ' + response);
-            console.log(response[0]);
+            console.log(response);
+            var result = response['boxberryInfoOrder'];
+
+            if ('track' in result) {
+                alert(`Трекинг код для посылки: ${result['track']}`);
+            } else if ('err' in result) {
+                alert(`Ошибка: ${result['err']}`);
+            } else {
+                alert('Не удалось сформировать заказ');
+            }
         }
     });
 }
