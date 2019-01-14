@@ -239,9 +239,9 @@ def make_order():
 
     }
     order = {
-        'orderNumberInternal' : '123456',
+        'orderNumberInternal' : '000001',
         'serviceCode' : 'DPE',
-        'serviceVariant' : 'TT',
+        'serviceVariant' : 'ТТ',
         'cargoNumPack' : 1,
         'cargoWeight' : 1,
         'cargoRegistered' : False,
@@ -261,7 +261,7 @@ def make_order():
 
 #get_cities()
 #get_service_cost('кемерово','екатеринбург',True,True,1,20,20,20)
-make_order()
+#make_order()
 #get_terminals()
 
 
