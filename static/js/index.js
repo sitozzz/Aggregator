@@ -93,22 +93,24 @@ function DeliveryData(weight, length, height, width, size) {
 // Дата приема 
 // Цена 
 function showResults(data) {
-    data = [
-        {
-            name: 'cdek',
-            shippingDate: 1547906646,
-            receivingDate: 1547906646,
-            price: 2767,
-        },
-        {
-            name: 'dpd',
-            shippingDate: 1547906646,
-            receivingDate: 1547906646,
-            price: 27267,
-        },
-    ]
+    // data = [
+    //     {
+    //         name: 'cdek',
+    //         shippingDate: 1547906646,
+    //         receivingDate: 1547906646,
+    //         price: 2767,
+    //     },
+    //     {
+    //         name: 'dpd',
+    //         shippingDate: 1547906646,
+    //         receivingDate: 1547906646,
+    //         price: 27267,
+    //     },
+    // ]
     for (const carrier of data) {
-        showCarrier(carrier)
+        if (Object.keys(carrier).length !== 0) {
+            showCarrier(carrier)
+        }
     }
 }
 
@@ -120,8 +122,8 @@ function transformDateToString(unixTimestamp) {
 
 function transformData({name, shippingDate, receivingDate, price}) {
     const logoClassName = `carrier-logo-${name}`
-    const fromText = transformDateToString(shippingDate)
-    const toText = transformDateToString(receivingDate)
+    const fromText = shippingDate//transformDateToString(shippingDate)
+    const toText = receivingDate//transformDateToString(receivingDate)
     const priceText = `${price}₽`
 
     return { logoClassName, fromText, toText, priceText }
