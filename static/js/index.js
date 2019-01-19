@@ -29,93 +29,78 @@ function DeliveryData(weight, length, height, width, size) {
     }
 }
 
-
+// Название перевозщика
+// Звезды
+// Дата отправки
+// Дата приема 
+// Цена 
 function showResults(data) {
-    showDPDres(data.dpd);
-    showPonyres(data.pony);
-    showBoxberry(data.boxberry);
-    showSDEKres(data.sdek);
-}
-
-function showDPDres(dpdData) {
-    $('#dpd-output').html('');
-    if (dpdData[0].serviceName) {
-        var dpdHolder = d.getElementById('dpd-output');
-        var row = d.createElement('div')
-        row.className = 'row';
-        row.style = "margin:auto; padding:0; max-width: 600px; padding: 24px;border: 1px solid gray; border-radius: 15px;";
-        dpdHolder.appendChild(row);
-        var title = d.createElement('h1');
-        title.innerText = 'Стоимость доставки DPD';
-        row.appendChild(title);
-        for (let r in dpdData) {
-            var propHolder = d.createElement('div');
-            propHolder.style = 'width:100%;';
-            propHolder.innerHTML = '<p> услуга: ' + dpdData[r].serviceName + ', цена: ' + dpdData[r].cost + ' дней до доставки: ' + dpdData[r].days + '</p>'
-            row.appendChild(propHolder);
-        }
-    } else {
-        var dpdHolder = d.getElementById('dpd-output');
-        var row = d.createElement('div')
-        row.className = 'row';
-        row.style = "margin:auto; padding:0; max-width: 600px; padding: 24px;border: 1px solid gray; border-radius: 15px;";
-        dpdHolder.appendChild(row);
-        var title = d.createElement('h1');
-        title.innerText = dpdData.replace('Server raised fault: ', '');
-        row.appendChild(title);
-
+    data = [
+        {
+            name: 'cdek',
+            shippingDate: 1547906646,
+            receivingDate: 1547906646,
+            price: 2767,
+        },
+        {
+            name: 'dpd',
+            shippingDate: 1547906646,
+            receivingDate: 1547906646,
+            price: 27267,
+        },
+    ]
+    for (const carrier of data) {
+        showCarrier(carrier)
     }
-
-    $('#dpd-output').show();
-}
-function showPonyres(ponyData) {
-    $('#pony-output').html('');
-    $('#pony-output').show();
-    let row = d.createElement('div')
-    let title = d.createElement('h1');
-    title.innerText = 'Pony Express';
-    row.appendChild(title);
-    row.className = 'row';
-    row.style = "margin:auto; padding:0; max-width: 600px; padding: 24px;border: 1px solid gray; border-radius: 15px;";
-
-
-
-    for (let i in ponyData) {
-
-        var propHolder = d.createElement('div');
-        propHolder.style = 'width:100%;';
-        propHolder.innerHTML = '<p> услуга: ' + ponyData[i].Mode + ', цена без НДС: ' + ponyData[i].Sum + ' НДС: ' + ponyData[i].VAT + ' дней до доставки: ' + ponyData[i].MaxTerm + '</p>'
-        row.appendChild(propHolder);
-    }
-    $('#pony-output').append(row);
-    //----------------------------------------
-
-
-
-
 }
 
-function showBoxberry(boxberryData) {
-    console.log(boxberryData);
-    $('#boxberry-output').html('');
-    if (boxberryData.price) {
-        var blockBoxberry = d.getElementById('boxberry-output');
-        console.log(blockBoxberry);
-        var row = d.createElement('div');
-        row.className = 'row';
-        row.style = "margin: auto; padding: 0; max-width: 600px; padding: 24px;border: 1px solid gray; border-radius: 15px;";
-        blockBoxberry.appendChild(row);
-        var title = d.createElement('h1');
-        title.innerText = 'Стоимость доставки Boxberry';
-        row.appendChild(title);
-        var deliveryInformation = d.createElement('div');
-        deliveryInformation.style = 'width: 100%;';
-        deliveryInformation.innerHTML = '<p> Цена: ' + boxberryData.price + '; дней до доставки: ' + boxberryData.period + '</p>';
-        row.appendChild(deliveryInformation);
-    }
-
-    $('#boxberry-output').show();
+function transformDateToString(unixTimestamp) {
+    const date = new Date(unixTimestamp * 1000)
+    const options = { month: 'long', day: 'numeric' };
+    return date.toLocaleDateString(undefined, options);
 }
+
+function transformData({name, shippingDate, receivingDate, price}) {
+    const logoClassName = `carrier-logo-${name}`
+    const fromText = transformDateToString(shippingDate)
+    const toText = transformDateToString(receivingDate)
+    const priceText = `${price}₽`
+
+    return { logoClassName, fromText, toText, priceText }
+}
+
+function showCarrier({name, shippingDate, receivingDate, price}) {
+    const container = d.createElement('div')
+    container.setAttribute('class', 'carrier')
+    
+    const { logoClassName, fromText, toText, priceText } = transformData({ name, shippingDate, receivingDate, price })
+
+    const nameElement  = d.createElement('div')
+    nameElement.classList.add('carrier-logo', logoClassName)
+
+    const shippingDateElement  = d.createElement('div')
+    shippingDateElement.setAttribute('class', 'carrier-shipping-date')
+    shippingDateElement.textContent = fromText
+
+    const receivingDateElement  = d.createElement('div')
+    receivingDateElement.setAttribute('class', 'carrier-receiving-date')
+    receivingDateElement.textContent = toText
+
+    const priceElement  = d.createElement('div')
+    priceElement.setAttribute('class', 'carrier-price')
+    priceElement.textContent = priceText
+
+    container.appendChild(nameElement)
+    container.appendChild(shippingDateElement)
+    container.appendChild(receivingDateElement)
+    container.appendChild(priceElement)
+    
+    const shippingOffers = d.getElementById('shipping-offers')
+    shippingOffers.appendChild(container)
+    shippingOffers.classList.add('shipping-offers-active')
+
+}   
+
 
 $(document).ready(function () {
     d.getElementById('dateExecute').value = new Date().toISOString().slice(0, 10);
@@ -261,16 +246,19 @@ $(document).ready(function () {
                 showResults(data)
 
                 $('#output').show('fast');
-            }
+            },
+            error: function () {
+                // TODO: Hide loader here!
+                $('#loader').hide();
+
+                showResults()
+
+                $('#output').show('fast');
+            },
+
+            
         });
     });
-    $("#close-sdek-order").click(function () {
-        $("#order").fadeOut('fast', function () { $(".section").fadeIn('fast'); });
-    });
+    
 
-    $('#sdekOrderBtn').click(function () { 
-        // TODO: check this flags after user selection
-        addSDEKDelivery(false, false);
-        
-    });
 });
