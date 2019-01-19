@@ -59,6 +59,7 @@ function showSDEKres(sdekdata) {
             btn.innerText = 'Заказать';
             row.appendChild(btn);
             btn.onclick = function () {
+                console.log('sdek order click');
                 if (deliveryDataFrom != 'door') {
                     $("#send-door").hide();
                     $("#send-storage").show();
@@ -71,7 +72,7 @@ function showSDEKres(sdekdata) {
                     getSDEKPvz(city2._id, 'sdek-dropdown-to');
                     // TODO: display full address in p tag
                 }
-                $('.section').fadeOut('fast', function () {
+                $('#calc').fadeOut('fast', function () {
                     d.getElementById('send-city').innerText = $('#city1').val();
                     d.getElementById('recieve-city').innerText = $('#city2').val();
                     $('#order').fadeIn('fast');
@@ -139,17 +140,18 @@ function createSDEKDropdown(data, rootElement) {
     root.appendChild(option);
 }
 function addSDEKDelivery(isSendStorage, isRecieveStorage) {
-    var dateDelivery = new Date().toJSON().slice(0, 10);
+    var dateDelivery = new Date().toJSON().replace('T', ' ').split('.')[0];
     var sender = {
         'city_id': city1._id,
-        'phone': $('#send-phone').text(),
-        'name': $('#send-name').text()
+        'phone': $('#send-phone').val(),
+        'name': $('#sender-name').val()
     };
     var reciever = {
         'city_id': city2._id,
-        'phone': $('#reciever-phone').text(),
-        'name': $('#reciever-name').text()
-    };
+        'phone': $('#reciever-phone').val(),
+        'name': $('#reciever-name').val()
+    }; 
+    console.log(sender);
     var package = {
         'height': $('#height').val(),
         'width': $('#width').val(),
@@ -161,9 +163,9 @@ function addSDEKDelivery(isSendStorage, isRecieveStorage) {
         sender['pvzcode'] = $("#sdek-dropdown-from option:selected").attr('id');
     }
     else {
-        sender['street'] = $('#send-street').text();
-        sender['flat'] = $('#send-flat').text();
-        sender['house'] = $('#send-house').text();
+        sender['street'] = $('#send-street').val();
+        sender['flat'] = $('#send-flat').val();
+        sender['house'] = $('#send-house').val();
     }
     if (isRecieveStorage) {
         // TODO: Add fields for storage
@@ -171,10 +173,18 @@ function addSDEKDelivery(isSendStorage, isRecieveStorage) {
 
     }
     else {
-        reciever['street'] = $('#recieve-street').text();
-        reciever['flat'] = $('#recieve-flat').text();
-        reciever['house'] = $('#recieve-house').text();
+        reciever['street'] = $('#recieve-street').val();
+        reciever['flat'] = $('#recieve-flat').val();
+        reciever['house'] = $('#recieve-house').val();
     }
+    console.log(sender);
+    console.log('request');
+    console.log(JSON.stringify({
+        'date': dateDelivery,
+        'sender': sender,
+        'reciever': reciever,
+        'package': package
+    }));
     $.ajax({
         type: "POST",
         contentType: "application/json",
@@ -183,10 +193,11 @@ function addSDEKDelivery(isSendStorage, isRecieveStorage) {
             'date': dateDelivery,
             'sender': sender,
             'reciever': reciever,
-            package: package
+            'package': package
         }),
         success: function (response) {
             console.log('response = ' + response);
+            console.log(response.response);
             console.log(response[0]);
         }
     });

@@ -51,15 +51,12 @@ def calculate():
     req = request.get_json()
     # print('Request: ')
     print(req)
-
-    #TODO: Match city names
    
     # ==SDEK API==
-    # TODO: Add from and to delivery selection
     sdek_res = sdek_api.calculate_sdek(req)
     # sdek_res = json.loads(sdek_res,encoding='utf-8')
     # ==SDEK API==
-    
+    # FIXME: 404 err
     dpd_res = dpd_api.get_service_cost(req)
     print(dpd_res['list'])
 
@@ -98,7 +95,13 @@ def sdek_delivery():
     print(out)
     return jsonify(out)
 
+@app.route('/boxberry_delivery', methods=['POST'])
+def boxberry_delivery():
+    req = request.get_json()
+    out = boxberry_api.set_booking(req)
+    print(out)
+    return jsonify({"boxberryInfoOrder": out})
 
 if __name__ == '__main__':
     
-    app.run(host='127.0.0.1', port=8000, debug=False)
+    app.run(host='127.0.0.1', port=8000, debug=True)

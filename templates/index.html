@@ -28,11 +28,15 @@
     <!-- Icons -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
     <!-- Icons -->
+    <!-- Cladr autocomplete API -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='libs/jquery.kladr.min.css') }}">
+    <script src="{{ url_for('static', filename='libs/jquery.kladr.min.js') }}"></script>
+    <!-- Cladr autocomplete API -->
     <!-- App scripts and styles -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
     <script src="{{ url_for('static', filename='js/sdek_functions.js') }}"></script>
     <script src="{{ url_for('static', filename='js/index.js') }}"></script>
-
+    <script src="{{ url_for('static', filename='js/boxberry_functions.js') }}"></script>
 
 
 <body>
@@ -157,6 +161,8 @@
 
         </div>
     </section>
+        {% include "boxberry_order.html" %}
+    </main>
 </body>
 
 </html>

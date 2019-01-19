@@ -1,6 +1,7 @@
 import requests
 import csv
 import json
+import uuid
 
 token = '84327.pjpqbddd'
 url = 'http://api.boxberry.de/json.php'
@@ -12,7 +13,6 @@ file_points = 'list_points_boxberry.csv'
 
 def get_json(url, data = None):
     response = requests.get(url, params = data)
-    print(response.url)
     return response.json()
 
 #достаточно обновления 1 раз в день
@@ -364,7 +364,8 @@ def calculate_boxberry(sender_city, recipient_city, advanced_sending_options, or
 
     if zip_code != 0:
         if zip_code == 1:
-            zip_code = take_zips_for_city(file_zips, recipient_city)[0]['Zip']
+            zips_for_city = take_zips_for_city(file_zips, recipient_city)
+            zip_code = zips_for_city[0]['Zip']
         elif not zip_check(zip_code):
             zip_code = 0
         
@@ -383,11 +384,13 @@ def calculate_boxberry(sender_city, recipient_city, advanced_sending_options, or
     if zip_code == 0:
         reception_points = points_of_issue_orders
     else:
-        reception_points = zip_code
+        reception_points = zips_for_city
     
     return {
         'price'             : price,
         'period'            : period,
+        'senderCity'        : city_a['Code'],
+        'recipientCity'     : city_b['Code'],
         'shippingPoints'    : points_for_parcels,
         'receptionPoints'   : reception_points
     }
@@ -403,7 +406,7 @@ def get_data_boxberry(request):
     if request['deliveryType']['deliveryTo'] == 'door':
         zip_code = 1
 
-    return calculate_boxberry(sender_city, recipient_city, request['goods'][0], zip_code=zip_code)
+    return calculate_boxberry(sender_city, recipient_city, request['goods'][0], zip_code = zip_code)
 
 def send_request(data = None):
     return requests.post(url, data = data)
@@ -478,115 +481,111 @@ def parsel_delete(order_tracking_code):
     except:
         return False
 
-def create_parsel():
-    """Создание/обновление посылки в личном кабинете."""
-    data = {
-        'updateByTrack'     : 'track',
-        'order_id'          : 'ID заказа в ИМ',
-        'PalletNumber'      : 'Номер палеты',
-        'barcode'           : 'Штрих-код заказа',
-        'price'             : 'Объявленная стоимость - общая оценочная стоимость ЗП, в руб.',
-        'payment_sum'       : 'Сумма к оплате',
-        'delivery_sum'      : 'Стоимость доставки',
-        'vid'               : 'Тип доставки (1/2)',
-        'shop'              : {
-            'name'          : 'Код ПВЗ',
-            'name1'         : 'Код пункта поступления'
-        },
-        'customer'          : {
-            'fio'           : 'ФИО',
-            'phone'         : 'phone',
-            'phone2'        : 'phone2',
-            'email'         : 'email',
-            'name'          : 'имя организации',
-            'address'       : 'адрес',
-            'inn'           : 'inn',
-            'kpp'           : 'kpp',
-            'r_s'           : 'расчетный счет',
-            'bank'          : 'наименование банка',
-            'kor_s'         : 'кор счет',
-            'bik'           : 'БИК'
-        },
-        'kurdost'           : {
-            'index'         : 'Индекс',
-            'citi'          : 'Город',
-            'addressp'      : 'Адрес получателя',
-            'timesfrom1'    : 'Время доставки, от',
-            'timesto1'      : 'Время доставки, до',
-            'timesfrom2'    : 'Альтернативное время, от',
-            'timesto2'      : 'Альтернативное время, до',
-            'timep'         : 'Время доставки текстовый формат',
-            'delivery_date' : 'Дата доставки от +1 день до +5 дней от текущий даты (только для доставки по Москве, МО и Санкт-Петербургу)',
-            'comentk'       : 'Комментарий'
-        },
-        'items'             : {
-            'id'            : 'ID товара в БД ИМ',
-            'name'          : 'Наименование товара',
-            'UnitName'      : 'Единица измерения',
-            'nds'           : 'Процент НДС',
-            'price'         : 'Цена товара',
-            'quantity'      : 'Количество'
-        },
-        'weights'           : {
-            'weight'        : 'Вес 1-ого места',
-            'barcode'       : 'Баркод 1-го места',
-            'weight2'       : 'Вес 2-ого места',
-            'barcode2'      : 'Баркод 2-го места',
-            'weight3'       : 'Вес 3-его места',
-            'barcode3'      : 'Баркод 3-го места',
-            'weight4'       : 'Вес 4-ого места',
-            'barcode4'      : 'Баркод 4-го места',
-            'weight5'       : 'Вес 5-ого места',
-            'barcode5'      : 'Баркод 5-го места'
-        }
-    }
-
-    # order_id - идентификатор (номер) заказа в БД ИМ (должен быть уникальным в рамках одного ЛК).
-    # price - Объявленная стоимость - общая (оценочная) стоимость ЗП, в руб.
-    # payment_sum - Сумма к оплате (сумма, которую необходимо взять с получателя), руб. Для полностью предоплаченного заказа указывать 0.
-    # delivery_sum - Стоимость доставки, которую ИМ объявил получателю, руб.
-    # vid - 1 - самовывоз из ПВЗ (по умолчанию), 2 - курьерская доставка
-    # shop name1 - Код пункта поступления ЗП (код ПВЗ, в который ИМ сдаёт посылки для доставки).
-    # customer fio phone
-    # kurdost city - Наименование города Получателя ЗП, в котором будет курьерская доставка
-    # kurdost addressp - Адрес Получателя ЗП для курьерской доставки. Рекомендуется указывать в соответствии с КЛАДР. Адрес должен принадлежать почтовому индексу, по которому осуществляется Курьерская доставка.
-    # weights weight
-
+def create_parsel(data):
+    """Создание/обновление посылки в личном кабинете.
+    
+    :param data: сформированные данные для создания заказа.\n
+    :return: словарь данных."""
     return send_request({
         'token'     : token,
         'method'    : 'ParselCreate',
         'sdata'     : json.dumps(data)
     }).json()
 
-def place_order():
-    return create_parsel()
+def get_data_for_delivery_to_door(type_of_delivery, sender, recipient, weights):
+    """Создание словаря данных для формирования заказа до двери."""
+    return {
+        'order_id'          : uuid.uuid4().hex[:30],
+        'price'             : '0',
+        'payment_sum'       : '0',
+        'delivery_sum'      : '0',
+        'vid'               : type_of_delivery,
+        'shop'              : {
+            'name'          : recipient['code'],
+            'name1'         : sender['code']
+        },
+        'customer'          : {
+            'fio'           : recipient['name'],
+            'phone'         : recipient['phone'],
+            'email'         : recipient['email']
+        },
+        'weights'           : weights
+    }
+
+def get_data_for_delivery_to_warehouse(type_of_delivery, sender, recipient, weights):
+    """Создание словаря данных для формирования заказа до склада."""
+    address = ', '.join([str(recipient['street']), str(recipient['flat']), str(recipient['house'])])
+
+    return {
+        'order_id'          : uuid.uuid4().hex[:30],
+        'price'             : '0',
+        'payment_sum'       : '0',
+        'delivery_sum'      : '0',
+        'vid'               : type_of_delivery,
+        'shop'              : {
+            'name1'         : sender['code']
+        },
+        'customer'          : {
+            'fio'           : recipient['name'],
+            'phone'         : recipient['phone'],
+            'email'         : recipient['email']
+        },
+        'kurdost'           : {
+            'index'         : recipient['zip'],
+            'citi'          : recipient['nameCity'],
+            'addressp'      : address,
+            'comentk'       : recipient['coment']
+        },
+        'weights'           : weights
+    }
+
+def get_weights(package):
+    try:
+        weight = float(package['weight']) * 1000
+    except:
+        return None
+
+    weights = {
+        'weight' : weight
+    }
+
+    name_key = ['weight2', 'weight3', 'weight4', 'weight5']
+
+    for i in name_key:
+        if i in package and package[i] != '':
+            try:
+                weight = float(package[i]) * 1000
+            except:
+                return weights
+
+            weights.update({
+                i : float(weight)
+            })
+        else:
+            return weights
 
 def set_booking(request):
-    return place_order()
+    weights = get_weights(request['package'])
+    if weights == None:
+        return {}
 
-data = {
-    'order_id'          : '1111',
-    'price'             : '0',
-    'payment_sum'       : '0',
-    'delivery_sum'      : '0',
-    'vid'               : '1',
-    'shop'              : {
-        'name'          : '54351',
-        'name1'         : '66151'
-    },
-    'customer'          : {
-        'fio'           : 'Strange Alexander',
-        'phone'         : '9120526079'
-    },
-    'weights'           : {
-        'weight'        : '3000'
-    }
-}
+    if 'code' in request['reciever']:
+        type_of_delivery = 1
+        data = get_data_for_delivery_to_door(
+            type_of_delivery, 
+            request['sender'], 
+            request['reciever'], 
+            weights
+        )
+    elif 'zip' in request['reciever']:
+        type_of_delivery = 2
+        data = get_data_for_delivery_to_warehouse(
+            type_of_delivery, 
+            request['sender'], 
+            request['reciever'], 
+            weights
+        )
+    else:
+        return {}
 
-par = {
-    'token' : token,
-    'method': 'ParselCreate',
-    'sdata' : json.dumps(data)
-}
-
-print(send_request(par).json())
+    return create_parsel(data)

@@ -1,3 +1,61 @@
+// Название перевозщика
+// Звезды
+// Дата отправки
+// Дата приема 
+// Цена 
+// function showResults(data) {
+//     data = [
+//         {
+//             name: 'sdek',
+//             shippingDate: '21',
+//             receivingDate: '23',
+//             price: 2767,
+//         },
+//         {
+//             name: 'dek',
+//             shippingDate: '23',
+//             receivingDate: '23',
+//             price: 27267,
+//         },
+//         {
+//             name: 'mek',
+//             shippingDate: '23',
+//             receivingDate: '27',
+//             price: 27167,
+//         }
+//     ]
+//     for (const carrier of data) {
+//         showCarrier(carrier)
+//     }
+// }
+
+// function showCarrier({name, shippingDate, receivingDate, price}) {
+//     const container = d.createElement('div')
+//     container.setAttribute('class', 'carrier')
+    
+//     const nameElement  = d.createElement('div')
+//     nameElement.setAttribute('class', 'carrier-name')
+//     nameElement.textContent = name
+
+//     const shippingDateElement  = d.createElement('div')
+//     shippingDateElement.setAttribute('class', 'carrier-shipping-date')
+//     shippingDateElement.textContent = shippingDate
+
+//     const receivingDateElement  = d.createElement('div')
+//     receivingDateElement.setAttribute('class', 'carrier-receiving-date')
+//     receivingDateElement.textContent = receivingDate
+
+//     const priceElement  = d.createElement('div')
+//     priceElement.setAttribute('class', 'carrier-price')
+//     priceElement.textContent = price
+
+//     container.appendChild(nameElement)
+//     container.appendChild(shippingDateElement)
+//     container.appendChild(receivingDateElement)
+//     container.appendChild(priceElement)
+
+//     d.getElementById('shipping-offers').appendChild(container)
+// }
 var city1;
 var city2;
 var deliveryDataFrom = 'door';
@@ -98,9 +156,7 @@ function showCarrier({name, shippingDate, receivingDate, price}) {
     const shippingOffers = d.getElementById('shipping-offers')
     shippingOffers.appendChild(container)
     shippingOffers.classList.add('shipping-offers-active')
-
-}   
-
+}
 
 $(document).ready(function () {
     d.getElementById('dateExecute').value = new Date().toISOString().slice(0, 10);
@@ -259,6 +315,22 @@ $(document).ready(function () {
             
         });
     });
-    
+    $("#close-sdek-order").click(function () {
+        $("#order").fadeOut('fast', function () { $("#calc").fadeIn('fast'); });
+    });
 
+    $('#sdekOrderBtn').click(function () { 
+        // TODO: check this flags after user selection
+        console.log('sdek delivery clicked');
+        addSDEKDelivery(false, false);
+        
+    });
+
+    $("#close-boxberry-order").click(function () {
+        $("#boxberry-order").fadeOut('fast', function () { $("#calc").fadeIn('fast'); });
+    });
+
+    $('#boxberry-order-btn').click(function () { 
+        addDeliveryBoxberry();
+    });
 });
