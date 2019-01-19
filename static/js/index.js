@@ -161,7 +161,10 @@ function showCarrier({name, shippingDate, receivingDate, price}) {
 }
 
 $(document).ready(function () {
-    d.getElementById('dateExecute').value = new Date().toISOString().slice(0, 10);
+    var today = new Date();
+    var nextDate = new Date(today);
+    nextDate.setDate(today.getDate() + 1);
+    d.getElementById('dateExecute').value = nextDate.toISOString().slice(0, 10);
     $('input[name=fromDelivery]').on('change', function () {
         deliveryDataFrom = $(this).val();
     });
