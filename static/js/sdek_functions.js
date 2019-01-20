@@ -204,6 +204,14 @@ function addSDEKDelivery(isSendStorage, isRecieveStorage) {
 }
 
 function prepareSdekOrder(data) {
+    console.log('prepared data = ');
+    console.log(data);
+    $("#priceCheck").text(data[0].price);
+
+    $("#heightCheck").text($('#height').val());
+    $("#widthCheck").text($('#width').val());
+    $("#weightCheck").text($('#weight').val());
+    $("#lengthCheck").text($('#length').val());
     
     if (deliveryDataFrom != 'door') {
         $("#send-door").hide();
@@ -315,4 +323,36 @@ $(document).ready(function(){
         addSDEKDelivery(false, false);
         
     });
+    $(".order-back-btn").click(function () {
+       console.log(this.id.split('-')[1]); 
+       var clickedId = this.id.split('-')[1];
+       var hideId = parseInt(clickedId) + 1;
+       console.log('show => ' + clickedId);
+       console.log('hide => ' + hideId);
+       $("#cdek-page-" + clickedId).show();
+       $("#cdek-page-" + hideId).hide();
+
+    });
+
+    $(".order-foward-btn").click(function () {
+        console.log(this.id.split('-')[1]); 
+        var clickedId = this.id.split('-')[1];
+        var hideId = parseInt(clickedId) - 1;
+        console.log('show => ' + clickedId);
+        console.log('hide => ' + hideId);
+
+        $("#cdek-page-" + clickedId).show();
+        $("#cdek-page-" + hideId).hide();
+ 
+     });
+    // $("#toPage1").click(function () {
+    //    $("#cdek-page0").hide();
+    //    $("#cdek-page1").show();
+    // });
+
+    // $("#toPage2").click(function () {
+    //     $("#cdek-page1").hide();
+    //     $("#cdek-page2").show();
+    //     $("#sdekOrderBtn").show();
+    //  });
 })

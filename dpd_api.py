@@ -283,9 +283,9 @@ def make_order(data):
 
     }
     order = {
-        'orderNumberInternal' : '123456',
+        'orderNumberInternal' : '000001',
         'serviceCode' : 'DPE',
-        'serviceVariant' : 'TT',
+        'serviceVariant' : 'ТТ',
         'cargoNumPack' : 1,
         'cargoWeight' : 1,
         'cargoRegistered' : False,
