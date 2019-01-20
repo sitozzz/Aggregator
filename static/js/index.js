@@ -64,16 +64,36 @@ var d = document;
 
 //var sdekFunc = 
 //prepareSdekOrder
+
+function dpdOrdPrev(data) {
+    
+    if (deliveryDataFrom != 'door') {
+        $("#send-door").hide();
+        $("#send-storage").show();
+        // getSDEKPvz(city1._id, 'sdek-dropdown-from');
+        // // TODO: display full address in p tag
+    }
+    if (deliveryDataTo != 'door') {
+        $("#recieve-door").hide();
+        $("#recieve-storage").show();
+        // getSDEKPvz(city2._id, 'sdek-dropdown-to');
+        // // TODO: display full address in p tag
+    }
+    $('#calc').fadeOut('fast', function () {
+        d.getElementById('dpd-send-city').innerText = $('#city1').val();
+        d.getElementById('dpd-recieve-city').innerText = $('#city2').val();
+        $('#dpd-order').fadeIn('fast');
+    });
+}
+
+
 var respGlob = {
     "cdek": {
         'func': prepareSdekOrder, 
         'data': undefined
     },
     "dpd": {
-        'func': function (data) {
-            console.log('dpd func');
-            console.log(data);
-        }, 
+        'func': dpdOrdPrev, 
         'data': undefined
     },
     "boxberry": { 'func': undefined, 'data': undefined },
@@ -327,6 +347,46 @@ $(document).ready(function () {
     });
     $("#calcBtn1").click(function () {
         $("#prop-holder").show(100);
+    });
+    $("#dpd-send-order").click(function () {
+        d.getElementById('dpd-send-city').innerText = $('#dpd-send-city').text();
+        d.getElementById('dpd-recieve-city').innerText = $('#city2').val();
+        var ordProp = {
+            'senderAddress' : {
+                'name' : $('#dpd-sender-name').text(),
+                'terminalCode' : '032L',
+                'countryName' : $('#dpd-send-city').text().split(',')[2].replace(' ',''),
+                'city' : $('#dpd-send-city').text().split(',')[0],
+                'street' : $('#dpd-send-street').text(),
+                'house' : $('#dpd-send-house').text(),
+                'contactPhone' : $('#dpd-send-phone').text(),
+                'contactFio' : $('#dpd-sender-name').text()
+            },
+             'receiverAddress' : {
+                'name' : $('#dpd-reciever-name').text(),
+                'terminalCode' : '032L',
+                'countryName' : $('#dpd-recieve-city').text().split(',')[2].replace(' ',''),
+                'city' : $('#dpd-recieve-city').text().split(',')[0],
+                'street' : $('#dpd-reciever-street').text(),
+                'house' : $('#dpd-reciever-house').text(),
+                'contactPhone' : $('#dpd-reciever-phone').text(),
+                'contactFio' : $('#dpd-reciever-name').text()
+        
+            },
+            'order' : {
+                'orderNumberInternal' : '123456',
+                'serviceCode' : 'DPE',
+                'serviceVariant' : 'TT',
+                'cargoNumPack' : 1,
+                'cargoWeight' : 1,
+                'cargoRegistered' : False,
+                'cargoCategory' : 'Одежда',
+                'receiverAddress' : receiverAddress,
+        
+            }
+        }
+
+        
     });
     $("#calcBtn").click(function () {
         let size;

@@ -226,7 +226,7 @@ def get_terminals():
     f.close()
     
     
-def make_order():
+def make_order(data):
     
     url = "http://ws.dpd.ru/services/order2?wsdl"
     client = Client(url)
@@ -246,6 +246,7 @@ def make_order():
         'contactPhone' : '79292155373',
         'contactFio' : 'Комаров Василий Дмитриевич'
     }
+    
     header = {
         'datePickup' : '2019-01-16',
         #'payer' : 'sdf',
