@@ -245,7 +245,7 @@ function prepareKladrAutocomplete(cityId, streetId, houseId, parentId, calculate
             parentInput: '#' + parentId,
             verify: true,
             select: function (obj) {
-                
+                console.log('select fired');
                 setLabel($(this), obj.type);
                 $tooltip.hide();
             },
@@ -269,6 +269,9 @@ function prepareKladrAutocomplete(cityId, streetId, houseId, parentId, calculate
                     $tooltip.hide();
                     return false;
                 }
+            }, 
+            input: function (obj) {
+                console.log('input fired');
             }
         });
     
@@ -304,8 +307,10 @@ function prepareKladrAutocomplete(cityId, streetId, houseId, parentId, calculate
     
             $tooltip.show();
         }
-        $('#' + cityId).val($('#' + calculatedCityId).val().split(',')[0]);
-        $("#" + cityId).kladr().select()[0];
+        $.kladr.setValues({
+            city: $('#' + calculatedCityId).val().split(',')[0],
+
+        }, '#' + parentId);
         $("#" + cityId).attr('disabled', true);
     });
 
