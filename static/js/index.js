@@ -156,15 +156,21 @@ function showCarrier({name, shippingDate, receivingDate, price}) {
     container.appendChild(priceElement)
     
     const shippingOffers = d.getElementById('shipping-offers')
+    shippingOffers.innerHTML = ''
     shippingOffers.appendChild(container)
     shippingOffers.classList.add('shipping-offers-active')
 }
 
 $(document).ready(function () {
     var today = new Date();
-    var nextDate = new Date(today);
-    nextDate.setDate(today.getDate() + 1);
-    d.getElementById('dateExecute').value = nextDate.toISOString().slice(0, 10);
+    // d.getElementById('dateExecute').value = nextDate.toISOString().slice(0, 10);
+    $("#dateExecute").datepicker({
+        format: 'dd.mm.yyyy',
+        onRender: function(date) {
+            return date.valueOf() < today ? 'disabled' : '';
+        }
+    });
+    $("#dateExecute").datepicker('setValue', nextDate);
     $('input[name=fromDelivery]').on('change', function () {
         deliveryDataFrom = $(this).val();
     });

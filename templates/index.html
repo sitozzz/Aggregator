@@ -25,6 +25,10 @@
     <script src="http://code.jquery.com/ui/1.8.24/jquery-ui.min.js" integrity="sha256-UOoxwEUqhp5BSFFwqzyo2Qp4JLmYYPTHB8l+1yhZij8="
         crossorigin="anonymous"></script>
     <!-- Jquery UI -->
+    <!-- Datepicker -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='libs/datepicker.css') }}">
+    <script src="{{ url_for('static', filename='libs/bootstrap-datepicker.js') }}"></script>
+    <!-- Datepicker -->
     <!-- Icons -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
     <!-- Icons -->
@@ -103,7 +107,7 @@
                 <div class="next-row" style="margin:auto; padding:0; max-width: 600px; padding: 24px; border: 1px solid gray; border-radius: 15px;">
                     <div style="width:100%; ">
                         <label for="dateExecute">Дата отправки:</label>
-                        <input id="dateExecute" class="form-control" type="date">
+                        <input id="dateExecute" class="form-control" type="text">
                         <!-- <label for="tariff">Варианты доставки:</label>
                         <select id="tariff"  class="form-control">
                            
