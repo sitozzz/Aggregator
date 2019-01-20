@@ -348,43 +348,58 @@ $(document).ready(function () {
     $("#calcBtn1").click(function () {
         $("#prop-holder").show(100);
     });
+    $("#close-dpd-order").click(function () {
+        $("#dpd-order").fadeOut('fast', function () { $("#calc").fadeIn('fast'); });
+    });
+    
     $("#dpd-send-order").click(function () {
+        console.log("#dpd-send-order");
         d.getElementById('dpd-send-city').innerText = $('#dpd-send-city').text();
         d.getElementById('dpd-recieve-city').innerText = $('#city2').val();
+        console.log(); deliveryDataFrom = 'door';
+        var fr = deliveryDataFrom == 'door' ? 'T':'Д'
+        var to = deliveryDataTo == 'door' ? 'T':'Д'
+
         var ordProp = {
             'senderAddress' : {
-                'name' : $('#dpd-sender-name').text(),
+                'name' : $('#dpd-sender-name').val(),
                 'terminalCode' : '032L',
                 'countryName' : $('#dpd-send-city').text().split(',')[2].replace(' ',''),
                 'city' : $('#dpd-send-city').text().split(',')[0],
-                'street' : $('#dpd-send-street').text(),
-                'house' : $('#dpd-send-house').text(),
-                'contactPhone' : $('#dpd-send-phone').text(),
-                'contactFio' : $('#dpd-sender-name').text()
+                'street' : $('#dpd-send-street').val(),
+                'house' : $('#dpd-send-house').val(),
+                'contactPhone' : $('#dpd-send-phone').val(),
+                'contactFio' : $('#dpd-sender-name').val()
             },
              'receiverAddress' : {
-                'name' : $('#dpd-reciever-name').text(),
+                'name' : $('#dpd-reciever-name').val(),
                 'terminalCode' : '032L',
                 'countryName' : $('#dpd-recieve-city').text().split(',')[2].replace(' ',''),
                 'city' : $('#dpd-recieve-city').text().split(',')[0],
-                'street' : $('#dpd-reciever-street').text(),
-                'house' : $('#dpd-reciever-house').text(),
-                'contactPhone' : $('#dpd-reciever-phone').text(),
-                'contactFio' : $('#dpd-reciever-name').text()
+                'street' : $('#dpd-reciever-street').val(),
+                'house' : $('#dpd-reciever-house').val(),
+                'contactPhone' : $('#dpd-reciever-phone').val(),
+                'contactFio' : $('#dpd-reciever-name').val()
         
             },
             'order' : {
                 'orderNumberInternal' : '123456',
-                'serviceCode' : 'DPE',
-                'serviceVariant' : 'TT',
+                'serviceCode' : respGlob.dpd.serviceCode,
+                'serviceVariant' : fr + to,
                 'cargoNumPack' : 1,
-                'cargoWeight' : 1,
-                'cargoRegistered' : False,
+                'cargoWeight' : $('#weight').val(),
+                'cargoRegistered' : false,
                 'cargoCategory' : 'Одежда',
-                'receiverAddress' : receiverAddress,
+                // 'receiverAddress' : receiverAddress,
         
             }
         }
+
+        // 'height': $('#height').val(),
+        // 'width': $('#width').val(),
+        // 'weight': $('#weight').val(),
+        // 'length': $('#length').val()
+        console.log(ordProp);
 
         
     });

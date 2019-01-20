@@ -126,13 +126,10 @@ def get_service_cost(req):
 
         
         
-        print(dpd_prefix )
-        print(type(result))
-        print(type(vrs))
+        print(dpd_prefix)
+        print(vrs)
+
         for i in vrs:
-            
-            print(i)
-            
             ship_dt = str(datetime.datetime.now()).split(' ')[0]
             res_dt = str(datetime.datetime.now() + datetime.timedelta(days=i['days'])).split(' ')[0]
             output.append({
@@ -144,7 +141,7 @@ def get_service_cost(req):
             })
             
     except Exception as identifier:
-        print(dpd_prefix + 'DPD ERROR')
+        print(dpd_prefix)
         print(identifier)
         
         #return {'orig_resp': str(identifier) , 'list': str(identifier)}
@@ -224,6 +221,24 @@ def get_terminals():
     f = open('dpd_terminals.txt', 'w',encoding="utf8")
     simplejson.dump(cities_arr, f,ensure_ascii=False)
     f.close()
+
+# def get_terminals_by_city():
+    
+    
+
+    
+
+#     print(type(result))
+#     cities_arr = []
+#     for i in result:
+#         city = {}
+#         #i = Client.dict(i)
+#         for key in i:
+#             city[key[0]] = key[1]
+#         cities_arr.append(city)
+#     f = open('dpd_terminals.txt', 'w',encoding="utf8")
+#     simplejson.dump(cities_arr, f,ensure_ascii=False)
+#     f.close()
     
     
 def make_order(data):

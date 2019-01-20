@@ -307,6 +307,7 @@ $(document).ready(function(){
     $("#close-sdek-order").click(function () {
         $("#sdek-order").fadeOut('fast', function () { $("#calc").fadeIn('fast'); });
     });
+    
 
     $('#sdekOrderBtn').click(function () { 
         // TODO: check this flags after user selection
