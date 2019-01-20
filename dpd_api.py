@@ -114,6 +114,7 @@ def get_service_cost(req):
     req_data['serviceCode'] = 'ECN,CUR,NDY,PCL,DPI,DPE,ECU' #MXO,
     req_data['parcel'] = {'weight':weight,'length':length,'width':width,'height':height}
 
+    output = {}
     try:
         result = client.service.getServiceCostByParcels2(request=req_data)
         vrs = []
@@ -131,7 +132,7 @@ def get_service_cost(req):
         res_dt = str(datetime.datetime.now() + datetime.timedelta(days=result[0]['days'])).split(' ')[0]
 
         output = {
-            'name': 'DPD',
+            'name': 'dpd',
             'price': result[0]['cost'],
             'shippingDate': ship_dt,
             'receivingDate': res_dt,
@@ -140,7 +141,7 @@ def get_service_cost(req):
     except Exception as identifier:
         print(dpd_prefix + 'DPD ERROR')
         print(identifier)
-        output = {}
+        
         #return {'orig_resp': str(identifier) , 'list': str(identifier)}
         
     

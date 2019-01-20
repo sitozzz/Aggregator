@@ -62,6 +62,25 @@ var deliveryDataFrom = 'door';
 var deliveryDataTo = 'door';
 var d = document;
 
+//var sdekFunc = 
+//prepareSdekOrder
+var respGlob = {
+    "cdek": {
+        'func': prepareSdekOrder, 
+        'data': undefined
+    },
+    "dpd": {
+        'func': function (data) {
+            console.log('dpd func');
+            console.log(data);
+        }, 
+        'data': undefined
+    },
+    "boxberry": { 'func': undefined, 'data': undefined },
+    "pony": { 'func': undefined, 'data': undefined },
+};
+
+
 function* entries(obj) {
     for (let key of Object.keys(obj)) {
         yield [key, obj[key]];
@@ -109,10 +128,10 @@ function showResults(data) {
     // ]
     d.getElementById('shipping-offers').innerHTML = '';
     
-    for (const carrier of data) {
-        if (Object.keys(carrier).length !== 0) {
-            showCarrier(carrier)
-        }
+    for (var carrier in data) {
+        
+            showCarrier(data[carrier])
+        
     }
 }
 
@@ -157,9 +176,7 @@ function showCarrier({name, shippingDate, receivingDate, price, tariffId}) {
     const orderButton = d.createElement('button')
     orderButton.setAttribute('class', 'btn btn-default')
     orderButton.textContent = 'Заказать'
-    if (tariffId != undefined || tariffId != null) {
-        orderButton.id = tariffId + '-cdekOrderBtn'        
-    } else {
+    if (name) {
         orderButton.id = name + '-OrderBtn'                
     }
 
@@ -175,12 +192,8 @@ function showCarrier({name, shippingDate, receivingDate, price, tariffId}) {
     shippingOffers.classList.add('shipping-offers-active')
 
     orderButton.onclick = function () {
-        if (this.id.split('-')[1] == 'cdekOrderBtn') {
-            console.log('sdek order click');
-            prepareSdekOrder();
-        } else {
-            console.log('other functions');
-        }
+        var cs = this.id.split('-')[0]
+        respGlob[this.id.split('-')[0]].func(respGlob[this.id.split('-')[0]].data)
     }
 }
 
@@ -278,8 +291,6 @@ $(document).ready(function () {
         $("#prop-holder").show(100);
     });
     $("#calcBtn").click(function () {
-
-        //Collect data from fields
         let size;
         if ($('#variant2').is(':visible')) {
             size = $('#size').val();
@@ -295,7 +306,6 @@ $(document).ready(function () {
         console.log('Delivery data = ');
         console.log(deliveryData);
 
-        // TODO: Show loader here!
         $('#loader').show();
         $.ajax({
             url: "/calculate",
@@ -331,6 +341,17 @@ $(document).ready(function () {
                 ]
             }),
             success: function (data) {
+                for (var i in data) {
+                    for (var j in respGlob){
+                        if (i == j){
+                            respGlob[j].data = data[j];
+                        }
+                    }
+
+                }
+                console.log(respGlob);
+
+                
                 $('#loader').hide();
                 console.log(data);
                 showResults(data)

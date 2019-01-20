@@ -68,16 +68,13 @@ def calculate():
 
     pony_res = pony_api.get_service_cost(req)
 
-    # out_json = jsonify({
-    #     "sdek": sdek_res,
-    #     "dpd": dpd_res['list'],
-    #     "boxberry": boxberry_res,
-    #     "pony": pony_res
-    # })
-    out_json = jsonify([
-        sdek_res,
-        dpd_res
-    ])
+    out_json = jsonify({
+        "cdek": sdek_res,
+        "dpd": dpd_res,
+        #"boxberry": boxberry_res,
+       # "pony": pony_res
+    })
+   
     print(out_json)
 
     

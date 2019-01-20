@@ -203,7 +203,8 @@ function addSDEKDelivery(isSendStorage, isRecieveStorage) {
     });
 }
 
-function prepareSdekOrder() {
+function prepareSdekOrder(data) {
+    
     if (deliveryDataFrom != 'door') {
         $("#send-door").hide();
         $("#send-storage").show();
