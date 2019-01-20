@@ -202,3 +202,23 @@ function addSDEKDelivery(isSendStorage, isRecieveStorage) {
         }
     });
 }
+
+function prepareSdekOrder() {
+    if (deliveryDataFrom != 'door') {
+        $("#send-door").hide();
+        $("#send-storage").show();
+        getSDEKPvz(city1._id, 'sdek-dropdown-from');
+        // TODO: display full address in p tag
+    }
+    if (deliveryDataTo != 'door') {
+        $("#recieve-door").hide();
+        $("#recieve-storage").show();
+        getSDEKPvz(city2._id, 'sdek-dropdown-to');
+        // TODO: display full address in p tag
+    }
+    $('#calc').fadeOut('fast', function () {
+        d.getElementById('send-city').innerText = $('#city1').val();
+        d.getElementById('recieve-city').innerText = $('#city2').val();
+        $('#sdek-order').fadeIn('fast');
+    });
+}

@@ -129,7 +129,7 @@ function transformData({name, shippingDate, receivingDate, price}) {
     return { logoClassName, fromText, toText, priceText }
 }
 
-function showCarrier({name, shippingDate, receivingDate, price}) {
+function showCarrier({name, shippingDate, receivingDate, price, tariffId}) {
     const container = d.createElement('div')
     container.setAttribute('class', 'carrier')
     
@@ -150,19 +150,40 @@ function showCarrier({name, shippingDate, receivingDate, price}) {
     priceElement.setAttribute('class', 'carrier-price')
     priceElement.textContent = priceText
 
+    const orderButton = d.createElement('button')
+    orderButton.setAttribute('class', 'btn btn-default')
+    orderButton.textContent = 'Заказать'
+    if (tariffId != undefined || tariffId != null) {
+        orderButton.id = tariffId + '-cdekOrderBtn'        
+    } else {
+        orderButton.id = name + '-OrderBtn'                
+    }
+
     container.appendChild(nameElement)
     container.appendChild(shippingDateElement)
     container.appendChild(receivingDateElement)
     container.appendChild(priceElement)
-    
+    container.appendChild(orderButton)
+
     const shippingOffers = d.getElementById('shipping-offers')
     shippingOffers.innerHTML = ''
     shippingOffers.appendChild(container)
     shippingOffers.classList.add('shipping-offers-active')
+
+    orderButton.onclick = function () {
+        if (this.id.split('-')[1] == 'cdekOrderBtn') {
+            console.log('sdek order click');
+            prepareSdekOrder();
+        } else {
+            console.log('other functions');
+        }
+    }
 }
 
 $(document).ready(function () {
     var today = new Date();
+    var nextDate = new Date(today);
+    nextDate.setDate(today.getDate() + 1);
     // d.getElementById('dateExecute').value = nextDate.toISOString().slice(0, 10);
     $("#dateExecute").datepicker({
         format: 'dd.mm.yyyy',
@@ -327,7 +348,7 @@ $(document).ready(function () {
         });
     });
     $("#close-sdek-order").click(function () {
-        $("#order").fadeOut('fast', function () { $("#calc").fadeIn('fast'); });
+        $("#sdek-order").fadeOut('fast', function () { $("#calc").fadeIn('fast'); });
     });
 
     $('#sdekOrderBtn').click(function () { 
