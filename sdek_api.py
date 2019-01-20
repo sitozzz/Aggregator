@@ -121,16 +121,16 @@ def calculate_sdek(data):
 	sdek_res = requests.post('http://api.cdek.ru/calculator/calculate_price_by_json.php',json=sdek_json)
 	sdek_res = json.loads(sdek_res.text,encoding='utf-8')
 	print(sdek_res)
-	output = {}
+	output = []
 	try:
 		sdek_res = sdek_res['result']
-		output = {
+		output = [{
 			'name': 'cdek',
-			'price': sdek_res['price'],
+			'price': float(sdek_res['price']),
 			'shippingDate': sdek_res['deliveryDateMin'],
 			'receivingDate': sdek_res['deliveryDateMax'],
 			'tariffId': sdek_res['tariffId']
-		}
+		}]
 	except KeyError:
 		print('Can not calc this order')
 	

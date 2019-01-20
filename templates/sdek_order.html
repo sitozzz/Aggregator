@@ -4,78 +4,84 @@
             
         <div class="row" style="margin:auto; padding:0; max-width: 600px; padding: 24px; border: 1px solid gray; border-radius: 15px; background-color: white;">
                 <div style="position: relative; top: 0; left: 2%;">
-                        <span id="close-sdek-order" style="font-size: 2.5rem; cursor: pointer;"><i class="fas fa-times"></i></span> 
+                    <span id="close-sdek-order" style="font-size: 2.5rem; cursor: pointer;"><i class="fas fa-times"></i></span> 
                  </div>
-            <h2>Город отправителя: <span id="send-city"></span></h2>
-           
-
-            <div id="send-door">
-                <h2>Адрес отправителя</h2>
-                <div style="display: inline-block; width:49%; padding-top: 10px;">
-                    <label for="send-street">Улица</label>
-                    <input id="send-street" class="form-control" required type="text" />
+            <div>
+                        
+                <h3>Город отправителя: <span id="send-city"></span></h3>
+                
+                <div id="send-door">
+                    <h3>Адрес отправителя</h3>
+                    <div style="display: inline-block; width:49%; padding-top: 10px;">
+                        <label for="send-street">Улица</label>
+                        <input id="send-street" class="form-control" required type="text" />
+                    </div>
+                    <div style="display: inline-block; width:50%; padding-top: 10px;">
+                        <label for="send-house">Дом</label>
+                        <input id="send-house" class="form-control" required type="text" />
+                    </div>
+                    <div style="display: inline-block; width:49%; padding-top: 10px;">
+                        <label for="send-flat">Квартира</label>
+                        <input id="send-flat" class="form-control" required type="text" />
+                    </div>
+                </div>
+                
+                <div style="display: inline-block; width:50%; padding-top: 10px;">
+                    <label for="sender-name">Имя Фамилия отправителя</label>
+                    <input id="sender-name" class="form-control" type="text" />
                 </div>
                 <div style="display: inline-block; width:50%; padding-top: 10px;">
-                    <label for="send-house">Дом</label>
-                    <input id="send-house" class="form-control" required type="text" />
+                    <label for="send-phone">Телефон отправителя</label>
+                    <input id="send-phone" class="form-control" type="tel" />
                 </div>
-                <div style="display: inline-block; width:49%; padding-top: 10px;">
-                    <label for="send-flat">Квартира</label>
-                    <input id="send-flat" class="form-control" required type="text" />
+                
+                <div id="send-storage" style="display: none;">
+                    <label for="sdek-dropdown-from">Адрес отправки</label>
+                    <select id="sdek-dropdown-from"></select>
+                    <p id="full-address-from"></p>
                 </div>
             </div>
-            <div id="send-storage" style="display: none;">
-                <label for="sdek-dropdown-from">Адрес отправки</label>
-                <select id="sdek-dropdown-from"></select>
-                <p id="full-address-from"></p>
-            </div>
 
-            <h2>Город получателя: <span id="recieve-city"></span></h2>
+            <div>
+                <h3>Город получателя: <span id="recieve-city"></span></h3>
 
-            <div id="recieve-door">
-                <h2>Адрес получателя</h2>
-                <div style="display: inline-block; width:49%; padding-top: 10px;">
-                    <label for="recieve-street">Улица</label>
-                    <input id="recieve-street" class="form-control" required type="text" />
+                <div id="recieve-door">
+                    <h3>Адрес получателя</h3>
+                    <div style="display: inline-block; width:49%; padding-top: 10px;">
+                        <label for="recieve-street">Улица</label>
+                        <input id="recieve-street" class="form-control" required type="text" />
+                    </div>
+                    <div style="display: inline-block; width:50%; padding-top: 10px;">
+                        <label for="recieve-house">Дом</label>
+                        <input id="recieve-house" class="form-control" required type="text" />
+                    </div>
+                    <div style="display: inline-block; width:49%; padding-top: 10px;">
+                        <label for="recieve-flat">Квартира</label>
+                        <input id="recieve-flat" class="form-control" required type="text" />
+                    </div>
+                </div>
+                
+                <div id="recieve-storage" style="display: none;">
+                    <label for="sdek-dropdown-to">Адрес получения</label>
+                    <select id="sdek-dropdown-to"></select>
+                    <p id="full-address-to"></p>
+                </div>
+
+                <!-- <div style="width:100%; ">
+                        <label for="dateExecute">Дата отправки:</label>
+                        <input id="dateExecute" class="form-control" type="date" value="2018-11-30">
+                    </div> -->
+                
+
+                <div style="display: inline-block; width:50%; padding-top: 10px;">
+                    <label for="reciever-name">Имя Фамилия получателя</label>
+                    <input id="reciever-name" class="form-control" type="text" />
                 </div>
                 <div style="display: inline-block; width:50%; padding-top: 10px;">
-                    <label for="recieve-house">Дом</label>
-                    <input id="recieve-house" class="form-control" required type="text" />
-                </div>
-                <div style="display: inline-block; width:49%; padding-top: 10px;">
-                    <label for="recieve-flat">Квартира</label>
-                    <input id="recieve-flat" class="form-control" required type="text" />
+                    <label for="reciever-phone">Телефон получателя</label>
+                    <input id="reciever-phone" class="form-control" type="tel" />
                 </div>
             </div>
-            
-            <div id="recieve-storage" style="display: none;">
-                <label for="sdek-dropdown-to">Адрес получения</label>
-                <select id="sdek-dropdown-to"></select>
-                <p id="full-address-to"></p>
-            </div>
-
-            <!-- <div style="width:100%; ">
-                    <label for="dateExecute">Дата отправки:</label>
-                    <input id="dateExecute" class="form-control" type="date" value="2018-11-30">
-                </div> -->
-            <div style="display: inline-block; width:50%; padding-top: 10px;">
-                <label for="sender-name">Имя Фамилия отправителя</label>
-                <input id="sender-name" class="form-control" type="text" />
-            </div>
-            <div style="display: inline-block; width:50%; padding-top: 10px;">
-                <label for="send-phone">Телефон отправителя</label>
-                <input id="send-phone" class="form-control" type="tel" />
-            </div>
-
-            <div style="display: inline-block; width:50%; padding-top: 10px;">
-                <label for="reciever-name">Имя Фамилия получателя</label>
-                <input id="reciever-name" class="form-control" type="text" />
-            </div>
-            <div style="display: inline-block; width:50%; padding-top: 10px;">
-                <label for="reciever-phone">Телефон получателя</label>
-                <input id="reciever-phone" class="form-control" type="tel" />
-            </div>
-
             <div style="width:100%; padding-top: 20px; text-align: center;">
                 <button id="sdekOrderBtn"  class="btn btn-lg btn-success">Заказать</button>
             </div>

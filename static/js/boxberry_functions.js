@@ -142,3 +142,13 @@ function addDeliveryBoxberry() {
         }
     });
 }
+
+$(document).ready(function(){
+    $("#close-boxberry-order").click(function () {
+        $("#boxberry-order").fadeOut('fast', function () { $("#calc").fadeIn('fast'); });
+    });
+
+    $('#boxberry-order-btn').click(function () { 
+        addDeliveryBoxberry();
+    });
+})
