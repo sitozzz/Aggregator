@@ -121,7 +121,21 @@ def calculate_sdek(data):
 	sdek_res = requests.post('http://api.cdek.ru/calculator/calculate_price_by_json.php',json=sdek_json)
 	sdek_res = json.loads(sdek_res.text,encoding='utf-8')
 	print(sdek_res)
-	return sdek_res
+	output = []
+	try:
+		sdek_res = sdek_res['result']
+		output = [{
+			'name': 'cdek',
+			'price': float(sdek_res['price']),
+			'shippingDate': sdek_res['deliveryDateMin'],
+			'receivingDate': sdek_res['deliveryDateMax'],
+			'tariffId': sdek_res['tariffId']
+		}]
+	except KeyError:
+		print('Can not calc this order')
+	
+	
+	return output
 
 def get_pvz_list(city_id):
 	# city_id = str(city_id)

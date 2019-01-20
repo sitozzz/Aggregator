@@ -1,3 +1,8 @@
+body
+{
+    font-family: 'Roboto', sans-serif;
+    font-weight: 100;
+}
 .loading-window
 {
     position: absolute;
@@ -21,10 +26,10 @@
 {
     width: 100%;
     padding: 10px;
-    font-size: 30px;
-    font: 30px 'ZCOOL XiaoWei', serif;
+    font: 30px 'Roboto', sans-serif;
+    font-weight: 100;
     color: #fff;
-    margin-left: 100px;
+    padding-left: 100px;
 }
 
 .title-text
@@ -43,18 +48,18 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: 700px;
-    background-image: linear-gradient(to bottom, #033d93, #00409f, #0042ab, #0044b6, #0046c2, #0a4ecb, #1357d5, #1a5fde, #2b6fe7, #3c7fef, #4d8ef7, #5e9efe);
+    background-color: #2196f3;
+    padding-bottom: 50px;
+    min-height: 100vh;
 }
 
 .description-text
 {
-    display: flex;
-    flex-direction: column;
     margin-top: 50px;
-    font: 30px 'Montserrat', sans-serif;
+    font: 30px 'Roboto', sans-serif;
+    font-weight: 100;
     color: #fff;
-    align-items: center;
+    text-align: center;
 }
 
 
@@ -92,4 +97,74 @@
 .row .btn-success:hover
 {
     background-color: rgb(3, 42, 104);
+}
+
+
+/* Вывод результатов */
+body
+{
+    border-radius: 2px;
+    background-color: #eff2f5;
+}
+
+.shipping-offers
+{
+    max-width: 800px;
+    margin: 0 auto;
+    margin-top: 20px;
+    border: 1px solid #d4d8dd;
+    border-radius: 4px;
+    display: none;
+    background-color: #fafbfc;
+    margin-bottom: 20px;
+}
+
+.shipping-offers-active
+{
+    display: block;
+}
+
+.carrier
+{
+    padding: 15px;
+    font-size: 22px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #d4d8dd;
+}
+
+.carrier:last-child
+{
+    border-bottom: none;
+}
+
+/* logo */
+.carrier-logo
+{
+    align-self: stretch;
+    width: 80px;
+    background-position: left center;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.carrier-receiving-date,
+.carrier-shipping-date
+{
+    width: 120px;
+}
+
+.carrier-price{
+    width: 160px;
+}
+
+.carrier-logo-cdek
+{
+    background-image: url('/static/img/cdek_color.svg');
+}
+
+.carrier-logo-dpd
+{
+    background-image: url('/static/img/dpd_color.svg');
 }

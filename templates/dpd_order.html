@@ -1,0 +1,90 @@
+<div id="dpd-order" class="" style="display: none;">
+   
+    <div id="dpd-order-holder" class="row" style="margin:0; padding:30px;  width:100%;">
+            
+        <div class="row" style="margin:auto; padding:0; max-width: 600px; padding: 24px; border: 1px solid gray; border-radius: 15px; background-color: white;">
+                <div style="position: relative; top: 0; left: 2%;">
+                    <span id="close-dpd-order" style="font-size: 2.5rem; cursor: pointer;"><i class="fas fa-times"></i></span> 
+                 </div>
+            <div>
+                        
+                <h3>Город отправителя: <span id="dpd-send-city"></span></h3>
+                
+                <div id="dpd-send-door">
+                    <h3>Адрес отправителя</h3>
+                    <div style="display: inline-block; width:49%; padding-top: 10px;">
+                        <label for="dpd-send-street">Улица</label>
+                        <input id="dpd-send-street" class="form-control" required type="text" />
+                    </div>
+                    <div style="display: inline-block; width:50%; padding-top: 10px;">
+                        <label for="dpd-send-house">Дом</label>
+                        <input id="dpd-send-house" class="form-control" required type="text" />
+                    </div>
+                    <div style="display: inline-block; width:49%; padding-top: 10px;">
+                        <label for="dpd-send-flat">Квартира</label>
+                        <input id="dpd-send-flat" class="form-control" required type="text" />
+                    </div>
+                </div>
+                
+                <div style="display: inline-block; width:50%; padding-top: 10px;">
+                    <label for="dpd-sender-name">Имя Фамилия отправителя</label>
+                    <input id="dpd-sender-name" class="form-control" type="text" />
+                </div>
+                <div style="display: inline-block; width:50%; padding-top: 10px;">
+                    <label for="dpd-send-phone">Телефон отправителя</label>
+                    <input id="dpd-send-phone" class="form-control" type="tel" />
+                </div>
+                
+                <div id="dpd-send-storage" style="display: none;">
+                    <label for="sdek-dropdown-from">Адрес отправки</label>
+                    <select id="dpd-sdek-dropdown-from"></select>
+                    <p id="dpd-full-address-from"></p>
+                </div>
+            </div>
+
+            <div>
+                <h3>Город получателя: <span id="dpd-recieve-city"></span></h3>
+
+                <div id="dpd-recieve-door">
+                    <h3>Адрес получателя</h3>
+                    <div style="display: inline-block; width:49%; padding-top: 10px;">
+                        <label for="dpd-recieve-street">Улица</label>
+                        <input id="dpd-recieve-street" class="form-control" required type="text" />
+                    </div>
+                    <div style="display: inline-block; width:50%; padding-top: 10px;">
+                        <label for="dpd-recieve-house">Дом</label>
+                        <input id="dpd-recieve-house" class="form-control" required type="text" />
+                    </div>
+                    <div style="display: inline-block; width:49%; padding-top: 10px;">
+                        <label for="dpd-recieve-flat">Квартира</label>
+                        <input id="dpd-recieve-flat" class="form-control" required type="text" />
+                    </div>
+                </div>
+                
+                <div id="dpd-recieve-storage" style="display: none;">
+                    <label for="dpd-sdek-dropdown-to">Адрес получения</label>
+                    <select id="dpd-sdek-dropdown-to"></select>
+                    <p id="dpd-full-address-to"></p>
+                </div>
+
+                <!-- <div style="width:100%; ">
+                        <label for="dateExecute">Дата отправки:</label>
+                        <input id="dateExecute" class="form-control" type="date" value="2018-11-30">
+                    </div> -->
+                
+
+                <div style="display: inline-block; width:50%; padding-top: 10px;">
+                    <label for="dpd-reciever-name">Имя Фамилия получателя</label>
+                    <input id="dpd-reciever-name" class="form-control" type="text" />
+                </div>
+                <div style="display: inline-block; width:50%; padding-top: 10px;">
+                    <label for="dpd-reciever-phone">Телефон получателя</label>
+                    <input id="dpd-reciever-phone" class="form-control" type="tel" />
+                </div>
+            </div>
+            <div style="width:100%; padding-top: 20px; text-align: center;">
+                <button id="dpd-send-order"  class="btn btn-lg btn-success">Заказать</button>
+            </div>
+        </div>
+    </div>
+</div>

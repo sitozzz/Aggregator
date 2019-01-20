@@ -58,7 +58,7 @@ def calculate():
     # ==SDEK API==
     # FIXME: 404 err
     dpd_res = dpd_api.get_service_cost(req)
-    print(dpd_res['list'])
+    
 
     #загрузить файлы
     #boxberry_api.data_loading()
@@ -69,11 +69,12 @@ def calculate():
     pony_res = pony_api.get_service_cost(req)
 
     out_json = jsonify({
-        "sdek": sdek_res,
-        "dpd": dpd_res['list'],
-        "boxberry": boxberry_res,
-        "pony": pony_res
+        "cdek": sdek_res,
+        "dpd": dpd_res,
+        #"boxberry": boxberry_res,
+       # "pony": pony_res
     })
+   
     print(out_json)
 
     
@@ -104,4 +105,4 @@ def boxberry_delivery():
 
 if __name__ == '__main__':
     
-    app.run(host='127.0.0.1', port=8000, debug=True)
+    app.run(host='0.0.0.0', port=8000, debug=True)
