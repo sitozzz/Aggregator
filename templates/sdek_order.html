@@ -2,11 +2,27 @@
    
     <div id="order-holder" class="row" style="margin:0; padding:30px;  width:100%;">
             
-        <div class="row" style="margin:auto; padding:0; max-width: 600px; padding: 24px; border: 1px solid gray; border-radius: 15px; background-color: white;">
+        <div class="row" style="margin:auto; padding:0; min-width: 600px; min-height: 600px; padding: 24px; border: 1px solid gray; border-radius: 15px; background-color: white;">
                 <div style="position: relative; top: 0; left: 2%;">
                     <span id="close-sdek-order" style="font-size: 2.5rem; cursor: pointer;"><i class="fas fa-times"></i></span> 
                  </div>
-            <div>
+            <div id="cdek-page-0">
+                <h3>Проверьте детали заказа:</h3>
+                <h5>Дата отправки: <span id="dateExecuteCheck"></span></h5>
+                <h5>Стоимость: <span id="priceCheck"></span> рублей</h5>
+                <hr>
+                <h5>Данные заказа</h5>
+                <h5>Вес: <span id="weightCheck"></span></h5>
+                <h5>Длина: <span id="lengthCheck"></span></h5>
+                <h5>Высота: <span id="heightCheck"></span></h5>
+                <h5>Ширина: <span id="widthCheck"></span></h5>
+
+
+                <div style="width:100%; padding-top: 20px; text-align: center;">
+                    <button id="toPage-1"  class="btn btn-lg btn-success order-foward-btn">Продолжить</button>
+                </div>
+            </div>
+            <div id="cdek-page-1" style="display: none;">
                         
                 <!-- <h3>Город отправителя: <span id="send-city"></span></h3> -->
                 
@@ -65,9 +81,14 @@
                     <select id="sdek-dropdown-from"></select>
                     <p id="full-address-from"></p>
                 </div>
+
+                <div style="width:100%; padding-top: 20px; text-align: center;">
+                    <button id="backToPage-0" class="btn btn-lg btn-success order-back-btn">Назад</button>
+                    <button id="toPage-2"  class="btn btn-lg btn-success order-foward-btn">Продолжить</button>
+                </div>
             </div>
 
-            <div>
+            <div id="cdek-page-2" style="display: none;">
                 <!-- <h3>Город получателя: <span id="recieve-city"></span></h3> -->
 
                 <div id="recieve-door">
@@ -128,10 +149,12 @@
                     <label for="reciever-phone">Телефон получателя</label>
                     <input id="reciever-phone" class="form-control" type="tel" />
                 </div>
+                <div  style="width:100%; padding-top: 20px; text-align: center; ">
+                    <button id="backToPage-1" class="btn btn-lg btn-success order-back-btn">Назад</button>
+                    <button id="sdekOrderBtn"  class="btn btn-lg btn-success">Заказать</button>
+                </div>
             </div>
-            <div style="width:100%; padding-top: 20px; text-align: center;">
-                <button id="sdekOrderBtn"  class="btn btn-lg btn-success">Заказать</button>
-            </div>
+            
         </div>
     </div>
 </div>
