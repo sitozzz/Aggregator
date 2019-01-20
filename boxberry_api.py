@@ -507,7 +507,7 @@ def get_data_for_delivery_to_door(type_of_delivery, sender, recipient, weights):
         'customer'          : {
             'fio'           : recipient['name'],
             'phone'         : recipient['phone'],
-         #   'email'         : recipient['email']
+            'email'         : recipient['email']
         },
         'weights'           : weights
     }
