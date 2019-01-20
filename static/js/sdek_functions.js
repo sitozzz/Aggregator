@@ -218,10 +218,89 @@ function prepareSdekOrder(data) {
         // TODO: display full address in p tag
     }
     $('#calc').fadeOut('fast', function () {
-        d.getElementById('send-city').innerText = $('#city1').val();
-        d.getElementById('recieve-city').innerText = $('#city2').val();
+        prepareKladrAutocomplete('send-city', 'send-street', 'send-house', 'send-address', 'city1');
+        prepareKladrAutocomplete('recieve-city', 'recieve-street', 'recieve-house', 'recieve-address', 'city2');
         $('#sdek-order').fadeIn('fast');
     });
+}
+
+function prepareKladrAutocomplete(cityId, streetId, houseId, parentId, calculatedCityId) {
+
+    $(function () {
+        var $sendcity = $('#' + cityId),
+            $sendstreet = $('#' + streetId),
+            $sendhouse = $('#' + houseId);
+            
+        var $tooltip = $('.tooltip');
+    
+        $.kladr.setDefault({
+            parentInput: '#' + parentId,
+            verify: true,
+            select: function (obj) {
+                
+                setLabel($(this), obj.type);
+                $tooltip.hide();
+            },
+            check: function (obj) {
+                
+                var $input = $(this);
+    
+                if (obj) {
+                    setLabel($input, obj.type);
+                    $tooltip.hide();
+                }
+                else {
+                    showError($input, 'Введено неверно');
+                }
+            },
+            checkBefore: function () {
+                
+                var $input = $(this);
+    
+                if (!$.trim($input.val())) {
+                    $tooltip.hide();
+                    return false;
+                }
+            }
+        });
+    
+        
+        
+        $sendcity.kladr('type', $.kladr.type.city);
+        $sendstreet.kladr('type', $.kladr.type.street);
+        $sendhouse.kladr('type', $.kladr.type.building);
+        
+        // Отключаем проверку введённых данных для строений
+        $sendhouse.kladr('verify', false);
+    
+       
+    
+        function setLabel($input, text) {
+            text = text.charAt(0).toUpperCase() + text.substr(1).toLowerCase();
+            $input.parent().find('label').text(text);
+        }
+    
+        function showError($input, message) {
+            $tooltip.find('span').text(message);
+    
+            var inputOffset = $input.offset(),
+                inputWidth = $input.outerWidth(),
+                inputHeight = $input.outerHeight();
+    
+            var tooltipHeight = $tooltip.outerHeight();
+    
+            $tooltip.css({
+                left: (inputOffset.left + inputWidth + 10) + 'px',
+                top: (inputOffset.top + (inputHeight - tooltipHeight) / 2 - 1) + 'px'
+            });
+    
+            $tooltip.show();
+        }
+        $('#' + cityId).val($('#' + calculatedCityId).val().split(',')[0]);
+        $("#" + cityId).kladr().select()[0];
+        $("#" + cityId).attr('disabled', true);
+    });
+
 }
 
 $(document).ready(function(){
