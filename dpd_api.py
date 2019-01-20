@@ -8,12 +8,15 @@ from suds.client import Client
 import simplejson
 import codecs
 import ast
+import datetime
 
 client_number = 1020004365
 client_key = '04CD36DEDACCD77DB1424218BF57A57F6D82A12F'
 
 f = open('dpd_cities.txt', 'r',encoding="utf8").read()
 f = ast.literal_eval(f)
+
+dpd_prefix = '[DPD] \n'
 
 def get_cities():
     '''
@@ -46,21 +49,21 @@ def get_cities():
     return {'orig_resp': result, 'list': cities_arr}
 def getCityProp(cityName):
     #global f
-    print("-------------------")
-    print(cityName)
-    print(f[0])
+    #print("-------------------")
+    #print(cityName)
+    #print(f[0])
     cityProp = {'cityName':cityName}
     for city in f:
         if city['cityName'] == cityName:
             cityProp = {'cityName':cityName, "cityId": city['cityId']}
-    print(cityProp)
-    print("-------------------")
+    #print(cityProp)
+    #print("-------------------")
     return cityProp
              
     
 
 def get_service_cost(req):
-    print('SDFSDFSDFSDFSDF')
+    
     '''
     returns dict 
     orig_resp - object list (???)
@@ -113,18 +116,37 @@ def get_service_cost(req):
 
     try:
         result = client.service.getServiceCostByParcels2(request=req_data)
-    except Exception as identifier:
-        print('DPD ERROR')
-        return {'orig_resp': str(identifier) , 'list': str(identifier)}
-        
-    vrs = []
-    for i in result:
-        vr = {}
-        for key in i:
-            vr[key[0]] = key[1]
-        vrs.append(vr)
+        vrs = []
+        for i in result:
+            vr = {}
+            for key in i:
+                vr[key[0]] = key[1]
+            vrs.append(vr)
 
-    return {'orig_resp': result, 'list': vrs}
+        
+        print(dpd_prefix )
+        print(result[0])
+        print(str(datetime.datetime.now() + datetime.timedelta(days=result[0]['days'])).split(' ')[0])
+        ship_dt = str(datetime.datetime.now()).split(' ')[0]
+        res_dt = str(datetime.datetime.now() + datetime.timedelta(days=result[0]['days'])).split(' ')[0]
+
+        output = {
+            'name': 'DPD',
+            'price': result[0]['cost'],
+            'shippingDate': ship_dt,
+            'receivingDate': res_dt,
+            'tariffId': result[0]['serviceCode']
+        }
+    except Exception as identifier:
+        print(dpd_prefix + 'DPD ERROR')
+        print(identifier)
+        output = {}
+        #return {'orig_resp': str(identifier) , 'list': str(identifier)}
+        
+    
+
+
+    return output
 
 def sobject_to_dict(obj, key_to_lower=False, json_serialize=True):
     """
@@ -261,7 +283,7 @@ def make_order():
 
 #get_cities()
 #get_service_cost('кемерово','екатеринбург',True,True,1,20,20,20)
-make_order()
+#make_order()
 #get_terminals()
 
 

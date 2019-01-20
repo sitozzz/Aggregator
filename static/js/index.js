@@ -107,6 +107,8 @@ function showResults(data) {
     //         price: 27267,
     //     },
     // ]
+    d.getElementById('shipping-offers').innerHTML = '';
+    
     for (const carrier of data) {
         if (Object.keys(carrier).length !== 0) {
             showCarrier(carrier)
@@ -121,7 +123,7 @@ function transformDateToString(unixTimestamp) {
 }
 
 function transformData({name, shippingDate, receivingDate, price}) {
-    const logoClassName = `carrier-logo-${name}`
+    const logoClassName = `carrier-logo-${name.toLowerCase()}`
     const fromText = shippingDate//transformDateToString(shippingDate)
     const toText = receivingDate//transformDateToString(receivingDate)
     const priceText = `${price}₽`
@@ -130,6 +132,8 @@ function transformData({name, shippingDate, receivingDate, price}) {
 }
 
 function showCarrier({name, shippingDate, receivingDate, price, tariffId}) {
+    console.log('showCarrier - ' + name);
+    
     const container = d.createElement('div')
     container.setAttribute('class', 'carrier')
     
@@ -166,7 +170,7 @@ function showCarrier({name, shippingDate, receivingDate, price, tariffId}) {
     container.appendChild(orderButton)
 
     const shippingOffers = d.getElementById('shipping-offers')
-    shippingOffers.innerHTML = ''
+    //shippingOffers.innerHTML = ''
     shippingOffers.appendChild(container)
     shippingOffers.classList.add('shipping-offers-active')
 
@@ -327,24 +331,16 @@ $(document).ready(function () {
                 ]
             }),
             success: function (data) {
-                // TODO: Hide loader here!
                 $('#loader').hide();
                 console.log(data);
-
                 showResults(data)
-
                 $('#output').show('fast');
             },
             error: function () {
-                // TODO: Hide loader here!
                 $('#loader').hide();
-
                 showResults()
-
                 $('#output').show('fast');
             },
-
-            
         });
     });
     $("#close-sdek-order").click(function () {
