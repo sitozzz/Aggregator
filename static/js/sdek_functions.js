@@ -319,6 +319,7 @@ function prepareKladrAutocomplete(cityId, streetId, houseId, parentId, calculate
 $(document).ready(function(){
     $("#close-sdek-order").click(function () {
         $("#sdek-order").fadeOut('fast', function () { $("#calc").fadeIn('fast'); });
+        $("#shipping-offers").show();
     });
     
 

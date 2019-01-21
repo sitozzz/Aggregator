@@ -304,6 +304,7 @@ function showCarrier({name, shippingDate, receivingDate, price, tariffId}) {
     shippingOffers.classList.add('shipping-offers-active')
 
     orderButton.onclick = function () {
+        $("#shipping-offers").hide();
         var cs = this.id.split('-')[0]
         if (this.id.split('-')[0] == 'dpd') {
             for (var i in respGlob.dpd.data){
@@ -420,6 +421,8 @@ $(document).ready(function () {
         $('#dpd-send-storage').hide()
         $('#dpd-recieve-storage').hide()
         $("#dpd-order").fadeOut('fast', function () { $("#calc").fadeIn('fast'); });
+        $("#shipping-offers").show();
+
     });
     
     $("#dpd-send-order").click(function () {
