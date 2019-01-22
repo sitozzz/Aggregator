@@ -1,5 +1,6 @@
 function boxberryOrder(boxberryData) {
     console.log(boxberryData);
+
     boxberryData[0].shippingPoints.forEach(element => {
         var root = d.getElementById('boxberry-dropdown-from');
         var option = d.createElement('option');
@@ -9,7 +10,6 @@ function boxberryOrder(boxberryData) {
         root.appendChild(option);
     });
 
-    // изменить вид адреса для отправителя
     if (deliveryDataTo != 'door') {
         boxberryData[0].receptionPoints.forEach(element => {
             var root = d.getElementById('boxberry-dropdown-to');
@@ -39,9 +39,11 @@ function boxberryOrder(boxberryData) {
     }
 
     $('#calc').fadeOut('fast', function () {
-        d.getElementById('sender-city-boxberry').innerText = $('#city1').val();
-        d.getElementById('reciever-city-boxberry').innerText = $('#city2').val();
-
+        $("#sender-city-boxberry").val($('#city1').val().split(',')[0]);
+        $("#sender-city-boxberry").attr('disabled', true);
+        $("#reciever-warehouse-city-boxberry").val($('#city2').val().split(',')[0]);
+        $("#reciever-warehouse-city-boxberry").attr('disabled', true);
+        prepareKladrAutocomplete('reciever-city-boxberry', 'reciever-street-boxberry', 'reciever-house-boxberry', 'reciever-address-boxberry', 'city2');
         $('#boxberry-order').fadeIn('fast');
     });
 }
