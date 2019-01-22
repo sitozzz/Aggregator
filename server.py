@@ -71,7 +71,7 @@ def calculate():
     out_json = jsonify({
         "cdek": sdek_res,
         "dpd": dpd_res,
-        #"boxberry": boxberry_res,
+        "boxberry": boxberry_res,
        # "pony": pony_res
     })
    

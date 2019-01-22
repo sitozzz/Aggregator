@@ -168,3 +168,8 @@ body
 {
     background-image: url('/static/img/dpd_color.svg');
 }
+
+.carrier-logo-boxberry
+{
+    background-image: url('/static/img/boxberry_color.png');
+}

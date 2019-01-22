@@ -144,7 +144,10 @@ var respGlob = {
         'func': dpdOrdPrev, 
         'data': undefined
     },
-    "boxberry": { 'func': undefined, 'data': undefined },
+    "boxberry": { 
+        'func': boxberryOrder,
+        'data': undefined 
+    },
     "pony": { 'func': undefined, 'data': undefined },
 };
 
