@@ -1,7 +1,7 @@
 body
 {
-    font-family: 'Roboto', sans-serif;
-    font-weight: 100;
+    font-family: 'Roboto', sans-serif !important;
+    font-weight: 100 !important;
 }
 .loading-window
 {
@@ -81,22 +81,34 @@ body
 
 .row-s .btn-success
 {
-    background-color: rgb(7, 77, 182);
+    background-color: #f57c00;
+    border: #f57c00;
+    border-radius: 5px;
+    font-size: 1.375rem;
+    color: #fff;
+    font-weight: 500;
+    padding: 10px 15px;
 }
 
+.btn-lg 
+{
+    background-color: #f57c00 !important;
+    border: #f57c00 !important;
+    color: #fff;
+    font-weight: 500;
+}
+
+.row .btn-success,
+.row .btn,
+.row .btn-lg
+{
+    background-color: #f57c00 !important;
+}
+
+.btn-lg:hover,
 .row-s .btn-success:hover
 {
-    background-color: rgb(3, 42, 104);
-}
-
-.row .btn-success
-{
-    background-color: rgb(7, 77, 182);
-}
-
-.row .btn-success:hover
-{
-    background-color: rgb(3, 42, 104);
+    background-color: #ff9c3a !important;
 }
 
 
@@ -173,3 +185,12 @@ body
 {
     background-image: url('/static/img/boxberry_color.png');
 }
+
+.next-row
+{
+    border:1px solid #d4d8dd !important; 
+}
+
+
+/* Окна заказа */
+

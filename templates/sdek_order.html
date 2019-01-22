@@ -2,10 +2,10 @@
    
     <div id="order-holder" class="row" style="margin:0; padding:30px;  width:100%;">
             
-        <div class="row" style="margin:auto; padding:0; min-width: 600px; min-height: 600px; padding: 24px; border: 1px solid gray; border-radius: 15px; background-color: white;">
-                <div style="position: relative; top: 0; left: 2%;">
+        <div class="next-row" style="margin:auto; padding:0;padding: 24px; border-radius: 15px; background-color: white;">
+                <div style="position: relative; top: 0; text-align: right;">
                     <span id="close-sdek-order" style="font-size: 2.5rem; cursor: pointer;"><i class="fas fa-times"></i></span> 
-                 </div>
+                </div>
             <div id="cdek-page-0">
                 <h3>Проверьте детали заказа:</h3>
                 <h5>Дата отправки: <span id="dateExecuteCheck"></span></h5>
@@ -42,10 +42,25 @@
                     </div> -->
 
                     <form id="send-address" >
-                        <div class="field">
-                            <label>Город</label>
-                            <input class="form-control" type="text" id="send-city">
+                        
+                        <div style="display: inline-block; width:100%; padding-top: 10px;">
+                            <label for="sender-name">ФИО отправителя</label>
+                            <input id="sender-name" class="form-control" type="text" />
                         </div>
+                        <div style="display: inline-block; width:100%; padding-top: 10px;">
+                            <label for="sender-name">E-mail</label>
+                            <input id="sender-email" class="form-control" type="text" />
+                        </div>
+
+                        <div style="display: inline-block; width:100%; padding-top: 10px;">
+                            <label for="send-phone">Телефон отправителя</label>
+                            <!-- <input id="send-phone" class="form-control" type="tel" /> -->
+                            <input id="send-phone" class="form-control tel" type="tel" value="">
+                        </div>
+                        <div class="field">
+                                <label>Город</label>
+                                <input class="form-control" type="text" id="send-city">
+                            </div>
                         <div class="field">
                             <label>Улица</label>
                             <input class="form-control" type="text" id="send-street">
@@ -67,14 +82,6 @@
 
                 </div>
                 
-                <div style="display: inline-block; width:50%; padding-top: 10px;">
-                    <label for="sender-name">Имя Фамилия отправителя</label>
-                    <input id="sender-name" class="form-control" type="text" />
-                </div>
-                <div style="display: inline-block; width:50%; padding-top: 10px;">
-                    <label for="send-phone">Телефон отправителя</label>
-                    <input id="send-phone" class="form-control" type="tel" />
-                </div>
                 
                 <div id="send-storage" style="display: none;">
                     <label for="sdek-dropdown-from">Адрес отправки</label>
@@ -107,6 +114,7 @@
                     </div> -->
 
                     <form id="recieve-address">
+                        
                         <div class="field">
                             <label>Город</label>
                             <input class="form-control" type="text" id="recieve-city">
@@ -140,11 +148,6 @@
                         <input id="dateExecute" class="form-control" type="date" value="2018-11-30">
                     </div> -->
                 
-
-                <div style="display: inline-block; width:50%; padding-top: 10px;">
-                    <label for="reciever-name">Имя Фамилия получателя</label>
-                    <input id="reciever-name" class="form-control" type="text" />
-                </div>
                 <div style="display: inline-block; width:50%; padding-top: 10px;">
                     <label for="reciever-phone">Телефон получателя</label>
                     <input id="reciever-phone" class="form-control" type="tel" />
@@ -158,3 +161,42 @@
         </div>
     </div>
 </div>
+
+<script>
+        window.addEventListener("DOMContentLoaded", function() {
+            [].forEach.call( document.querySelectorAll('.tel'), function(input) {
+            var keyCode;
+            function mask(event) {
+                event.keyCode && (keyCode = event.keyCode);
+                var pos = this.selectionStart;
+                if (pos < 3) event.preventDefault();
+                var matrix = "+7 (___) ___ ____",
+                    i = 0,
+                    def = matrix.replace(/\D/g, ""),
+                    val = this.value.replace(/\D/g, ""),
+                    new_value = matrix.replace(/[_\d]/g, function(a) {
+                        return i < val.length ? val.charAt(i++) || def.charAt(i) : a
+                    });
+                i = new_value.indexOf("_");
+                if (i != -1) {
+                    i < 5 && (i = 3);
+                    new_value = new_value.slice(0, i)
+                }
+                var reg = matrix.substr(0, this.value.length).replace(/_+/g,
+                    function(a) {
+                        return "\\d{1," + a.length + "}"
+                    }).replace(/[+()]/g, "\\$&");
+                reg = new RegExp("^" + reg + "$");
+                if (!reg.test(this.value) || this.value.length < 5 || keyCode > 47 && keyCode < 58) this.value = new_value;
+                if (event.type == "blur" && this.value.length < 5)  this.value = ""
+            }
+        
+            input.addEventListener("input", mask, false);
+            input.addEventListener("focus", mask, false);
+            input.addEventListener("blur", mask, false);
+            input.addEventListener("keydown", mask, false)
+        
+          });
+        
+        });
+          </script>
