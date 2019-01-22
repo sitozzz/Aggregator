@@ -140,7 +140,7 @@ function createSDEKDropdown(data, rootElement) {
     root.appendChild(option);
 }
 function addSDEKDelivery(isSendStorage, isRecieveStorage) {
-    var dateDelivery = new Date().toJSON().replace('T', ' ').split('.')[0];
+    var dateDelivery = new Date(($("#dateExecute").val()).replace(/\./g, '-').replace( /(\d{2})-(\d{2})-(\d{4})/, "$2/$1/$3")).toJSON().replace('T', ' ').split('.')[0];
     var sender = {
         'city_id': city1._id,
         'phone': $('#send-phone').val(),
