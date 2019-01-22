@@ -198,7 +198,11 @@ function addSDEKDelivery(isSendStorage, isRecieveStorage) {
         success: function (response) {
             console.log('response = ' + response);
             console.log(response.response);
-            console.log(response[0]);
+            response = response.response;
+            // TODO: Добавить отображение инфы при заказе
+            if (response.order[0]['@Number'] != undefined){
+                alert(response.order[1]['@Msg'] + '; Номер заказа' + response.order[0]['@Number']);
+            }
         }
     });
 }
