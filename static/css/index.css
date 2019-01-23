@@ -168,3 +168,8 @@ body
 {
     background-image: url('/static/img/dpd_color.svg');
 }
+
+.carrier-logo-ponyexpress
+{
+    background-image: url('/static/img/pony_color.png');
+}

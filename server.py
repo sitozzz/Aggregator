@@ -72,7 +72,7 @@ def calculate():
         "cdek": sdek_res,
         "dpd": dpd_res,
         #"boxberry": boxberry_res,
-       # "pony": pony_res
+        "pony": pony_res
     })
    
     print(out_json)
