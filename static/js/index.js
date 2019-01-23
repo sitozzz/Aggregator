@@ -56,6 +56,8 @@
 
 //     d.getElementById('shipping-offers').appendChild(container)
 // }
+var scode;
+
 var city1;
 var city2;
 var deliveryDataFrom = 'door';
@@ -66,24 +68,70 @@ var d = document;
 //prepareSdekOrder
 
 function dpdOrdPrev(data) {
+    d.getElementById('dpd-send-city').innerText = $('#city1').val();
+    d.getElementById('dpd-recieve-city').innerText = $('#city2').val();
+    var fr = deliveryDataFrom == 'door' ? 'Д':'Т'
+    var to = deliveryDataTo == 'door' ? 'Д':'Т'
     
-    if (deliveryDataFrom != 'door') {
-        $("#send-door").hide();
-        $("#send-storage").show();
-        // getSDEKPvz(city1._id, 'sdek-dropdown-from');
-        // // TODO: display full address in p tag
-    }
-    if (deliveryDataTo != 'door') {
-        $("#recieve-door").hide();
-        $("#recieve-storage").show();
-        // getSDEKPvz(city2._id, 'sdek-dropdown-to');
-        // // TODO: display full address in p tag
-    }
-    $('#calc').fadeOut('fast', function () {
-        d.getElementById('dpd-send-city').innerText = $('#city1').val();
-        d.getElementById('dpd-recieve-city').innerText = $('#city2').val();
-        $('#dpd-order').fadeIn('fast');
+    $.ajax({
+        contentType: 'application/json',
+        method: 'POST',
+        url: "/dpd_pvz",
+        data: JSON.stringify({
+            "send_city": $('#dpd-send-city').text().split(',')[0],
+            "get_city": $('#dpd-recieve-city').text().split(',')[0],
+        }),
+        success: function (response) {
+            console.log(response);
+            var send_city_list = []
+            var get_city_list = []
+            for (var i in response[0]){
+                send_city_list.push({'id': response[0][i].code, 'addr': response[0][i].address.street + ' ' + response[0][i].address.houseNo})
+            }
+
+            for (var i in response[1]){
+                get_city_list.push({'id': response[1][i].code, 'addr': response[1][i].address.street + ' ' + response[1][i].address.houseNo})
+            }
+
+            if (fr == 'Т'){
+                $('#dpd-dropdown-from').html('')
+                for (var s in send_city_list){
+                    var o = d.createElement('option')
+                    o.value = send_city_list[s].id
+                    o.text = send_city_list[s].addr
+                    //dpd-send-storage
+                    $('#dpd-dropdown-from').append(o)
+
+                }
+                $('#dpd-send-storage').show()
+                
+            }
+
+            if (to == 'Т'){
+                $('#dpd-dropdown-to').html('')
+                for (var p in get_city_list){
+                    var o = d.createElement('option')
+                    o.value = get_city_list[p].id
+                    o.text = get_city_list[p].addr
+                    
+                    $('#dpd-dropdown-to').append(o)
+
+                }
+                $('#dpd-recieve-storage').show()
+                
+            }
+            $('#calc').fadeOut('fast', function () {
+                
+                $('#dpd-order').fadeIn('fast');
+            });
+            
+        },
+        error: function (err) {
+            console.log('AJAX ERROR');
+            console.log(err);
+        }
     });
+
 }
 
 
@@ -96,7 +144,10 @@ var respGlob = {
         'func': dpdOrdPrev, 
         'data': undefined
     },
-    "boxberry": { 'func': undefined, 'data': undefined },
+    "boxberry": { 
+        'func': boxberryOrder,
+        'data': undefined 
+    },
     "pony": { 'func': undefined, 'data': undefined },
 };
 
@@ -235,7 +286,13 @@ function showCarrier({name, shippingDate, receivingDate, price, tariffId}) {
     orderButton.setAttribute('class', 'btn btn-default')
     orderButton.textContent = 'Заказать'
     if (name) {
-        orderButton.id = name + '-OrderBtn'                
+        if (name == 'dpd'){
+
+            orderButton.id = name + '-'+Math.round(price)+ '-OrderBtn' 
+        } else {
+            orderButton.id = name + '-OrderBtn'   
+        }   
+                     
     }
 
     container.appendChild(nameElement)
@@ -250,7 +307,22 @@ function showCarrier({name, shippingDate, receivingDate, price, tariffId}) {
     shippingOffers.classList.add('shipping-offers-active')
 
     orderButton.onclick = function () {
+        $("#shipping-offers").hide();
         var cs = this.id.split('-')[0]
+        if (this.id.split('-')[0] == 'dpd') {
+            for (var i in respGlob.dpd.data){
+                console.log('++++++++++++++++++');
+                console.log(Math.round(respGlob.dpd.data[i].price));
+                console.log(Math.round(this.id.split('-')[1]));
+                if (Math.round(respGlob.dpd.data[i].price) == Math.round(parseFloat(this.id.split('-')[1]))){
+                    console.log('))))))))))))))))))))0');
+                    console.log(respGlob.dpd.data[i]);
+                    scode = respGlob.dpd.data[i].tariffId;
+                }
+            }
+           
+        }
+        
         respGlob[this.id.split('-')[0]].func(respGlob[this.id.split('-')[0]].data)
     }
 }
@@ -348,43 +420,85 @@ $(document).ready(function () {
     $("#calcBtn1").click(function () {
         $("#prop-holder").show(100);
     });
+    $("#close-dpd-order").click(function () {
+        $('#dpd-send-storage').hide()
+        $('#dpd-recieve-storage').hide()
+        $("#dpd-order").fadeOut('fast', function () { $("#calc").fadeIn('fast'); });
+        $("#shipping-offers").show();
+
+    });
+    
     $("#dpd-send-order").click(function () {
-        d.getElementById('dpd-send-city').innerText = $('#dpd-send-city').text();
-        d.getElementById('dpd-recieve-city').innerText = $('#city2').val();
+        console.log("#dpd-send-order");
+        //d.getElementById('dpd-send-city').innerText = $('#dpd-send-city').text();
+        //d.getElementById('dpd-recieve-city').innerText = $('#city2').val();
+        console.log(); 
+        
+
+       
+
+        var fr = deliveryDataFrom == 'door' ? 'Д':'Т'
+        var to = deliveryDataTo == 'door' ? 'Д':'Т'
+
+        
+
         var ordProp = {
             'senderAddress' : {
-                'name' : $('#dpd-sender-name').text(),
-                'terminalCode' : '032L',
+                'name' : $('#dpd-sender-name').val(),
+                'terminalCode' : $('#dpd-dropdown-from').val(),
                 'countryName' : $('#dpd-send-city').text().split(',')[2].replace(' ',''),
                 'city' : $('#dpd-send-city').text().split(',')[0],
-                'street' : $('#dpd-send-street').text(),
-                'house' : $('#dpd-send-house').text(),
-                'contactPhone' : $('#dpd-send-phone').text(),
-                'contactFio' : $('#dpd-sender-name').text()
+                'street' : $('#dpd-send-street').val(),
+                'house' : $('#dpd-send-house').val(),
+                'contactPhone' : $('#dpd-send-phone').val(),
+                'contactFio' : $('#dpd-sender-name').val()
             },
              'receiverAddress' : {
-                'name' : $('#dpd-reciever-name').text(),
-                'terminalCode' : '032L',
+                'name' : $('#dpd-reciever-name').val(),
+                'terminalCode' : $('#dpd-dropdown-to').val(),
                 'countryName' : $('#dpd-recieve-city').text().split(',')[2].replace(' ',''),
                 'city' : $('#dpd-recieve-city').text().split(',')[0],
-                'street' : $('#dpd-reciever-street').text(),
-                'house' : $('#dpd-reciever-house').text(),
-                'contactPhone' : $('#dpd-reciever-phone').text(),
-                'contactFio' : $('#dpd-reciever-name').text()
+                'street' : $('#dpd-recieve-street').val(),
+                'house' : $('#dpd-recieve-house').val(),
+                'contactPhone' : $('#dpd-reciever-phone').val(),
+                'contactFio' : $('#dpd-reciever-name').val()
         
             },
             'order' : {
                 'orderNumberInternal' : '123456',
-                'serviceCode' : 'DPE',
-                'serviceVariant' : 'TT',
+                'serviceCode' : scode,
+                'serviceVariant' : fr + to,
                 'cargoNumPack' : 1,
-                'cargoWeight' : 1,
-                'cargoRegistered' : False,
+                'cargoWeight' : $('#weight').val(),
+                'cargoRegistered' : false,
                 'cargoCategory' : 'Одежда',
-                'receiverAddress' : receiverAddress,
+                // 'receiverAddress' : receiverAddress,
         
             }
         }
+
+        // 'height': $('#height').val(),
+        // 'width': $('#width').val(),
+        // 'weight': $('#weight').val(),
+        // 'length': $('#length').val()
+        console.log(ordProp);
+        $.ajax({
+            contentType: 'application/json',
+            method: 'POST',
+            url: "/dpd_make_order",
+            data: JSON.stringify(ordProp),
+            success: function (response) {
+                console.log(response);
+                alert(response)
+                
+                
+            },
+            error: function (err) {
+                console.log('AJAX ERROR');
+                console.log(err);
+            }
+        });
+        //Сарыгина 40 3
 
         
     });

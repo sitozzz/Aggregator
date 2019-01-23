@@ -2,6 +2,7 @@ import requests
 import csv
 import json
 import uuid
+import datetime
 
 token = '84327.pjpqbddd'
 url = 'http://api.boxberry.de/json.php'
@@ -339,28 +340,28 @@ def calculate_boxberry(sender_city, recipient_city, advanced_sending_options, or
         volume = (height * width * depth) / 1000000
 
     if height > 120 or width > 120 or depth > 120:
-        return {}
+        return []
     if height + width + depth > 250:
-        return {}
+        return []
     if weight > 31:
-        return {}
+        return []
     
     city_a = take_city_from_csv(file_cities, sender_city)
     city_b = take_city_from_csv(file_cities, recipient_city)
 
     if city_a == None or city_b == None:
-        return {}
+        return []
 
     points_for_parcels = take_points_for_parcels_from_csv(file_points_for_parcels, city_a['Name'])
 
     if len(points_for_parcels) == 0:
-        return {}
+        return []
 
     points_of_issue_orders = take_points_of_issue_orders(file_points, city_b['Code'])
     points_of_issue_orders = filter_by_point(points_of_issue_orders, weight, volume)
 
     if len(points_of_issue_orders) == 0:
-        return {}
+        return []
 
     if zip_code != 0:
         if zip_code == 1:
@@ -385,19 +386,22 @@ def calculate_boxberry(sender_city, recipient_city, advanced_sending_options, or
         reception_points = points_of_issue_orders
     else:
         reception_points = zips_for_city
+
+    shipping_date = str(datetime.datetime.now()).split(' ')[0]
+    receiving_date = str(datetime.datetime.now() + datetime.timedelta(days = period)).split(' ')[0]
     
-    return {
+    return [{
+        'name'              : 'boxberry',
         'price'             : price,
-        'period'            : period,
-        'senderCity'        : city_a['Code'],
-        'recipientCity'     : city_b['Code'],
+        'receivingDate'     : receiving_date,
+        'shippingDate'      : shipping_date,
         'shippingPoints'    : points_for_parcels,
         'receptionPoints'   : reception_points
-    }
+    }]
 
 def get_data_boxberry(request):
     if request['deliveryType']['deliveryFrom'] == 'door':
-        return {}
+        return []
     
     sender_city = get_name_city(request['city1']['name'])
     recipient_city = get_name_city(request['city2']['name'])
@@ -494,6 +498,16 @@ def create_parsel(data):
 
 def get_data_for_delivery_to_door(type_of_delivery, sender, recipient, weights):
     """Создание словаря данных для формирования заказа до двери."""
+    customer = {
+        'fio'           : recipient['name'],
+        'phone'         : recipient['phone']
+    }
+
+    if 'email' in recipient:
+        customer.update({
+            'email' : recipient['email']
+        })
+
     return {
         'order_id'          : uuid.uuid4().hex[:30],
         'price'             : '0',
@@ -504,17 +518,32 @@ def get_data_for_delivery_to_door(type_of_delivery, sender, recipient, weights):
             'name'          : recipient['code'],
             'name1'         : sender['code']
         },
-        'customer'          : {
-            'fio'           : recipient['name'],
-            'phone'         : recipient['phone'],
-            'email'         : recipient['email']
-        },
+        'customer'          : customer,
         'weights'           : weights
     }
 
 def get_data_for_delivery_to_warehouse(type_of_delivery, sender, recipient, weights):
     """Создание словаря данных для формирования заказа до склада."""
     address = ', '.join([str(recipient['street']), str(recipient['flat']), str(recipient['house'])])
+    customer = {
+        'fio'           : recipient['name'],
+        'phone'         : recipient['phone']
+    }
+    kurdost = {
+        'index'         : recipient['zip'],
+        'citi'          : recipient['nameCity'],
+        'addressp'      : address
+    }
+
+    if 'email' in recipient:
+        customer.update({
+            'email' : recipient['email']
+        })
+
+    if 'coment' in recipient:
+        kurdost.update({
+            'coment' : recipient['coment']
+        })
 
     return {
         'order_id'          : uuid.uuid4().hex[:30],
@@ -525,17 +554,8 @@ def get_data_for_delivery_to_warehouse(type_of_delivery, sender, recipient, weig
         'shop'              : {
             'name1'         : sender['code']
         },
-        'customer'          : {
-            'fio'           : recipient['name'],
-            'phone'         : recipient['phone'],
-            'email'         : recipient['email']
-        },
-        'kurdost'           : {
-            'index'         : recipient['zip'],
-            'citi'          : recipient['nameCity'],
-            'addressp'      : address,
-            'comentk'       : recipient['coment']
-        },
+        'customer'          : customer,
+        'kurdost'           : kurdost,
         'weights'           : weights
     }
 

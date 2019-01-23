@@ -140,7 +140,7 @@ function createSDEKDropdown(data, rootElement) {
     root.appendChild(option);
 }
 function addSDEKDelivery(isSendStorage, isRecieveStorage) {
-    var dateDelivery = new Date().toJSON().replace('T', ' ').split('.')[0];
+    var dateDelivery = new Date(($("#dateExecute").val()).replace(/\./g, '-').replace( /(\d{2})-(\d{2})-(\d{4})/, "$2/$1/$3")).toJSON().replace('T', ' ').split('.')[0];
     var sender = {
         'city_id': city1._id,
         'phone': $('#send-phone').val(),
@@ -198,12 +198,24 @@ function addSDEKDelivery(isSendStorage, isRecieveStorage) {
         success: function (response) {
             console.log('response = ' + response);
             console.log(response.response);
-            console.log(response[0]);
+            response = response.response;
+            // TODO: Добавить отображение инфы при заказе
+            if (response.order[0]['@Number'] != undefined){
+                alert(response.order[1]['@Msg'] + '; Номер заказа' + response.order[0]['@Number']);
+            }
         }
     });
 }
 
 function prepareSdekOrder(data) {
+    console.log('prepared data = ');
+    console.log(data);
+    $("#priceCheck").text(data[0].price);
+
+    $("#heightCheck").text($('#height').val());
+    $("#widthCheck").text($('#width').val());
+    $("#weightCheck").text($('#weight').val());
+    $("#lengthCheck").text($('#length').val());
     
     if (deliveryDataFrom != 'door') {
         $("#send-door").hide();
@@ -218,16 +230,102 @@ function prepareSdekOrder(data) {
         // TODO: display full address in p tag
     }
     $('#calc').fadeOut('fast', function () {
-        d.getElementById('send-city').innerText = $('#city1').val();
-        d.getElementById('recieve-city').innerText = $('#city2').val();
+        prepareKladrAutocomplete('send-city', 'send-street', 'send-house', 'send-address', 'city1');
+        prepareKladrAutocomplete('recieve-city', 'recieve-street', 'recieve-house', 'recieve-address', 'city2');
         $('#sdek-order').fadeIn('fast');
     });
+}
+
+function prepareKladrAutocomplete(cityId, streetId, houseId, parentId, calculatedCityId) {
+
+    $(function () {
+        var $sendcity = $('#' + cityId),
+            $sendstreet = $('#' + streetId),
+            $sendhouse = $('#' + houseId);
+            
+        var $tooltip = $('.tooltip');
+    
+        $.kladr.setDefault({
+            parentInput: '#' + parentId,
+            verify: true,
+            select: function (obj) {
+                console.log('select fired');
+                setLabel($(this), obj.type);
+                $tooltip.hide();
+            },
+            check: function (obj) {
+                
+                var $input = $(this);
+    
+                if (obj) {
+                    setLabel($input, obj.type);
+                    $tooltip.hide();
+                }
+                else {
+                    showError($input, 'Введено неверно');
+                }
+            },
+            checkBefore: function () {
+                
+                var $input = $(this);
+    
+                if (!$.trim($input.val())) {
+                    $tooltip.hide();
+                    return false;
+                }
+            }, 
+            input: function (obj) {
+                console.log('input fired');
+            }
+        });
+    
+        
+        
+        $sendcity.kladr('type', $.kladr.type.city);
+        $sendstreet.kladr('type', $.kladr.type.street);
+        $sendhouse.kladr('type', $.kladr.type.building);
+        
+        // Отключаем проверку введённых данных для строений
+        $sendhouse.kladr('verify', false);
+    
+       
+    
+        function setLabel($input, text) {
+            text = text.charAt(0).toUpperCase() + text.substr(1).toLowerCase();
+            $input.parent().find('label').text(text);
+        }
+    
+        function showError($input, message) {
+            $tooltip.find('span').text(message);
+    
+            var inputOffset = $input.offset(),
+                inputWidth = $input.outerWidth(),
+                inputHeight = $input.outerHeight();
+    
+            var tooltipHeight = $tooltip.outerHeight();
+    
+            $tooltip.css({
+                left: (inputOffset.left + inputWidth + 10) + 'px',
+                top: (inputOffset.top + (inputHeight - tooltipHeight) / 2 - 1) + 'px'
+            });
+    
+            $tooltip.show();
+        }
+        $.kladr.setValues({
+            city: $('#' + calculatedCityId).val().split(',')[0],
+
+        }, '#' + parentId);
+        $("#" + cityId).attr('disabled', true);
+    });
+
 }
 
 $(document).ready(function(){
     $("#close-sdek-order").click(function () {
         $("#sdek-order").fadeOut('fast', function () { $("#calc").fadeIn('fast'); });
+        $("#shipping-offers").show();
     });
+    
 
     $('#sdekOrderBtn').click(function () { 
         // TODO: check this flags after user selection
@@ -235,4 +333,36 @@ $(document).ready(function(){
         addSDEKDelivery(false, false);
         
     });
+    $(".order-back-btn").click(function () {
+       console.log(this.id.split('-')[1]); 
+       var clickedId = this.id.split('-')[1];
+       var hideId = parseInt(clickedId) + 1;
+       console.log('show => ' + clickedId);
+       console.log('hide => ' + hideId);
+       $("#cdek-page-" + clickedId).show();
+       $("#cdek-page-" + hideId).hide();
+
+    });
+
+    $(".order-foward-btn").click(function () {
+        console.log(this.id.split('-')[1]); 
+        var clickedId = this.id.split('-')[1];
+        var hideId = parseInt(clickedId) - 1;
+        console.log('show => ' + clickedId);
+        console.log('hide => ' + hideId);
+
+        $("#cdek-page-" + clickedId).show();
+        $("#cdek-page-" + hideId).hide();
+ 
+     });
+    // $("#toPage1").click(function () {
+    //    $("#cdek-page0").hide();
+    //    $("#cdek-page1").show();
+    // });
+
+    // $("#toPage2").click(function () {
+    //     $("#cdek-page1").hide();
+    //     $("#cdek-page2").show();
+    //     $("#sdekOrderBtn").show();
+    //  });
 })

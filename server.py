@@ -71,8 +71,13 @@ def calculate():
     out_json = jsonify({
         "cdek": sdek_res,
         "dpd": dpd_res,
+<<<<<<< HEAD
         #"boxberry": boxberry_res,
         "pony": pony_res
+=======
+        "boxberry": boxberry_res,
+       # "pony": pony_res
+>>>>>>> 79ff1533481119e4f382372cac6620b1063c029f
     })
    
     print(out_json)
@@ -81,6 +86,38 @@ def calculate():
    
     return out_json
 
+@app.route('/dpd_pvz', methods=['POST'])
+def dpd_pvz():
+    req = request.get_json()
+    
+    send_city = dpd_api.get_terminals_by_city(req['send_city'])
+    get_city = dpd_api.get_terminals_by_city(req['get_city'])
+
+    
+       
+    
+    return jsonify([send_city,get_city])
+
+@app.route('/dpd_make_order', methods=['POST'])
+def dpd_make_order():
+    req = request.get_json()
+    
+    responce = dpd_api.make_order(req)
+    
+    r = []
+    for key in responce:
+       
+        key = dpd_api.sobject_to_json(key)
+        g = {}
+        print(type(key))
+        print(key)
+        r.append(key)
+        #r[key] = responce[key]
+    #print(r)
+    
+       
+    
+    return jsonify(r)
 
 @app.route('/sdek_pvz', methods=['POST'])
 def sdek_pvz():

@@ -2,17 +2,33 @@
    
     <div id="order-holder" class="row" style="margin:0; padding:30px;  width:100%;">
             
-        <div class="row" style="margin:auto; padding:0; max-width: 600px; padding: 24px; border: 1px solid gray; border-radius: 15px; background-color: white;">
-                <div style="position: relative; top: 0; left: 2%;">
+        <div class="next-row" style="margin:auto; padding:0;padding: 24px; border-radius: 15px; background-color: white;">
+                <div style="position: relative; top: 0; text-align: right;">
                     <span id="close-sdek-order" style="font-size: 2.5rem; cursor: pointer;"><i class="fas fa-times"></i></span> 
-                 </div>
-            <div>
+                </div>
+            <div id="cdek-page-0">
+                <h3>Проверьте детали заказа:</h3>
+                <h5>Дата отправки: <span id="dateExecuteCheck"></span></h5>
+                <h5>Стоимость: <span id="priceCheck"></span> рублей</h5>
+                <hr>
+                <h5>Данные заказа</h5>
+                <h5>Вес: <span id="weightCheck"></span></h5>
+                <h5>Длина: <span id="lengthCheck"></span></h5>
+                <h5>Высота: <span id="heightCheck"></span></h5>
+                <h5>Ширина: <span id="widthCheck"></span></h5>
+
+
+                <div style="width:100%; padding-top: 20px; text-align: center;">
+                    <button id="toPage-1"  class="btn btn-lg btn-success order-foward-btn">Продолжить</button>
+                </div>
+            </div>
+            <div id="cdek-page-1" style="display: none;">
                         
-                <h3>Город отправителя: <span id="send-city"></span></h3>
+                <!-- <h3>Город отправителя: <span id="send-city"></span></h3> -->
                 
                 <div id="send-door">
                     <h3>Адрес отправителя</h3>
-                    <div style="display: inline-block; width:49%; padding-top: 10px;">
+                    <!-- <div style="display: inline-block; width:49%; padding-top: 10px;">
                         <label for="send-street">Улица</label>
                         <input id="send-street" class="form-control" required type="text" />
                     </div>
@@ -23,31 +39,68 @@
                     <div style="display: inline-block; width:49%; padding-top: 10px;">
                         <label for="send-flat">Квартира</label>
                         <input id="send-flat" class="form-control" required type="text" />
-                    </div>
+                    </div> -->
+
+                    <form id="send-address" >
+                        
+                        <div style="display: inline-block; width:100%; padding-top: 10px;">
+                            <label for="sender-name">ФИО отправителя</label>
+                            <input id="sender-name" class="form-control" type="text" />
+                        </div>
+                        <div style="display: inline-block; width:100%; padding-top: 10px;">
+                            <label for="sender-name">E-mail</label>
+                            <input id="sender-email" class="form-control" type="text" />
+                        </div>
+
+                        <div style="display: inline-block; width:100%; padding-top: 10px;">
+                            <label for="send-phone">Телефон отправителя</label>
+                            <!-- <input id="send-phone" class="form-control" type="tel" /> -->
+                            <input id="send-phone" class="form-control tel" type="tel" value="">
+                        </div>
+                        <div class="field">
+                                <label>Город</label>
+                                <input class="form-control" type="text" id="send-city">
+                            </div>
+                        <div class="field">
+                            <label>Улица</label>
+                            <input class="form-control" type="text" id="send-street">
+                        </div>
+                        <div class="field">
+                            <label>Дом</label>
+                            <input class="form-control" type="text" id="send-house">
+                        </div>
+                        <div class="field">
+                            <label>Квартира</label>
+                            <input class="form-control" type="text" id="send-flat">
+                        </div>
+                       
+                        
+                        <div class="tooltip" style="display: none;"><b></b><span></span></div>
+                    </form>
+
+
+
                 </div>
                 
-                <div style="display: inline-block; width:50%; padding-top: 10px;">
-                    <label for="sender-name">Имя Фамилия отправителя</label>
-                    <input id="sender-name" class="form-control" type="text" />
-                </div>
-                <div style="display: inline-block; width:50%; padding-top: 10px;">
-                    <label for="send-phone">Телефон отправителя</label>
-                    <input id="send-phone" class="form-control" type="tel" />
-                </div>
                 
                 <div id="send-storage" style="display: none;">
                     <label for="sdek-dropdown-from">Адрес отправки</label>
                     <select id="sdek-dropdown-from"></select>
                     <p id="full-address-from"></p>
                 </div>
+
+                <div style="width:100%; padding-top: 20px; text-align: center;">
+                    <button id="backToPage-0" class="btn btn-lg btn-success order-back-btn">Назад</button>
+                    <button id="toPage-2"  class="btn btn-lg btn-success order-foward-btn">Продолжить</button>
+                </div>
             </div>
 
-            <div>
-                <h3>Город получателя: <span id="recieve-city"></span></h3>
+            <div id="cdek-page-2" style="display: none;">
+                <!-- <h3>Город получателя: <span id="recieve-city"></span></h3> -->
 
                 <div id="recieve-door">
                     <h3>Адрес получателя</h3>
-                    <div style="display: inline-block; width:49%; padding-top: 10px;">
+                    <!-- <div style="display: inline-block; width:49%; padding-top: 10px;">
                         <label for="recieve-street">Улица</label>
                         <input id="recieve-street" class="form-control" required type="text" />
                     </div>
@@ -58,7 +111,30 @@
                     <div style="display: inline-block; width:49%; padding-top: 10px;">
                         <label for="recieve-flat">Квартира</label>
                         <input id="recieve-flat" class="form-control" required type="text" />
-                    </div>
+                    </div> -->
+
+                    <form id="recieve-address">
+                        
+                        <div class="field">
+                            <label>Город</label>
+                            <input class="form-control" type="text" id="recieve-city">
+                        </div>
+                        <div class="field">
+                            <label>Улица</label>
+                            <input class="form-control" type="text" id="recieve-street">
+                        </div>
+                        <div class="field">
+                            <label>Дом</label>
+                            <input class="form-control" type="text" id="recieve-house">
+                        </div>
+                        <div class="field">
+                            <label>Квартира</label>
+                            <input class="form-control" type="text" id="recieve-flat">
+                        </div>
+                       
+                        
+                        <div class="tooltip" style="display: none;"><b></b><span></span></div>
+                    </form>
                 </div>
                 
                 <div id="recieve-storage" style="display: none;">
@@ -72,19 +148,55 @@
                         <input id="dateExecute" class="form-control" type="date" value="2018-11-30">
                     </div> -->
                 
-
-                <div style="display: inline-block; width:50%; padding-top: 10px;">
-                    <label for="reciever-name">Имя Фамилия получателя</label>
-                    <input id="reciever-name" class="form-control" type="text" />
-                </div>
                 <div style="display: inline-block; width:50%; padding-top: 10px;">
                     <label for="reciever-phone">Телефон получателя</label>
                     <input id="reciever-phone" class="form-control" type="tel" />
                 </div>
+                <div  style="width:100%; padding-top: 20px; text-align: center; ">
+                    <button id="backToPage-1" class="btn btn-lg btn-success order-back-btn">Назад</button>
+                    <button id="sdekOrderBtn"  class="btn btn-lg btn-success">Заказать</button>
+                </div>
             </div>
-            <div style="width:100%; padding-top: 20px; text-align: center;">
-                <button id="sdekOrderBtn"  class="btn btn-lg btn-success">Заказать</button>
-            </div>
+            
         </div>
     </div>
 </div>
+
+<script>
+        window.addEventListener("DOMContentLoaded", function() {
+            [].forEach.call( document.querySelectorAll('.tel'), function(input) {
+            var keyCode;
+            function mask(event) {
+                event.keyCode && (keyCode = event.keyCode);
+                var pos = this.selectionStart;
+                if (pos < 3) event.preventDefault();
+                var matrix = "+7 (___) ___ ____",
+                    i = 0,
+                    def = matrix.replace(/\D/g, ""),
+                    val = this.value.replace(/\D/g, ""),
+                    new_value = matrix.replace(/[_\d]/g, function(a) {
+                        return i < val.length ? val.charAt(i++) || def.charAt(i) : a
+                    });
+                i = new_value.indexOf("_");
+                if (i != -1) {
+                    i < 5 && (i = 3);
+                    new_value = new_value.slice(0, i)
+                }
+                var reg = matrix.substr(0, this.value.length).replace(/_+/g,
+                    function(a) {
+                        return "\\d{1," + a.length + "}"
+                    }).replace(/[+()]/g, "\\$&");
+                reg = new RegExp("^" + reg + "$");
+                if (!reg.test(this.value) || this.value.length < 5 || keyCode > 47 && keyCode < 58) this.value = new_value;
+                if (event.type == "blur" && this.value.length < 5)  this.value = ""
+            }
+        
+            input.addEventListener("input", mask, false);
+            input.addEventListener("focus", mask, false);
+            input.addEventListener("blur", mask, false);
+            input.addEventListener("keydown", mask, false)
+        
+          });
+        
+        });
+          </script>

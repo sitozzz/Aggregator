@@ -126,13 +126,10 @@ def get_service_cost(req):
 
         
         
-        print(dpd_prefix )
-        print(type(result))
-        print(type(vrs))
+        print(dpd_prefix)
+        print(vrs)
+
         for i in vrs:
-            
-            print(i)
-            
             ship_dt = str(datetime.datetime.now()).split(' ')[0]
             res_dt = str(datetime.datetime.now() + datetime.timedelta(days=i['days'])).split(' ')[0]
             output.append({
@@ -144,7 +141,7 @@ def get_service_cost(req):
             })
             
     except Exception as identifier:
-        print(dpd_prefix + 'DPD ERROR')
+        print(dpd_prefix)
         print(identifier)
         
         #return {'orig_resp': str(identifier) , 'list': str(identifier)}
@@ -192,9 +189,9 @@ def sobject_to_json(obj, key_to_lower=False):
     """
     import json
     data = sobject_to_dict(obj, key_to_lower=key_to_lower, json_serialize=True)
-    f = open('dpd_terminals.json', 'w',encoding="utf8")
-    json.dump(data, f,ensure_ascii=False)
-    f.close()
+    #f = open('dpd_terminals.json', 'w',encoding="utf8")
+    #json.dump(data, f,ensure_ascii=False)
+    #f.close()
     return json.dumps(data)
 
 def get_terminals():
@@ -224,6 +221,24 @@ def get_terminals():
     f = open('dpd_terminals.txt', 'w',encoding="utf8")
     simplejson.dump(cities_arr, f,ensure_ascii=False)
     f.close()
+
+def get_terminals_by_city(city):
+    city_prop = getCityProp(city)
+    #print(city_prop)
+    
+    f = open('dpd_terminals.json', 'r',encoding="utf8")
+    f = f.read()
+    f = json.loads(f)
+    
+
+    #print(f['parcelShop'][0])
+    terminal_arr = []
+    for i in f['parcelShop']:
+        if i['address']['cityId'] == city_prop['cityId']:
+            terminal_arr.append(i)
+    print(len(terminal_arr))
+    return terminal_arr
+    
     
     
 def make_order(data):
@@ -237,18 +252,18 @@ def make_order(data):
 
     req_data['auth'] = auth
     senderAddress = {
-        'name' : 'Иванов Сергей Петрович',
-        'terminalCode' : '032L',
-        'countryName' : 'Россия',
-        'city' : 'Екатеринбург',
-        'street' : 'Есенина',
-        'house' : 10,
-        'contactPhone' : '79292155373',
-        'contactFio' : 'Комаров Василий Дмитриевич'
+        'name' : data['senderAddress']['name'],
+        'terminalCode' : data['senderAddress']['terminalCode'],
+        'countryName' : data['senderAddress']['countryName'],
+        'city' : data['senderAddress']['city'],
+        'street' : data['senderAddress']['street'],
+        'house' : data['senderAddress']['house'],
+        'contactPhone' : data['senderAddress']['contactPhone'],
+        'contactFio' : data['senderAddress']['contactFio']
     }
     
     header = {
-        'datePickup' : '2019-01-16',
+        'datePickup' : '2019-01-23',
         #'payer' : 'sdf',
         'senderAddress' : senderAddress,
         'pickupTimePeriod' : '9-18',
@@ -257,33 +272,68 @@ def make_order(data):
     }
     req_data['header'] = header
     receiverAddress = {
-        'name' : 'Иванов Иван Петрович',
-        'terminalCode' : '045S',
-        'countryName' : 'Россия',
-        'city' : 'Екатеринбург',
-        'street' : 'Есенина',
-        'house' : 10,
-        'contactPhone' : '79292155373',
-        'contactFio' : 'Комаров Василий Дмитриевич'
+        'name' : data['receiverAddress']['name'],
+        'terminalCode' : data['receiverAddress']['terminalCode'],
+        'countryName' : data['receiverAddress']['countryName'],
+        'city' : data['receiverAddress']['city'],
+        'street' : data['receiverAddress']['street'],
+        'house' : data['receiverAddress']['house'],
+        'contactPhone' : data['receiverAddress']['contactPhone'],
+        'contactFio' : data['receiverAddress']['contactFio']
 
     }
     order = {
-        'orderNumberInternal' : '123456',
-        'serviceCode' : 'DPE',
-        'serviceVariant' : 'TT',
+        'orderNumberInternal' : 123457,#data['order']['orderNumberInternal'],
+        'serviceCode' : data['order']['serviceCode'],
+        'serviceVariant' : data['order']['serviceVariant'],
         'cargoNumPack' : 1,
-        'cargoWeight' : 1,
+        'cargoWeight' : data['order']['cargoWeight'],
         'cargoRegistered' : False,
         'cargoCategory' : 'Одежда',
         'receiverAddress' : receiverAddress,
 
     }
+
+    #------------------
+        #    'senderAddress' : {
+        #         'name' : $('#dpd-sender-name').val(),
+        #         'terminalCode' : $('#dpd-dropdown-from').val(),
+        #         'countryName' : $('#dpd-send-city').text().split(',')[2].replace(' ',''),
+        #         'city' : $('#dpd-send-city').text().split(',')[0],
+        #         'street' : $('#dpd-send-street').val(),
+        #         'house' : $('#dpd-send-house').val(),
+        #         'contactPhone' : $('#dpd-send-phone').val(),
+        #         'contactFio' : $('#dpd-sender-name').val()
+        #     },
+        #      'receiverAddress' : {
+        #         'name' : $('#dpd-reciever-name').val(),
+        #         'terminalCode' : $('#dpd-dropdown-to').val(),
+        #         'countryName' : $('#dpd-recieve-city').text().split(',')[2].replace(' ',''),
+        #         'city' : $('#dpd-recieve-city').text().split(',')[0],
+        #         'street' : $('#dpd-reciever-street').val(),
+        #         'house' : $('#dpd-reciever-house').val(),
+        #         'contactPhone' : $('#dpd-reciever-phone').val(),
+        #         'contactFio' : $('#dpd-reciever-name').val()
+        
+        #     },
+        #     'order' : {
+        #         'orderNumberInternal' : '123456',
+        #         'serviceCode' : respGlob.dpd.serviceCode,
+        #         'serviceVariant' : fr + to,
+        #         'cargoNumPack' : 1,
+        #         'cargoWeight' : $('#weight').val(),
+        #         'cargoRegistered' : false,
+        #         'cargoCategory' : 'Одежда',
+        #         // 'receiverAddress' : receiverAddress,
+        
+        #     }
     req_data['order'] = order
 
 
     # try:
     result = client.service.createOrder(orders=req_data)
     print(result)
+    return result
     # except Exception as identifier:
     #     print('DPD ERROR')
     #     return {'orig_resp': str(identifier) , 'list': str(identifier)}
@@ -292,6 +342,7 @@ def make_order(data):
 #get_service_cost('кемерово','екатеринбург',True,True,1,20,20,20)
 #make_order()
 #get_terminals()
+#get_terminals_by_city('Москва')
 
 
 
