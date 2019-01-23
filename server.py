@@ -71,13 +71,13 @@ def calculate():
     out_json = jsonify({
         "cdek": sdek_res,
         "dpd": dpd_res,
-<<<<<<< HEAD
+
         #"boxberry": boxberry_res,
         "pony": pony_res
-=======
+
         "boxberry": boxberry_res,
        # "pony": pony_res
->>>>>>> 79ff1533481119e4f382372cac6620b1063c029f
+
     })
    
     print(out_json)
