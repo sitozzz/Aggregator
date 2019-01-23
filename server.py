@@ -73,7 +73,7 @@ def calculate():
         "dpd": dpd_res,
 
         #"boxberry": boxberry_res,
-        "pony": pony_res
+        "pony": pony_res,
 
         "boxberry": boxberry_res,
        # "pony": pony_res
